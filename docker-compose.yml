@@ -16,4 +16,4 @@ services:
     ports:
       - "8080:80"  # Mappe le port 80 du conteneur au port 80 de ta machine
     volumes:
-      - ./nginx:/usr/share/nginx/html  # Monte ton répertoire local à /usr/share/nginx/html dans le conteneur
+      - ./frontend:/usr/share/nginx/html
