@@ -1,13 +1,23 @@
-# Utilise l'image officielle de Node.js
-FROM node:16
 
-# Définit le répertoire de travail
+
+
+# Utilise l'image officielle de Node.js
+FROM node:20
+
+# Définit le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copie les fichiers package.json et package-lock.json
+# Copie les fichiers package.json et package-lock.json pour installer les dépendances
 COPY package.json package-lock.json ./
 
 # Installe les dépendances
 RUN npm install
 
-# Copie l
+# Copie tout le reste des fichiers dans le répertoire de travail
+COPY . .
+
+# Expose le port 3000
+EXPOSE 3000
+
+# Lance l'application
+CMD ["node", "app.js"]

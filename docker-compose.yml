@@ -1,26 +1,19 @@
-
-
-
 version: '3'
 services:
-  backend:
-    build: ./backend
+  node-app:
+    build:
+      context: ./backend  # Chemin vers le répertoire contenant ton Dockerfile Node.js
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Mappe le port 3000 du conteneur au port 3000 de ta machine
     volumes:
-      - /home/whamdi/goinfre:/app   # Mappe /home/whamdi/goinfre dans le container à /app
-    networks:
-      - app-network
+      - ./node-app:/app  # Monte ton répertoire local à /app dans le conteneur
+    environment:
+      - NODE_ENV=production
 
-  frontend:
-    build: ./frontend
+  nginx:
+    build:
+      context: ./frontend # Chemin vers le répertoire contenant ton Dockerfile Nginx
     ports:
-      - "80:80"
+      - "80:80"  # Mappe le port 80 du conteneur au port 80 de ta machine
     volumes:
-      - /home/whamdi/goinfre:/usr/share/nginx/html
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+      - ./nginx:/usr/share/nginx/html  # Monte ton répertoire local à /usr/share/nginx/html dans le conteneur
