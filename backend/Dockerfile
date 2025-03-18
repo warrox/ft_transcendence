@@ -4,8 +4,6 @@
 # Utilise l'image officielle de Node.js
 FROM node:20
 
-# Définit le répertoire de travail dans le conteneur
-WORKDIR /app
 
 # Copie les fichiers package.json et package-lock.json pour installer les dépendances
 COPY package.json package-lock.json ./
