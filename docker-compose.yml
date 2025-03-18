@@ -1,0 +1,26 @@
+
+
+
+version: '3'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - /home/whamdi/goinfre:/app   # Mappe /home/whamdi/goinfre dans le container à /app
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    volumes:
+      - /home/whamdi/goinfre:/usr/share/nginx/html
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

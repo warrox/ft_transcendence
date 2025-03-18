@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend of the project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "fastify": "^3.0.0"
+  },
+  "devDependencies": {
+  },
+  "author": "",
+  "license": "ISC"
+}
