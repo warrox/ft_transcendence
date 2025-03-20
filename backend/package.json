@@ -7,10 +7,10 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "fastify": "^3.0.0"
-  },
-  "devDependencies": {
+    "fastify": "^3.29.5",
+    "sqlite3": "^5.1.7"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "keywords": []
 }
