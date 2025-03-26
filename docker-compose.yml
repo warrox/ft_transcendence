@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"  # Mappe le port 3000 du conteneur au port 3000 de ta machine
     volumes:
-      - ./node-app:/app  # Monte ton répertoire local à /app dans le conteneur
+      - ./backend:/app  # Monte ton répertoire local à /app dans le conteneur
     environment:
       - NODE_ENV=production
 

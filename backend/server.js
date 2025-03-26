@@ -1,17 +1,28 @@
 const Fastify = require('fastify');
-const db = require('./db');
+import cors from '@fastify/cors';
 
+const db = require('./db.js');
 const fastify = Fastify({ logger: true });
-
+fastify.register(cors, {
+  origin: '*', // Permet toutes les origines (à éviter en prod)
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Méthodes autorisées
+  allowedHeaders: ['Content-Type', 'Authorization'], // Headers autorisés
+  credentials: true // Autoriser l'envoi de cookies et d'identifiants
+});
 // Route pour ajouter un utilisateur
 fastify.post('/users', (request, reply) => {
-  const { name, email } = request.body;
+  const { name, surname , email, password } = request.body;
   
-  db.run('INSERT INTO users (name, email) VALUES (?, ?)', [name, email], function (err) {
+	if(!name || !surname || !email || !password){
+		return reply.status(400).send({error : " tous les champs sont obligatoires"});
+	}
+  db.run('INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)', 
+		[name,surname, email, password], 
+		function (err) {
     if (err) {
       reply.status(400).send({ error: 'Email déjà utilisé ou erreur SQL' });
     } else {
-      reply.send({ id: this.lastID, name, email });
+      reply.send({ id: this.lastID, name, surname, email });
     }
   });
 });

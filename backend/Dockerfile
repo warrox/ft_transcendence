@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # Lance l'application
-CMD ["node", "app.js"]
+CMD ["node", "server.js"]
