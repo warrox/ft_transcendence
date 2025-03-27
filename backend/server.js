@@ -1,6 +1,5 @@
 const Fastify = require('fastify');
-import cors from '@fastify/cors';
-
+const cors = require('@fastify/cors');
 const db = require('./db.js');
 const fastify = Fastify({ logger: true });
 fastify.register(cors, {
@@ -39,7 +38,7 @@ fastify.get('/users', (request, reply) => {
 });
 
 // Démarrer le serveur
-fastify.listen({ port: 3000 }, (err, address) => {
+fastify.listen({ port: 3000, host:"0.0.0.0" }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);

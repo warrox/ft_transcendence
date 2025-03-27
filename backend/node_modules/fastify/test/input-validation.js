@@ -1,9 +1,8 @@
-
 'use strict'
 
 const sget = require('simple-get').concat
 const Ajv = require('ajv')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const yup = require('yup')
 
 module.exports.payloadMethod = function (method, t) {
@@ -73,7 +72,7 @@ module.exports.payloadMethod = function (method, t) {
           const result = schema.validateSync(data, yupOptions)
           return { value: result }
         } catch (e) {
-          return { error: e }
+          return { error: [e] }
         }
       }
     }
@@ -134,12 +133,12 @@ module.exports.payloadMethod = function (method, t) {
     }
   })
 
-  fastify.listen(0, function (err) {
+  fastify.listen({ port: 0 }, function (err) {
     if (err) {
       t.error(err)
     }
 
-    fastify.server.unref()
+    t.teardown(() => { fastify.close() })
 
     test(`${upMethod} - correctly replies`, t => {
       if (upMethod === 'HEAD') {
@@ -182,8 +181,9 @@ module.exports.payloadMethod = function (method, t) {
         t.equal(response.statusCode, 400)
         t.same(body, {
           error: 'Bad Request',
-          message: 'body.hello should be integer',
-          statusCode: 400
+          message: 'body/hello must be integer',
+          statusCode: 400,
+          code: 'FST_ERR_VALIDATION'
         })
       })
     })
@@ -252,7 +252,8 @@ module.exports.payloadMethod = function (method, t) {
         t.same(body, {
           error: 'Bad Request',
           message: '"hello" must be a string',
-          statusCode: 400
+          statusCode: 400,
+          code: 'FST_ERR_VALIDATION'
         })
       })
     })
@@ -285,10 +286,11 @@ module.exports.payloadMethod = function (method, t) {
       }, (err, response, body) => {
         t.error(err)
         t.equal(response.statusCode, 400)
-        t.same(body, {
+        t.match(body, {
           error: 'Bad Request',
-          message: 'hello must be a `string` type, but the final value was: `44`.',
-          statusCode: 400
+          message: /body hello must be a `string` type, but the final value was: `44`./,
+          statusCode: 400,
+          code: 'FST_ERR_VALIDATION'
         })
       })
     })
@@ -306,7 +308,8 @@ module.exports.payloadMethod = function (method, t) {
         t.same(body, {
           error: 'Bad Request',
           message: 'From custom schema compiler!',
-          statusCode: '400'
+          statusCode: '400',
+          code: 'FST_ERR_VALIDATION'
         })
       })
     })
@@ -324,7 +327,8 @@ module.exports.payloadMethod = function (method, t) {
         t.same(body, {
           error: 'Bad Request',
           message: 'Always fail!',
-          statusCode: '400'
+          statusCode: '400',
+          code: 'FST_ERR_VALIDATION'
         })
       })
     })

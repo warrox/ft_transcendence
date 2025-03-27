@@ -1,9 +1,8 @@
-import { expectAssignable, expectError } from 'tsd'
-import fastify, { FastifyInstance, FastifyRequest, FastifySchema } from '../../fastify'
-import { RouteGenericInterface } from '../../types/route'
-import { ContextConfigDefault } from '../../types/utils'
-import { FastifyReply } from '../../types/reply'
-import Ajv = require('ajv')
+import { StandaloneValidator } from '@fastify/ajv-compiler'
+import { StandaloneSerializer } from '@fastify/fast-json-stringify-compiler'
+import Ajv from 'ajv'
+import { expectAssignable } from 'tsd'
+import fastify, { FastifyInstance, FastifySchema } from '../../fastify'
 
 const server = fastify()
 
@@ -16,6 +15,25 @@ expectAssignable<FastifyInstance>(server.get(
       params: { type: 'null' },
       headers: { type: 'null' },
       response: { type: 'null' }
+    }
+  },
+  () => { }
+))
+
+expectAssignable<FastifyInstance>(server.post(
+  '/multiple-content-schema',
+  {
+    schema: {
+      body: {
+        content: {
+          'application/json': {
+            schema: { type: 'object' }
+          },
+          'text/plain': {
+            schema: { type: 'string' }
+          }
+        }
+      }
     }
   },
   () => { }
@@ -34,33 +52,6 @@ expectAssignable<FastifyInstance>(server.get(
   {},
   () => { }
 ))
-
-expectAssignable<FastifyInstance>(server.get<RouteGenericInterface, ContextConfigDefault, { validate:(data: any) => any }>(
-  '/no-schema',
-{
-  schema: {},
-  validatorCompiler: ({ schema }) => {
-    // Error: Property 'validate' does not exist on type 'FastifySchema'.
-    return (data: any) => schema.validate(data)
-  }
-},
-() => { }
-))
-
-expectAssignable<FastifyInstance>(
-  server.route<RouteGenericInterface, ContextConfigDefault, { validate:(data: any) => any }>(
-    {
-      schema: {},
-      validatorCompiler: ({ schema }) => {
-        // Error: Property 'validate' does not exist on type 'FastifySchema'.
-        return (data: any) => schema.validate(data)
-      },
-      method: 'POST',
-      url: '/',
-      handler: async (_request: FastifyRequest, _reply: FastifyReply) => {}
-    }
-  )
-)
 
 expectAssignable<FastifyInstance>(server.setValidatorCompiler(({ schema }) => {
   return new Ajv().compile(schema)
@@ -83,7 +74,7 @@ expectAssignable<FastifyInstance>(server.post('/test', {
 
 expectAssignable<FastifyInstance>(server.setValidatorCompiler<FastifySchema & { validate: Record<string, unknown> }>(
   function ({ schema }) {
-    return new Ajv().compile(schema.validate)
+    return new Ajv().compile(schema)
   }
 ))
 
@@ -91,12 +82,33 @@ expectAssignable<FastifyInstance>(server.setSerializerCompiler<FastifySchema & {
   () => data => JSON.stringify(data)
 ))
 
-expectError(server.get(
-  '/unknown-schema-prop',
-  {
-    schema: {
-      unknown: { type: 'null' }
+// https://github.com/fastify/ajv-compiler/issues/95
+{
+  const factory = StandaloneValidator({
+    readMode: false,
+    storeFunction (routeOpts, schemaValidationCode) { }
+  })
+
+  fastify({
+    schemaController: {
+      compilersFactory: {
+        buildValidator: factory
+      }
     }
-  },
-  () => { }
-))
+  })
+}
+
+{
+  const factory = StandaloneSerializer({
+    readMode: false,
+    storeFunction (routeOpts, schemaValidationCode) { }
+  })
+
+  fastify({
+    schemaController: {
+      compilersFactory: {
+        buildSerializer: factory
+      }
+    }
+  })
+}

@@ -1,7 +1,7 @@
 'use strict'
 
-const fs = require('fs')
-const path = require('path')
+const fs = require('node:fs')
+const path = require('node:path')
 const fastify = require('../fastify')({
   http2: true,
   https: {
@@ -32,6 +32,8 @@ fastify
     reply.send({ hello: 'world' })
   })
 
-fastify.listen(3000, err => {
-  if (err) throw err
+fastify.listen({ port: 3000 }, err => {
+  if (err) {
+    throw err
+  }
 })

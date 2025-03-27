@@ -2,10 +2,10 @@
 
 const t = require('tap')
 const test = t.test
-const Stream = require('stream')
-const util = require('util')
+const Stream = require('node:stream')
+const util = require('node:util')
 const Fastify = require('..')
-const FormData = require('form-data')
+const { Readable } = require('node:stream')
 
 test('inject should exist', t => {
   t.plan(2)
@@ -342,7 +342,7 @@ test('inject a multipart request using form-body', t => {
   })
 
   const form = new FormData()
-  form.append('my_field', 'my value')
+  form.set('my_field', 'my value')
 
   fastify.inject({
     method: 'POST',
@@ -454,4 +454,32 @@ test('should handle errors in builder-style injection correctly', async (t) => {
     t.ok(err)
     t.equal(err.message, 'Kaboom')
   }
+})
+
+test('Should not throw on access to routeConfig frameworkErrors handler - FST_ERR_BAD_URL', t => {
+  t.plan(5)
+
+  const fastify = Fastify({
+    frameworkErrors: function (err, req, res) {
+      t.ok(typeof req.id === 'string')
+      t.ok(req.raw instanceof Readable)
+      t.same(req.routerPath, undefined)
+      res.send(`${err.message} - ${err.code}`)
+    }
+  })
+
+  fastify.get('/test/:id', (req, res) => {
+    res.send('{ hello: \'world\' }')
+  })
+
+  fastify.inject(
+    {
+      method: 'GET',
+      url: '/test/%world'
+    },
+    (err, res) => {
+      t.error(err)
+      t.equal(res.body, '\'/test/%world\' is not a valid url component - FST_ERR_BAD_URL')
+    }
+  )
 })

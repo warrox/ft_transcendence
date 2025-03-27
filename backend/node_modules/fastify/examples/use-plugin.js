@@ -1,3 +1,5 @@
+'use strict'
+
 const fastify = require('../fastify')({ logger: true })
 
 const opts = {
@@ -15,10 +17,12 @@ const opts = {
   }
 }
 fastify.register(require('./plugin'), opts, function (err) {
-  if (err) throw err
+  if (err) {
+    throw err
+  }
 })
 
-fastify.listen(3000, function (err) {
+fastify.listen({ port: 3000 }, function (err) {
   if (err) {
     throw err
   }

@@ -1,53 +1,62 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
+const { test } = require('node:test')
 const Fastify = require('../..')
-const https = require('https')
+const https = require('node:https')
+const dns = require('node:dns').promises
 const sget = require('simple-get').concat
-
 const { buildCertificate } = require('../build-certificate')
-t.before(buildCertificate)
 
-test('Should support a custom https server', t => {
-  t.plan(6)
+async function setup () {
+  await buildCertificate()
 
-  const serverFactory = (handler, opts) => {
-    t.ok(opts.serverFactory)
+  const localAddresses = await dns.lookup('localhost', { all: true })
 
-    const options = {
-      key: global.context.key,
-      cert: global.context.cert
-    }
+  test('Should support a custom https server', { skip: localAddresses.length < 1 }, async t => {
+    t.plan(4)
 
-    const server = https.createServer(options, (req, res) => {
-      req.custom = true
-      handler(req, res)
+    const fastify = Fastify({
+      serverFactory: (handler, opts) => {
+        t.assert.ok(opts.serverFactory, 'it is called once for localhost')
+
+        const options = {
+          key: global.context.key,
+          cert: global.context.cert
+        }
+
+        const server = https.createServer(options, (req, res) => {
+          req.custom = true
+          handler(req, res)
+        })
+
+        return server
+      }
     })
 
-    return server
-  }
+    t.after(() => { fastify.close() })
 
-  const fastify = Fastify({ serverFactory })
+    fastify.get('/', (req, reply) => {
+      t.assert.ok(req.raw.custom)
+      reply.send({ hello: 'world' })
+    })
 
-  t.teardown(fastify.close.bind(fastify))
+    await fastify.listen({ port: 0 })
 
-  fastify.get('/', (req, reply) => {
-    t.ok(req.raw.custom)
-    reply.send({ hello: 'world' })
-  })
-
-  fastify.listen(0, err => {
-    t.error(err)
-
-    sget({
-      method: 'GET',
-      url: 'https://localhost:' + fastify.server.address().port,
-      rejectUnauthorized: false
-    }, (err, response, body) => {
-      t.error(err)
-      t.equal(response.statusCode, 200)
-      t.same(JSON.parse(body), { hello: 'world' })
+    await new Promise((resolve, reject) => {
+      sget({
+        method: 'GET',
+        url: 'https://localhost:' + fastify.server.address().port,
+        rejectUnauthorized: false
+      }, (err, response, body) => {
+        if (err) {
+          return reject(err)
+        }
+        t.assert.strictEqual(response.statusCode, 200)
+        t.assert.deepStrictEqual(JSON.parse(body), { hello: 'world' })
+        resolve()
+      })
     })
   })
-})
+}
+
+setup()

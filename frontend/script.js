@@ -1,3 +1,4 @@
+console.log("HEllo world\n");
 document.addEventListener('DOMContentLoaded', () => {
     fetch('http://localhost:3000/users') // Va chercher les données du backend
         .then(response => response.json()) // Convertit en JSON

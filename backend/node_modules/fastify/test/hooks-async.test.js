@@ -1,19 +1,19 @@
 'use strict'
 
-const { Readable } = require('stream')
+const { Readable } = require('node:stream')
 const t = require('tap')
 const test = t.test
 const sget = require('simple-get').concat
 const Fastify = require('../fastify')
-const fs = require('fs')
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+const fs = require('node:fs')
+const { sleep } = require('./helper')
 
 process.removeAllListeners('warning')
 
 test('async hooks', t => {
   t.plan(21)
 
-  const fastify = Fastify()
+  const fastify = Fastify({ exposeHeadRoutes: false })
   fastify.addHook('onRequest', async function (request, reply) {
     await sleep(1)
     request.test = 'the request is coming'
@@ -56,9 +56,9 @@ test('async hooks', t => {
     reply.code(200).send({ hello: 'world' })
   })
 
-  fastify.listen(0, err => {
+  fastify.listen({ port: 0 }, err => {
     t.error(err)
-    fastify.server.unref()
+    t.teardown(() => { fastify.close() })
 
     sget({
       method: 'GET',
@@ -132,7 +132,7 @@ test('onRequest hooks should be able to block a request', t => {
   const fastify = Fastify()
 
   fastify.addHook('onRequest', async (req, reply) => {
-    reply.send('hello')
+    await reply.send('hello')
   })
 
   fastify.addHook('onRequest', async (req, reply) => {
@@ -194,22 +194,28 @@ test('preParsing hooks should be able to modify the payload', t => {
   })
 })
 
-test('preParsing hooks can completely ignore the payload - deprecated syntax', t => {
-  t.plan(5)
+test('preParsing hooks should be able to supply statusCode', t => {
+  t.plan(4)
   const fastify = Fastify()
 
-  process.on('warning', onWarning)
-  function onWarning (warning) {
-    t.equal(warning.name, 'FastifyDeprecation')
-    t.equal(warning.code, 'FSTDEP004')
-  }
+  fastify.addHook('preParsing', async (req, reply, payload) => {
+    const stream = new Readable({
+      read () {
+        const error = new Error('kaboom')
+        error.statusCode = 408
+        this.destroy(error)
+      }
+    })
+    stream.receivedEncodedLength = 20
+    return stream
+  })
 
-  fastify.addHook('preParsing', async (req, reply) => {
-
+  fastify.addHook('onError', async (req, res, err) => {
+    t.equal(err.statusCode, 408)
   })
 
   fastify.post('/', function (request, reply) {
-    reply.send(request.body)
+    t.fail('should not be called')
   })
 
   fastify.inject({
@@ -218,10 +224,127 @@ test('preParsing hooks can completely ignore the payload - deprecated syntax', t
     payload: { hello: 'world' }
   }, (err, res) => {
     t.error(err)
-    t.equal(res.statusCode, 200)
-    t.same(JSON.parse(res.payload), { hello: 'world' })
+    t.equal(res.statusCode, 408)
+    t.same(JSON.parse(res.payload), {
+      statusCode: 408,
+      error: 'Request Timeout',
+      message: 'kaboom'
+    })
+  })
+})
 
-    process.removeListener('warning', onWarning)
+test('preParsing hooks should ignore statusCode 200 in stream error', t => {
+  t.plan(4)
+  const fastify = Fastify()
+
+  fastify.addHook('preParsing', async (req, reply, payload) => {
+    const stream = new Readable({
+      read () {
+        const error = new Error('kaboom')
+        error.statusCode = 200
+        this.destroy(error)
+      }
+    })
+    stream.receivedEncodedLength = 20
+    return stream
+  })
+
+  fastify.addHook('onError', async (req, res, err) => {
+    t.equal(err.statusCode, 400)
+  })
+
+  fastify.post('/', function (request, reply) {
+    t.fail('should not be called')
+  })
+
+  fastify.inject({
+    method: 'POST',
+    url: '/',
+    payload: { hello: 'world' }
+  }, (err, res) => {
+    t.error(err)
+    t.equal(res.statusCode, 400)
+    t.same(JSON.parse(res.payload), {
+      statusCode: 400,
+      error: 'Bad Request',
+      message: 'kaboom'
+    })
+  })
+})
+
+test('preParsing hooks should ignore non-number statusCode in stream error', t => {
+  t.plan(4)
+  const fastify = Fastify()
+
+  fastify.addHook('preParsing', async (req, reply, payload) => {
+    const stream = new Readable({
+      read () {
+        const error = new Error('kaboom')
+        error.statusCode = '418'
+        this.destroy(error)
+      }
+    })
+    stream.receivedEncodedLength = 20
+    return stream
+  })
+
+  fastify.addHook('onError', async (req, res, err) => {
+    t.equal(err.statusCode, 400)
+  })
+
+  fastify.post('/', function (request, reply) {
+    t.fail('should not be called')
+  })
+
+  fastify.inject({
+    method: 'POST',
+    url: '/',
+    payload: { hello: 'world' }
+  }, (err, res) => {
+    t.error(err)
+    t.equal(res.statusCode, 400)
+    t.same(JSON.parse(res.payload), {
+      statusCode: 400,
+      error: 'Bad Request',
+      message: 'kaboom'
+    })
+  })
+})
+
+test('preParsing hooks should default to statusCode 400 if stream error', t => {
+  t.plan(4)
+  const fastify = Fastify()
+
+  fastify.addHook('preParsing', async (req, reply, payload) => {
+    const stream = new Readable({
+      read () {
+        this.destroy(new Error('kaboom'))
+      }
+    })
+    stream.receivedEncodedLength = 20
+    return stream
+  })
+
+  fastify.addHook('onError', async (req, res, err) => {
+    t.equal(err.statusCode, 400)
+  })
+
+  fastify.post('/', function (request, reply) {
+    t.fail('should not be called')
+  })
+
+  fastify.inject({
+    method: 'POST',
+    url: '/',
+    payload: { hello: 'world' }
+  }, (err, res) => {
+    t.error(err)
+    t.equal(res.statusCode, 400)
+    t.same(JSON.parse(res.payload), {
+      statusCode: 400,
+      error: 'Bad Request',
+      message: 'kaboom'
+    })
   })
 })
 
@@ -255,7 +378,7 @@ test('preHandler hooks should be able to block a request', t => {
   const fastify = Fastify()
 
   fastify.addHook('preHandler', async (req, reply) => {
-    reply.send('hello')
+    await reply.send('hello')
   })
 
   fastify.addHook('preHandler', async (req, reply) => {
@@ -289,7 +412,7 @@ test('preValidation hooks should be able to block a request', t => {
   const fastify = Fastify()
 
   fastify.addHook('preValidation', async (req, reply) => {
-    reply.send('hello')
+    await reply.send('hello')
   })
 
   fastify.addHook('preValidation', async (req, reply) => {
@@ -414,7 +537,7 @@ test('preValidation hooks should handle throwing null', t => {
 
   fastify.setErrorHandler(async (error, request, reply) => {
     t.ok(error instanceof Error)
-    reply.send(error)
+    await reply.send(error)
   })
 
   fastify.addHook('preValidation', async () => {
@@ -465,7 +588,7 @@ test('onRequest hooks should be able to block a request (last hook)', t => {
   const fastify = Fastify()
 
   fastify.addHook('onRequest', async (req, reply) => {
-    reply.send('hello')
+    await reply.send('hello')
   })
 
   fastify.addHook('preHandler', async (req, reply) => {
@@ -499,7 +622,7 @@ test('preHandler hooks should be able to block a request (last hook)', t => {
   const fastify = Fastify()
 
   fastify.addHook('preHandler', async (req, reply) => {
-    reply.send('hello')
+    await reply.send('hello')
   })
 
   fastify.addHook('onSend', async (req, reply, payload) => {
@@ -530,11 +653,12 @@ test('onRequest respond with a stream', t => {
 
   fastify.addHook('onRequest', async (req, reply) => {
     return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(process.cwd() + '/test/stream.test.js', 'utf8')
+      const stream = fs.createReadStream(__filename, 'utf8')
       // stream.pipe(res)
       // res.once('finish', resolve)
-      reply.send(stream)
-      reply.raw.once('finish', () => resolve())
+      reply.send(stream).then(() => {
+        reply.raw.once('finish', () => resolve())
+      })
     })
   })
 
@@ -580,14 +704,11 @@ test('preHandler respond with a stream', t => {
   const order = [1, 2]
 
   fastify.addHook('preHandler', async (req, reply) => {
-    return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(process.cwd() + '/test/stream.test.js', 'utf8')
-      reply.send(stream)
-      reply.raw.once('finish', () => {
-        t.equal(order.shift(), 2)
-        resolve()
-      })
+    const stream = fs.createReadStream(__filename, 'utf8')
+    reply.raw.once('finish', () => {
+      t.equal(order.shift(), 2)
     })
+    return reply.send(stream)
   })
 
   fastify.addHook('preHandler', async (req, reply) => {
@@ -617,35 +738,51 @@ test('preHandler respond with a stream', t => {
 })
 
 test('Should log a warning if is an async function with `done`', t => {
+  t.test('2 arguments', t => {
+    t.plan(2)
+    const fastify = Fastify()
+
+    try {
+      fastify.addHook('onRequestAbort', async (req, done) => {})
+    } catch (e) {
+      t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+      t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+    }
+  })
+
   t.test('3 arguments', t => {
-    t.plan(1)
+    t.plan(2)
     const fastify = Fastify()
 
     try {
       fastify.addHook('onRequest', async (req, reply, done) => {})
     } catch (e) {
-      t.ok(e.message === 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+      t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+      t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
     }
   })
 
   t.test('4 arguments', t => {
-    t.plan(3)
+    t.plan(6)
     const fastify = Fastify()
 
     try {
       fastify.addHook('onSend', async (req, reply, payload, done) => {})
     } catch (e) {
-      t.ok(e.message === 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+      t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+      t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
     }
     try {
       fastify.addHook('preSerialization', async (req, reply, payload, done) => {})
     } catch (e) {
-      t.ok(e.message === 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+      t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+      t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
     }
     try {
       fastify.addHook('onError', async (req, reply, payload, done) => {})
     } catch (e) {
-      t.ok(e.message === 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+      t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+      t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
     }
   })
 
@@ -742,4 +879,197 @@ test('preSerializationEnd should handle errors if the serialize method throws', 
   })
 
   t.end()
+})
+
+t.test('nested hooks to do not crash on 404', t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  fastify.get('/hello', (req, reply) => {
+    reply.send({ hello: 'world' })
+  })
+
+  fastify.register(async function (fastify) {
+    fastify.get('/something', (req, reply) => {
+      reply.callNotFound()
+    })
+
+    fastify.setNotFoundHandler(async (request, reply) => {
+      reply.statusCode = 404
+      return { status: 'nested-not-found' }
+    })
+
+    fastify.setErrorHandler(async (error, request, reply) => {
+      reply.statusCode = 500
+      return { status: 'nested-error', error }
+    })
+  }, { prefix: '/nested' })
+
+  fastify.setNotFoundHandler(async (request, reply) => {
+    reply.statusCode = 404
+    return { status: 'not-found' }
+  })
+
+  fastify.setErrorHandler(async (error, request, reply) => {
+    reply.statusCode = 500
+    return { status: 'error', error }
+  })
+
+  fastify.inject({
+    method: 'GET',
+    url: '/nested/something'
+  }, (err, res) => {
+    t.error(err)
+    t.equal(res.statusCode, 404)
+  })
+})
+
+test('Register an hook (preHandler) as route option should fail if mixing async and callback style', t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  try {
+    fastify.get(
+      '/',
+      {
+        preHandler: [
+          async (request, reply, done) => {
+            done()
+          }
+        ]
+      },
+      async (request, reply) => {
+        return { hello: 'world' }
+      }
+    )
+    t.fail('preHandler mixing async and callback style')
+  } catch (e) {
+    t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+    t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+  }
+})
+
+test('Register an hook (onSend) as route option should fail if mixing async and callback style', t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  try {
+    fastify.get(
+      '/',
+      {
+        onSend: [
+          async (request, reply, payload, done) => {
+            done()
+          }
+        ]
+      },
+      async (request, reply) => {
+        return { hello: 'world' }
+      }
+    )
+    t.fail('onSend mixing async and callback style')
+  } catch (e) {
+    t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+    t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+  }
+})
+
+test('Register an hook (preSerialization) as route option should fail if mixing async and callback style', t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  try {
+    fastify.get(
+      '/',
+      {
+        preSerialization: [
+          async (request, reply, payload, done) => {
+            done()
+          }
+        ]
+      },
+      async (request, reply) => {
+        return { hello: 'world' }
+      }
+    )
+    t.fail('preSerialization mixing async and callback style')
+  } catch (e) {
+    t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+    t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+  }
+})
+
+test('Register an hook (onError) as route option should fail if mixing async and callback style', t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  try {
+    fastify.get(
+      '/',
+      {
+        onError: [
+          async (request, reply, error, done) => {
+            done()
+          }
+        ]
+      },
+      async (request, reply) => {
+        return { hello: 'world' }
+      }
+    )
+    t.fail('onError mixing async and callback style')
+  } catch (e) {
+    t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+    t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+  }
+})
+
+test('Register an hook (preParsing) as route option should fail if mixing async and callback style', t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  try {
+    fastify.get(
+      '/',
+      {
+        preParsing: [
+          async (request, reply, payload, done) => {
+            done()
+          }
+        ]
+      },
+      async (request, reply) => {
+        return { hello: 'world' }
+      }
+    )
+    t.fail('preParsing mixing async and callback style')
+  } catch (e) {
+    t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+    t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+  }
+})
+
+test('Register an hook (onRequestAbort) as route option should fail if mixing async and callback style', t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  try {
+    fastify.get(
+      '/',
+      {
+        onRequestAbort: [
+          async (request, done) => {
+            done()
+          }
+        ]
+      },
+      async (request, reply) => {
+        return { hello: 'world' }
+      }
+    )
+    t.fail('onRequestAbort mixing async and callback style')
+  } catch (e) {
+    t.equal(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
+    t.equal(e.message, 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
+  }
 })

@@ -1,9 +1,5 @@
-
-
-
 # Utilise l'image officielle de Node.js
-FROM node:20
-
+FROM node:latest
 
 # Copie les fichiers package.json et package-lock.json pour installer les dépendances
 COPY package.json package-lock.json ./
@@ -18,4 +14,4 @@ COPY . .
 EXPOSE 3000
 
 # Lance l'application
-CMD ["node", "server.js"]
+CMD ["npm", "start"]

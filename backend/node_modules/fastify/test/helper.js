@@ -1,8 +1,12 @@
 'use strict'
 
 const sget = require('simple-get').concat
-const stream = require('stream')
+const dns = require('node:dns').promises
+const stream = require('node:stream')
+const { promisify } = require('node:util')
 const symbols = require('../lib/symbols')
+
+module.exports.sleep = promisify(setTimeout)
 
 /**
  * @param method HTTP request method
@@ -16,7 +20,7 @@ module.exports.payloadMethod = function (method, t, isSetErrorHandler = false) {
   if (isSetErrorHandler) {
     fastify.setErrorHandler(function (err, request, reply) {
       t.type(request, 'object')
-      t.type(request, fastify[symbols.kRequest])
+      t.type(request, fastify[symbols.kRequest].parent)
       reply
         .code(err.statusCode)
         .type('application/json; charset=utf-8')
@@ -91,13 +95,13 @@ module.exports.payloadMethod = function (method, t, isSetErrorHandler = false) {
     }
   })
 
-  fastify.listen(0, function (err) {
+  fastify.listen({ port: 0 }, function (err) {
     if (err) {
       t.error(err)
       return
     }
 
-    fastify.server.unref()
+    t.teardown(() => { fastify.close() })
 
     test(`${upMethod} - correctly replies`, t => {
       t.plan(3)
@@ -189,7 +193,7 @@ module.exports.payloadMethod = function (method, t, isSetErrorHandler = false) {
       }, (err, response, body) => {
         t.error(err)
         t.equal(response.statusCode, 200)
-        t.equal(JSON.parse(body.toString()), null)
+        t.equal(body.toString(), '')
       })
 
       // Must use inject to make a request without a Content-Length header
@@ -199,7 +203,7 @@ module.exports.payloadMethod = function (method, t, isSetErrorHandler = false) {
       }, (err, res) => {
         t.error(err)
         t.equal(res.statusCode, 200)
-        t.equal(JSON.parse(res.payload), null)
+        t.equal(res.payload.toString(), '')
       })
     })
 
@@ -212,11 +216,7 @@ module.exports.payloadMethod = function (method, t, isSetErrorHandler = false) {
 
       }, (err, response, body) => {
         t.error(err)
-        if (upMethod === 'OPTIONS') {
-          t.equal(response.statusCode, 200)
-        } else {
-          t.equal(response.statusCode, 415)
-        }
+        t.equal(response.statusCode, 415)
       })
     })
 
@@ -418,4 +418,37 @@ module.exports.payloadMethod = function (method, t, isSetErrorHandler = false) {
       })
     })
   })
+}
+
+function lookupToIp (lookup) {
+  return lookup.family === 6 ? `[${lookup.address}]` : lookup.address
+}
+
+module.exports.getLoopbackHost = async () => {
+  const lookup = await dns.lookup('localhost')
+  return [lookup.address, lookupToIp(lookup)]
+}
+
+module.exports.plainTextParser = function (request, callback) {
+  let body = ''
+  request.setEncoding('utf8')
+  request.on('error', onError)
+  request.on('data', onData)
+  request.on('end', onEnd)
+  function onError (err) {
+    callback(err, null)
+  }
+  function onData (chunk) {
+    body += chunk
+  }
+  function onEnd () {
+    callback(null, body)
+  }
+}
+
+module.exports.getServerUrl = function (app) {
+  const { address, port } = app.server.address()
+  return address === '::1'
+    ? `http://[${address}]:${port}`
+    : `http://${address}:${port}`
 }

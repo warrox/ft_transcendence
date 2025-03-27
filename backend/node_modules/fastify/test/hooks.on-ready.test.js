@@ -2,7 +2,7 @@
 
 const t = require('tap')
 const Fastify = require('../fastify')
-const immediate = require('util').promisify(setImmediate)
+const immediate = require('node:util').promisify(setImmediate)
 
 t.test('onReady should be called in order', t => {
   t.plan(7)
@@ -33,6 +33,22 @@ t.test('onReady should be called in order', t => {
   })
 
   fastify.ready(err => t.error(err))
+})
+
+t.test('onReady should be called once', async (t) => {
+  const app = Fastify()
+  let counter = 0
+
+  app.addHook('onReady', async function () {
+    counter++
+  })
+
+  const promises = [1, 2, 3, 4, 5].map((id) => app.ready().then(() => id))
+
+  const result = await Promise.race(promises)
+
+  t.strictSame(result, 1, 'Should resolve in order')
+  t.equal(counter, 1, 'Should call onReady only once')
 })
 
 t.test('async onReady should be called in order', async t => {
@@ -112,7 +128,7 @@ t.test('listen and onReady order', async t => {
 
   await fastify.ready()
   t.pass('trigger the onReady')
-  await fastify.listen(0)
+  await fastify.listen({ port: 0 })
   t.pass('do not trigger the onReady')
 
   await fastify.close()
@@ -268,7 +284,7 @@ t.test('onReady can not add decorators or application hooks', t => {
 })
 
 t.test('onReady cannot add lifecycle hooks', t => {
-  t.plan(4)
+  t.plan(5)
   const fastify = Fastify()
 
   fastify.addHook('onReady', function (done) {
@@ -277,7 +293,9 @@ t.test('onReady cannot add lifecycle hooks', t => {
       fastify.addHook('onRequest', (request, reply, done) => {})
     } catch (error) {
       t.ok(error)
-      t.equal(error.message, 'root plugin has already booted')
+      t.equal(error.message, 'Root plugin has already booted')
+      // TODO: look where the error pops up
+      t.equal(error.code, 'AVV_ERR_ROOT_PLG_BOOTED')
       done(error)
     }
   })
@@ -289,28 +307,32 @@ t.test('onReady cannot add lifecycle hooks', t => {
 })
 
 t.test('onReady throw loading error', t => {
-  t.plan(1)
+  t.plan(2)
   const fastify = Fastify()
 
   try {
     fastify.addHook('onReady', async function (done) {})
   } catch (e) {
+    t.ok(e.code, 'FST_ERR_HOOK_INVALID_ASYNC_HANDLER')
     t.ok(e.message === 'Async function has too many arguments. Async hooks should not use the \'done\' argument.')
   }
 })
 
 t.test('onReady does not call done', t => {
-  t.plan(3)
+  t.plan(6)
   const fastify = Fastify({ pluginTimeout: 500 })
 
-  fastify.addHook('onReady', function (done) {
+  fastify.addHook('onReady', function someHookName (done) {
     t.pass('called in root')
     // done() // don't call done to test timeout
   })
 
   fastify.ready(err => {
     t.ok(err)
-    t.equal(err.code, 'ERR_AVVIO_READY_TIMEOUT')
+    t.equal(err.message, 'A callback for \'onReady\' hook "someHookName" timed out. You may have forgotten to call \'done\' function or to resolve a Promise')
+    t.equal(err.code, 'FST_ERR_HOOK_TIMEOUT')
+    t.ok(err.cause)
+    t.equal(err.cause.code, 'AVV_ERR_READY_TIMEOUT')
   })
 })
 
@@ -365,4 +387,17 @@ t.test('ready return registered', t => {
   fastify.ready()
     .then(instance => { t.same(instance, fastify) })
     .catch(err => { t.fail(err) })
+})
+
+t.test('do not crash with error in follow up onReady hook', async t => {
+  const fastify = Fastify()
+
+  fastify.addHook('onReady', async function () {
+  })
+
+  fastify.addHook('onReady', function () {
+    throw new Error('kaboom')
+  })
+
+  await t.rejects(fastify.ready())
 })

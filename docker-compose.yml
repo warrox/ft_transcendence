@@ -8,12 +8,12 @@ services:
     volumes:
       - ./backend:/app  # Monte ton répertoire local à /app dans le conteneur
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
 
   nginx:
     build:
       context: ./frontend # Chemin vers le répertoire contenant ton Dockerfile Nginx
     ports:
-      - "8080:80"  # Mappe le port 80 du conteneur au port 80 de ta machine
+      - "8081:80"  # Mappe le port 80 du conteneur au port 80 de ta machine
     volumes:
       - ./frontend:/usr/share/nginx/html

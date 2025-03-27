@@ -90,9 +90,9 @@ test('unlisted response code', t => {
   }
 })
 
-fastify.listen(0, err => {
+fastify.listen({ port: 0 }, err => {
   t.error(err)
-  fastify.server.unref()
+  t.teardown(() => { fastify.close() })
 
   test('shorthand - string get ok', t => {
     t.plan(4)
@@ -127,9 +127,13 @@ fastify.listen(0, err => {
       url: 'http://localhost:' + fastify.server.address().port + '/wrong-object-for-schema'
     }, (err, response, body) => {
       t.error(err)
-      t.equal(response.statusCode, 201)
+      t.equal(response.statusCode, 500)
       t.equal(response.headers['content-length'], '' + body.length)
-      t.same(JSON.parse(body), {})
+      t.same(JSON.parse(body), {
+        statusCode: 500,
+        error: 'Internal Server Error',
+        message: 'The value "world" cannot be converted to a number.'
+      })
     })
   })
 

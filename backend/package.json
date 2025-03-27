@@ -4,15 +4,19 @@
   "description": "Backend of the project",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "@fastify/cors": "^11.0.1",
     "cors": "^2.8.5",
-    "fastify": "^3.29.5",
+    "fastify": "^5.2.2",
+    "nvm": "^0.0.4",
     "sqlite3": "^5.1.7"
   },
   "author": "",
   "license": "ISC",
-  "keywords": []
+  "keywords": [],
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
 }
