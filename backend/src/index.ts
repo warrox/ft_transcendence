@@ -104,7 +104,7 @@ server.get('/users', (request: FastifyRequest, reply: FastifyReply) => {
 });
 
 // Démarrer le serveur
-server.listen({ port: 8000, host: "0.0.0.0" }, (err, address) => {
+server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
