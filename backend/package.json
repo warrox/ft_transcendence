@@ -1,26 +1,18 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "Backend of the project",
-  "main": "app.js",
-  "scripts": {
-  "build": "tsc -p tsconfig.json",
-  "start": "node index.ts",
-  "dev": " nodemon --watch src index.ts"
-  },
-  "dependencies": {
-    "@fastify/cors": "^11.0.1",
-    "cors": "^2.8.5",
-    "fastify": "^5.2.2",
-    "nvm": "^0.0.4",
-    "sqlite3": "^5.1.7"
-  },
-  "author": "",
-  "license": "ISC",
-  "keywords": [],
-  "devDependencies": {
-    "@types/node": "^22.13.14",
-    "nodemon": "^3.1.9",
-    "typescript": "^5.8.2"
-  }
+	"main": "index.js",
+	"scripts": {
+		"dev": "nodemon --watch src src/index.ts",
+		"build": "tsc -p tsconfig.json"
+	},
+	"dependencies": {
+		"@fastify/cors": "^11.0.1",
+		"fastify": "^5.2.2",
+		"nodemon": "^3.1.9",
+		"sqlite3": "^5.1.7",
+		"ts-node": "^10.9.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.13.14",
+		"typescript": "^5.8.2"
+	}
 }
