@@ -14,6 +14,6 @@ services:
     build:
       context: ./frontend # Chemin vers le répertoire contenant ton Dockerfile Nginx
     ports:
-      - "8081:80"  # Mappe le port 80 du conteneur au port 80 de ta machine
+      - "8082:80"  # Mappe le port 80 du conteneur au port 80 de ta machine
     volumes:
       - ./frontend:/usr/share/nginx/html
