@@ -29,7 +29,7 @@ server.post('/users', (request: FastifyRequest<{ Body: User }>, reply: FastifyRe
   if (!name || !surname || !email || !password) {
     return reply.status(400).send({ error: "Tous les champs sont obligatoires" });
   }
-
+	// ???? protege des sql injections.
   db.run(
     'INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
     [name, surname, email, password],
