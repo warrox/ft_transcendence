@@ -1,12 +1,38 @@
+# version: '3'
+# services:
+#   node-app:
+#     build:
+#       context: ./backend  # Chemin vers le répertoire contenant ton Dockerfile Node.js
+#     ports:
+#       - "3000:3000"  # Mappe le port 3000 du conteneur au port 3000 de ta machine
+#     volumes:
+#       - ./backend:/app  # Monte ton répertoire local à /app dans le conteneur
+#     environment:
+#       - NODE_ENV=development
+#
+#   nginx:
+#     build:
+#       context: ./frontend
+#     ports:
+#       - "8082:80"
+#     volumes:
+#       - ./frontend:/usr/share/nginx/html
+#       - ./frontend/nginx.conf:/etc/nginx/nginx.conf:ro
+#       - ./frontend/default.conf:/etc/nginx/conf.d/default.conf:ro
+#
+
+
+
+
 version: '3'
 services:
   node-app:
     build:
-      context: ./backend  # Chemin vers le répertoire contenant ton Dockerfile Node.js
+      context: ./backend
     ports:
-      - "3000:3000"  # Mappe le port 3000 du conteneur au port 3000 de ta machine
+      - "3000:3000"
     volumes:
-      - ./backend:/app  # Monte ton répertoire local à /app dans le conteneur
+      - ./backend:/app
     environment:
       - NODE_ENV=development
 
@@ -15,8 +41,11 @@ services:
       context: ./frontend
     ports:
       - "8082:80"
+      - "8443:443"  # Port HTTPS exposé
     volumes:
       - ./frontend:/usr/share/nginx/html
       - ./frontend/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./frontend/default.conf:/etc/nginx/conf.d/default.conf:ro
-
+      - ./certs:/etc/nginx/certs:ro  # ✅ Montage du dossier des certificats
+    depends_on:
+      - node-app
