@@ -6,7 +6,6 @@ WORKDIR /app
 COPY . .
 # Installe les dépendances
 RUN npm i --force
-
 EXPOSE 3000
 
 # Lance l'appliction

@@ -1,11 +1,14 @@
 import fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import cors from '@fastify/cors';
 import db from '../db';
-//const cors = require('@fastify/cors');
-//const db = require('./db.js');
-
+import bcrypt from 'fastify-bcrypt';
 
 const server = fastify();
+
+// Enregistrement du plugin bcrypt
+server.register(bcrypt, {
+  saltWorkFactor: 12
+});
 
 server.register(cors, {
   origin: '*',
@@ -23,29 +26,39 @@ interface User {
 }
 
 // Route pour ajouter un utilisateur
-server.post('/users', (request: FastifyRequest<{ Body: User }>, reply: FastifyReply) => {
+server.post('/users', async (request: FastifyRequest<{ Body: User }>, reply: FastifyReply) => {
   const { name, surname, email, password } = request.body;
+
 
   if (!name || !surname || !email || !password) {
     return reply.status(400).send({ error: "Tous les champs sont obligatoires" });
   }
-	// ???? protege des sql injections.
-  db.run(
-    'INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
-    [name, surname, email, password],
-    function (this: { lastID: number }, err: Error | null) {
-      if (err) {
-        reply.status(400).send({ error: 'Email déjà utilisé ou erreur SQL' });
-      } else {
-        reply.send({ id: this.lastID, name, surname, email });
-      }
-    }
-  );
+
+	const hashedPass = await server.bcrypt.hash(password);
+
+	try {
+		await new Promise<void>((resolve, reject) => {
+			db.run('INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
+				[name, surname, email, hashedPass], // Utilisation du mot de passe hashé
+				(err: Error | null) => {
+					if (err) {
+						return reject(new Error("Email déjà utilisé ou erreur SQL"));
+					}
+					return resolve();
+				}
+			)
+		});
+		return reply.status(200).send("User successfully created");
+	} catch (e: any) {
+		console.log(e);
+		return reply.status(401).send(e);
+	}
+
 });
 
-// Route pour récupérer tous les utilisateurs
+// Route pour récupérer tous les utilisateurs (sans mot de passe)
 server.get('/users', (request: FastifyRequest, reply: FastifyReply) => {
-  db.all('SELECT * FROM users', [], (err: Error | null, rows: User[]) => {
+  db.all('SELECT id, name, surname, email FROM users', [], (err: Error | null, rows: Omit<User, 'password'>[]) => {
     if (err) {
       reply.status(500).send({ error: 'Erreur lors de la récupération des utilisateurs' });
     } else {
