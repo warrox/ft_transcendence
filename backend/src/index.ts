@@ -1,24 +1,29 @@
 import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import fjwt from '@fastify/jwt';
+import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import db from '../db';
 import bcrypt from 'fastify-bcrypt';
 
 const server = fastify();
 
-// Enregistrement du plugin bcrypt
-server.register(bcrypt, {
-  saltWorkFactor: 12
+server.register(bcrypt, { saltWorkFactor: 12 });
+server.register(fjwt, { secret: 'test code to change in the future' });
+
+server.register(fCookie, {
+  secret: 'some-secret-key',
+  hook: 'preHandler',
 });
 
 server.register(cors, {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
 });
 
-// Interface pour typer les données de l'utilisateur
 interface User {
+  id?: number;
   name: string;
   surname: string;
   email: string;
@@ -29,41 +34,58 @@ interface User {
 server.post('/users', async (request: FastifyRequest<{ Body: User }>, reply: FastifyReply) => {
   const { name, surname, email, password } = request.body;
 
-
   if (!name || !surname || !email || !password) {
     return reply.status(400).send({ error: "Tous les champs sont obligatoires" });
   }
 
-	const hashedPass = await server.bcrypt.hash(password);
+  try {
+    // Vérifier si l'utilisateur existe déjà
+    const userExists = await new Promise<boolean>((resolve, reject) => {
+      db.get('SELECT email FROM users WHERE email = ?', [email], (err, row) => {
+        if (err) return reject(err);
+        resolve(!!row);
+      });
+    });
 
-	try {
-		await new Promise<void>((resolve, reject) => {
-			db.run('INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
-				[name, surname, email, hashedPass], // Utilisation du mot de passe hashé
-				(err: Error | null) => {
-					if (err) {
-						return reject(new Error("Email déjà utilisé ou erreur SQL"));
-					}
-					return resolve();
-				}
-			)
-		});
-		return reply.status(200).send("User successfully created");
-	} catch (e: any) {
-		console.log(e);
-		return reply.status(401).send(e);
-	}
+    if (userExists) {
+      return reply.status(409).send({ error: "Cet email est déjà utilisé" });
+    }
 
+    const hashedPass = await server.bcrypt.hash(password);
+
+    const userId = await new Promise<number>((resolve, reject) => {
+      db.run(
+        'INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
+        [name, surname, email, hashedPass],
+        function (err: Error | null) {
+          if (err) return reject(new Error("Erreur lors de l'insertion de l'utilisateur"));
+          resolve(this.lastID); // Récupérer l'ID de l'utilisateur ajouté
+        }
+      );
+    });
+
+    const token = server.jwt.sign({ id: userId, email });
+
+    reply.setCookie('access_token', token, {
+      path: '/',
+      httpOnly: true,
+      secure: true,
+    });
+
+    return reply.status(201).send({ accessToken: token, message: "Utilisateur créé avec succès" });
+  } catch (e: any) {
+    console.error(e);
+    return reply.status(500).send({ error: "Erreur serveur" });
+  }
 });
 
 // Route pour récupérer tous les utilisateurs (sans mot de passe)
 server.get('/users', (request: FastifyRequest, reply: FastifyReply) => {
-  db.all('SELECT id, name, surname, email FROM users', [], (err: Error | null, rows: Omit<User, 'password'>[]) => {
+  db.all('SELECT id, name, surname, email FROM users', [], (err, rows: Omit<User, 'password'>[]) => {
     if (err) {
-      reply.status(500).send({ error: 'Erreur lors de la récupération des utilisateurs' });
-    } else {
-      reply.send(rows);
+      return reply.status(500).send({ error: 'Erreur lors de la récupération des utilisateurs' });
     }
+    return reply.send(rows);
   });
 });
 
@@ -75,11 +97,11 @@ server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
   }
   console.log(`Serveur démarré sur ${address}`);
 });
-// graceful shutdown
-const listeners = ['SIGINT', 'SIGTERM']
-listeners.forEach((signal) => {
+
+// Graceful shutdown
+['SIGINT', 'SIGTERM'].forEach((signal) => {
   process.on(signal, async () => {
-    await server.close()
-    process.exit(0)
-  })
-})
+    await server.close();
+    process.exit(0);
+  });
+});
