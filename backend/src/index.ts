@@ -75,3 +75,11 @@ server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
   }
   console.log(`Serveur démarré sur ${address}`);
 });
+// graceful shutdown
+const listeners = ['SIGINT', 'SIGTERM']
+listeners.forEach((signal) => {
+  process.on(signal, async () => {
+    await server.close()
+    process.exit(0)
+  })
+})
