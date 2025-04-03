@@ -4,11 +4,13 @@ import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import db from '../db';
 import bcrypt from 'fastify-bcrypt';
+const { serialize, parse } = require('@fastify/cookie')
 
 const server = fastify();
 
 server.register(bcrypt, { saltWorkFactor: 12 });
-server.register(fjwt, { secret: 'test code to change in the future' });
+//FIX: Import jwt dynamically from .env file
+server.register(fjwt, { secret: '0VV6IaYsjVMlIl_e2kmcZsjllzIEjZSolCiPSoGPfY0sJhQtJKarviIMyWACuBvP_zRRA5bsIiM69HYgKZbifA'});
 
 server.register(fCookie, {
   secret: 'some-secret-key',
@@ -64,12 +66,12 @@ server.post('/users', async (request: FastifyRequest<{ Body: User }>, reply: Fas
       );
     });
 
-    const token = server.jwt.sign({ id: userId, email });
-
+    const token = server.jwt.sign({ id: userId, email}, {expiresIn: 3600 }); 
     reply.setCookie('access_token', token, {
       path: '/',
       httpOnly: true,
       secure: true,
+	  maxAge: 3600
     });
 
     return reply.status(201).send({ accessToken: token, message: "Utilisateur créé avec succès" });
@@ -80,7 +82,7 @@ server.post('/users', async (request: FastifyRequest<{ Body: User }>, reply: Fas
 });
 
 // Route pour récupérer tous les utilisateurs (sans mot de passe)
-server.get('/users', (request: FastifyRequest, reply: FastifyReply) => {
+server.get('/users', (_request: FastifyRequest, reply: FastifyReply) => {
   db.all('SELECT id, name, surname, email FROM users', [], (err, rows: Omit<User, 'password'>[]) => {
     if (err) {
       return reply.status(500).send({ error: 'Erreur lors de la récupération des utilisateurs' });
