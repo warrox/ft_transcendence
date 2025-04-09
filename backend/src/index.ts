@@ -8,10 +8,10 @@ import { postRoute } from "./route/post";
 export const server = fastify();
 
 import dotenv from 'dotenv';
+import { checkJWT, getRoute } from './route/get';
 dotenv.config();
 const JWS =  process.env.JWTSECRETKEY;
 server.register(bcrypt, { saltWorkFactor: 12 });
-//FIX: Import jwt dynamically from .env file
 server.register(fjwt, { secret: JWS!});
 
 server.register(fCookie, {
@@ -34,16 +34,8 @@ export interface User {
   password: string;
 }
  postRoute(server); // check tout le shmilbique pour export cette merde 
-// Route pour récupérer tous les utilisateurs (sans mot de passe)
-server.get('/users', (_request: FastifyRequest, reply: FastifyReply) => {
-  db.all('SELECT id, name, surname, email FROM users', [], (err, rows: Omit<User, 'password'>[]) => {
-    if (err) {
-      return reply.status(500).send({ error: 'Erreur lors de la récupération des utilisateurs' });
-    }
-    return reply.send(rows);
-  });
-});
-
+ checkJWT(server);
+ getRoute(server); // get 
 // Démarrer le serveur
 server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
   if (err) {
