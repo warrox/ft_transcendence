@@ -5,6 +5,7 @@ import cors from '@fastify/cors';
 import db from '../db';
 import bcrypt from 'fastify-bcrypt';
 import { postRoute } from "./route/post";
+import { getMe } from './route/me';
 export const server = fastify();
 
 import dotenv from 'dotenv';
@@ -33,8 +34,10 @@ export interface User {
   email: string;
   password: string;
 }
+
+checkJWT(server);
+getMe(server);
  postRoute(server); // check tout le shmilbique pour export cette merde 
- checkJWT(server);
  getRoute(server); // get 
 // Démarrer le serveur
 server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {

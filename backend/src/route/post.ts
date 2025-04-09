@@ -10,7 +10,7 @@ import {User} from '../index'
 
 export async function postRoute(server : FastifyInstance)
 {
-	server.post('/users', async (request: FastifyRequest<{ Body: User }>, reply: FastifyReply) => {
+	server.post('/register', async (request: FastifyRequest<{ Body: User }>, reply: FastifyReply) => {
 		const { name, surname, email, password } = request.body;
 
 		if (!name || !surname || !email || !password) {
@@ -43,7 +43,7 @@ export async function postRoute(server : FastifyInstance)
 				);
 			});
 
-			const token = server.jwt.sign({ id: userId, email}, {expiresIn: 3600 }); 
+			const token = server.jwt.sign({ id: userId, email: email}, {expiresIn: 3600 }); 
 			reply.setCookie('access_token', token, {
 				path: '/',
 				httpOnly: true,
