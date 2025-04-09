@@ -4,13 +4,15 @@ import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import db from '../db';
 import bcrypt from 'fastify-bcrypt';
-const { serialize, parse } = require('@fastify/cookie')
 import { postRoute } from "./route/post";
 export const server = fastify();
 
+import dotenv from 'dotenv';
+dotenv.config();
+const JWS =  process.env.JWTSECRETKEY;
 server.register(bcrypt, { saltWorkFactor: 12 });
 //FIX: Import jwt dynamically from .env file
-server.register(fjwt, { secret: '0VV6IaYsjVMlIl_e2kmcZsjllzIEjZSolCiPSoGPfY0sJhQtJKarviIMyWACuBvP_zRRA5bsIiM69HYgKZbifA'});
+server.register(fjwt, { secret: JWS!});
 
 server.register(fCookie, {
   secret: 'some-secret-key',

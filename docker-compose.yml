@@ -1,6 +1,8 @@
 version: '3'
 services:
   node-app:
+    env_file:
+      - .env
     build:
       context: ./backend
     ports:
