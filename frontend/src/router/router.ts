@@ -1,6 +1,7 @@
 import { Home } from '../components/Home';
 import { About } from '../components/About';
 import { Navbar } from '../components/Navbar';
+import { Register } from '../components/Register';
 
 type Route = {
 	path: string;
@@ -10,6 +11,7 @@ type Route = {
 const routes: Route[] = [
 	{ path: '/', component: Home },
 	{ path: '/about', component: About},
+	{ path: '/register', component: Register}
 ]
 
 export function router() {

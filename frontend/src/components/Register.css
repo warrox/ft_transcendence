@@ -1,0 +1,9 @@
+.ex1 {
+	background-color: red;
+}
+
+.ex2 {
+	background-color: blue;
+	width: 100px;
+	aspect-ratio: 1/1;
+}

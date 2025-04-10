@@ -6,6 +6,7 @@ export function Navbar(): HTMLElement {
 		<ul style="display: flex; gap: 1rem; list-style: none; padding: 0;">
 			<li><a href="#/">Home</a></li>
 			<li><a href="#/about">About</a></li>
+			<li><a href="#/register">Register</a></li>
 		</ul>
 	`;
 
