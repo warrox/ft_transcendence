@@ -24,14 +24,19 @@
 // document.addEventListener('DOMContentLoaded', startApp);
 
 
-import { Home } from './components/Home'
+// import { Home } from './components/Home'
 
-function startApp() {
-	const app = document.getElementById('app');
-	if (!app) return;
+// function startApp() {
+// 	const app = document.getElementById('app');
+// 	if (!app) return;
 
-	app.innerHTML = ''; // On nettoie avant d'afficher
-	app.append(Home()); // On ajoute la page Home
-}
+// 	app.innerHTML = ''; // On nettoie avant d'afficher
+// 	app.append(Home()); // On ajoute la page Home
+// }
 
-document.addEventListener('DOMContentLoaded', startApp);
+// document.addEventListener('DOMContentLoaded', startApp);
+
+import { router } from './router/router';
+
+window.addEventListener('DOMContentLoaded', router);
+window.addEventListener('hashchange', router);

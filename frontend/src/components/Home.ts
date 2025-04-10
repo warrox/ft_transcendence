@@ -22,6 +22,10 @@ export function Home(): HTMLElement {
 		description.textContent = 'Clicked!';
 	});
 
+	// const navLink = document.createElement('a');
+	// navLink.href = '#/about';
+	// navLink.textContent = 'Go to About Page';
+
 	container.append(title, description, button);
 	return container;
 }
