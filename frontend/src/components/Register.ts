@@ -1,39 +1,39 @@
-import { Div, Button } from "../lib/Div";
+// import { Div, Button } from "../lib/Div";
 
-import "./Register.css"
+// import "./Register.css"
 
-export function Register(): HTMLElement {
+// export function Register(): HTMLElement {
 
-	const container = document.createElement('div');
-	container.id = 'register';
+// 	const container = document.createElement('div');
+// 	container.id = 'register';
 
-	const printSalope = () => {
-		console.log("Salope");
-	}
+// 	const printTest = () => {
+// 		console.log("Test");
+// 	}
 
-	const div = new Div({style: "ex1", 
-		children: new Button({
-			id: "jolieBoutton",
-			onClick: printSalope,
-		})
-	});
+// 	const div = new Div({style: "ex1", 
+// 		children: new Button({
+// 			id: "jolieBoutton",
+// 			onClick: printTest,
+// 		})
+// 	});
 
-	container.innerHTML = div.render();
+// 	container.innerHTML = div.render();
 
-	// const title = document.createElement('h1');
-	// title.textContent = 'Register';
+// 	// const title = document.createElement('h1');
+// 	// title.textContent = 'Register';
 
-	// const description = document.createElement('p');
-	// description.textContent = 'Register yourself here!';
+// 	// const description = document.createElement('p');
+// 	// description.textContent = 'Register yourself here!';
 
 
-	// const button = document.createElement('button');
-	// button.textContent = 'OK';
-	// button.addEventListener('click', () => {
-	// 	description.textContent = 'Very OK';
-	// });
+// 	// const button = document.createElement('button');
+// 	// button.textContent = 'OK';
+// 	// button.addEventListener('click', () => {
+// 	// 	description.textContent = 'Very OK';
+// 	// });
 
-	// container.append(title, description, button);
+// 	// container.append(title, description, button);
 
-	return container;
-}
+// 	return container;
+// }

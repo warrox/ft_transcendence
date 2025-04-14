@@ -1,27 +1,42 @@
+import { PongNode } from "../lib/PongNode";
+import { Button, Div, P } from "../lib/PongFactory"
+import { rerender } from "../router/router";
+
 // function createElem(tag: string, txt: string) : HTMLElement {
 // 	const elem = document.createElement(tag);
 // 	elem.textContent = txt;
 // 	return elem;
 // }
 
+let postData: null | { title: string; body: string } = null;
 
-export function Home(): HTMLElement {
-	const container = document.createElement('div');
-	container.classList.add('home');
+export function Home(): PongNode<any> {
+	
+	// const data: 
 
-	const title = document.createElement('h1');
-	title.textContent = 'Welcome to Home Page';
+	// postData = { title: data.title, body: data.body };
+	const handleClick = () => {
+		// console.log("test");
+		fetch('https://jsonplaceholder.typicode.com/posts/1')
+		.then(res => res.json())
+		.then(data => postData = data)
+		.finally(() => rerender())
+	}
 
-	const description = document.createElement('p');
-	description.textContent = 'This is a single page app.';
+	const handleHide = () => {
+		postData = null;
+		rerender();
+	};
 
+	console.log(postData);
+	
 
-	const button = document.createElement('button');
-	button.textContent = 'Click me';
-	button.addEventListener('click', () => {
-		description.textContent = 'Clicked!';
-	});
-
-	container.append(title, description, button);
-	return container;
+	return Div({}, [
+		P({}, ["Welcome to Home page !"]),
+		Button({ id: "b1", onClick: handleClick }, ["Get a random activity"]),
+		P({}, [
+			postData && postData.title || ""
+		]),
+		Button({id: "b2", onClick: handleHide }, ["Hide title"]),
+	]);
 }

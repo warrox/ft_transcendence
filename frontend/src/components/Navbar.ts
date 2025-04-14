@@ -1,14 +1,20 @@
-export function Navbar(): HTMLElement {
-	const nav = document.createElement('nav');
-	nav.classList.add('navbar');
+import { PongNode } from "../lib/PongNode";
+import { Div, Link } from "../lib/PongFactory";
 
-	nav.innerHTML = `
-		<ul style="display: flex; gap: 1rem; list-style: none; padding: 0;">
-			<li><a href="#/">Home</a></li>
-			<li><a href="#/about">About</a></li>
-			<li><a href="#/register">Register</a></li>
-		</ul>
-	`;
+export function Navbar(): PongNode<any> {
+	return Div({
+		style: "navbar"
+	}, [
+		Div({
+			style: "nav-links"
+		}, [
+			Div({}, [link("/", "Home")]),
+			Div({}, [link("/about", "About")]),
+			Div({}, [link("/register", "Register")]),
+		])
+	]);
+}
 
-	return nav;
+function link(href: string, text: string): PongNode<any> {
+	return Link({ href, style: "link"}, [text]);
 }
