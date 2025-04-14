@@ -1,13 +1,11 @@
 import { PongNode } from '../lib/PongNode';
 import { Home } from '../components/Home';
-// import { About } from '../components/About';
+import { NotFound } from '../components/NotFound';
+import { About } from '../components/About';
 import { Navbar } from '../components/Navbar';
-// import { Register } from '../components/Register';
-import { Div, P } from '../lib/PongFactory';
+import { Register } from '../components/Register';
+import { Div } from '../lib/PongFactory';
 
-export function renderToDOM(node: PongNode<any>, container: HTMLElement) {
-	container.innerHTML = node.render();
-}
 
 type Route = {
 	path: string;
@@ -16,9 +14,13 @@ type Route = {
 
 const routes: Route[] = [
 	{ path: '/', component: Home },
-	// { path: '/about', component: About},
-	// { path: '/register', component: Register}
+	{ path: '/about', component: About},
+	{ path: '/register', component: Register}
 ]
+
+export function renderToDOM(node: PongNode<any>, container: HTMLElement) {
+	container.innerHTML = node.render();
+}
 
 export function rerender() {
 	const app = document.getElementById('app');
@@ -35,14 +37,12 @@ export function rerender() {
 	);
 }
 
-
 let currentPage: () => PongNode<any> = () => NotFound();
 
 export function setCurrentPage(page: () => PongNode<any>) {
 	currentPage = page;
 	rerender();
 }
-
 
 export function router() {
 	const app = document.getElementById('app');
@@ -57,8 +57,6 @@ export function router() {
 
 	const page = route ? route.component() : NotFound();
 
-	console.log(page);
-
 	renderToDOM(
 		Div({}, [
 			Navbar(),
@@ -66,10 +64,4 @@ export function router() {
 		]),
 		app
 	);
-}
-
-function NotFound() : PongNode<any> {
-	return Div({}, [
-		P({}, ["404 - Page not found"])
-	]);
 }
