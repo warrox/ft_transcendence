@@ -38,7 +38,6 @@ export const register = async (request: FastifyRequest<{ Body: User }>, reply: F
 			);
 		});
 
-
 		const token = server.jwt.sign({ id: userId, email: email}, {expiresIn: 3600 }); 
 		reply.setCookie('access_token', token, {
 			path: '/',
