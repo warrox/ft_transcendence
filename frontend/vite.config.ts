@@ -1,31 +1,39 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
 import path from 'path';
+import fs from 'fs'
 
 export default defineConfig({
-  // Définir les répertoires d'entrée
-  root: path.resolve(__dirname, 'src'),
-
-  // Configuration pour le serveur de développement
-  server: {
-	port: 3000, // Le port du serveur de développement
-	open: true, // Ouvrir automatiquement le navigateur
-  },
-
-  // Configuration de la sortie de build
-  build: {
-	outDir: path.resolve(__dirname, 'dist'), // Le dossier où la build sera générée
-	sourcemap: true, // Générer les sourcemaps
-  },
-
-  // Résolution des modules
-  resolve: {
-	alias: {
-	  '@': path.resolve(__dirname, 'src'),
+	root: path.resolve(__dirname, 'src'),
+	plugins: [],
+	build: {
+		outDir: "build",
 	},
-  },
-
-  // Options supplémentaires si nécessaire
-  optimizeDeps: {
-	include: [], // Modules à optimiser
-  },
-});
+	server: {
+		host: "0.0.0.0", // Allows access from Docker
+		port: 3020,
+		strictPort: true,
+		headers: {
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': '*',
+			'Access-Control-Allow-Headers': '*',
+		},
+		https: {
+			key: fs.readFileSync('/certs/localhost-key.pem'),
+			cert: fs.readFileSync('/certs/localhost.pem'),
+		},
+		proxy: {
+			'/api': {
+				target: 'http://node-app:3000', // Backend server
+				changeOrigin: true,
+			},
+		},
+		cors: {
+			origin: true,
+		},
+	},
+	resolve: {
+	alias: {
+		'@': path.resolve(__dirname, 'src'),
+	},
+},
+})
