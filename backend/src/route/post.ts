@@ -5,7 +5,10 @@ import {User} from '../index'
 
 export const register = async (request: FastifyRequest<{ Body: User }>, reply: FastifyReply) => {
 	const { name, surname, email, password } = request.body;
-
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	  if (!emailRegex.test(email)) {
+		return reply.status(400).send({ error: "Invalid email format" });
+	  }
 	if (!name || !surname || !email || !password) {
 		return reply.status(400).send({ error: "Tous les champs sont obligatoires" });
 	}

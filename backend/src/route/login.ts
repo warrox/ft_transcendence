@@ -9,6 +9,10 @@ export const login = async (request: FastifyRequest<{ Body: User }>,reply: Fasti
   if (!email || !password) {
     return reply.status(400).send({ error: "Email and password are required" });
   }
+ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return reply.status(400).send({ error: "Invalid email format" });
+  }
 
   db.get<{ password: string }>(
     "SELECT password FROM users WHERE email = ?",
