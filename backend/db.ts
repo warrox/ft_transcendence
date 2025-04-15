@@ -1,5 +1,4 @@
-
-import sqlite3 from 'sqlite3';
+import * as sqlite3 from 'sqlite3';
 
 sqlite3.verbose();
 
