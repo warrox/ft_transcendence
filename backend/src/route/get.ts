@@ -28,11 +28,3 @@ export const checkJWT = async (request: FastifyRequest, reply: FastifyReply)=> {
 	} 
 };
 
-//async function wawa (_param:string): void {
-//	console.log("salope");
-//}
-//
-//const wawa = (_param: string):void => {
-//	console.log("salope");
-//
-//}

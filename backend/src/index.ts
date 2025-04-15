@@ -5,7 +5,7 @@ import cors from '@fastify/cors';
 import bcrypt from 'fastify-bcrypt';
 export const server = fastify();
 import { getRoutes } from './GetRoutes.types';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 
 
 dotenv.config();
@@ -38,6 +38,7 @@ function registerRoutes(server: FastifyInstance): void {
 	server.get('/users', getRoutes.users);
 	server.get('/checkJWT', getRoutes.checkJWT);
 	server.post('/register', getRoutes.register);
+	server.post('/login', getRoutes.login);
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 
