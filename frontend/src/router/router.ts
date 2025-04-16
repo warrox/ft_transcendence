@@ -5,6 +5,8 @@ import { About } from '../components/About';
 import { Navbar } from '../components/Navbar';
 import { Register } from '../components/Register';
 import { Div } from '../lib/PongFactory';
+import { Login } from '../components/Login';
+import { Game } from '../components/Game';
 
 
 type Route = {
@@ -15,7 +17,9 @@ type Route = {
 const routes: Route[] = [
 	{ path: '/', component: Home },
 	{ path: '/about', component: About},
-	{ path: '/register', component: Register}
+	{ path: '/register', component: Register},
+	{ path: '/login', component: Login},
+	{ path: '/game', component: Game}
 ]
 
 export function renderToDOM(node: PongNode<any>, container: HTMLElement) {
