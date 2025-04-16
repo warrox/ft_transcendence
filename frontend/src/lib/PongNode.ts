@@ -11,6 +11,8 @@ export interface ButtonProps {
 	children?: PongNode<any>[],
 	onClick?: () => void,
 	id: string,
+	class?: string,
+	style?: string,
 }
 
 export class ButtonNode extends PongNode<ButtonProps> {
@@ -42,7 +44,8 @@ export class ButtonNode extends PongNode<ButtonProps> {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
 
 		return `
-			<button id="${this.props && this.props.id}">
+			<button id="${this.props && this.props.id}"
+				class="${this.props && this.props.style ? this.props.style: ""}">
 				${childHTML}
 			</button>
 		`
