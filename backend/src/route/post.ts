@@ -28,14 +28,16 @@ export const register = async (request: FastifyRequest<{ Body: User }>, reply: F
 		const hashedPass = await request.server.bcrypt.hash(password);
 
 		const userId = await new Promise<number>((resolve, reject) => {
-			db.run(
+			const test = db.run(
 				'INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
 				[name, surname, email, hashedPass],
 				function (err: Error | null) {
 					if (err) return reject(new Error("Erreur lors de l'insertion de l'utilisateur"));
-					resolve(this.lastID); // Récupérer l'ID de l'utilisateur ajouté
+					resolve(this.lastID);
 				}
 			);
+			console.log(test);
+			
 		});
 
 		const token = server.jwt.sign({ id: userId, email: email}, {expiresIn: 3600 }); 
