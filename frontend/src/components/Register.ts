@@ -3,7 +3,7 @@ import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
 
 import './Register.css'
-import "tailwindcss"
+import "../styles/index.css"
 
 export function Register(): PongNode<any> {
 	const nameInput = Input({ id: "name", required: true, onChange: () => {}});
@@ -22,6 +22,8 @@ export function Register(): PongNode<any> {
 			email: mail,
 			password: password,
 		}
+
+		console.log(mail);
 
 		fetch("http://localhost:3000/register", {
 			method: "POST",
@@ -54,6 +56,6 @@ export function Register(): PongNode<any> {
 		lastNameInput,
 		mailInput,
 		passwordInput,
-		Button({ class: "bg-sky-500 hover:bg-sky-700 ..." ,id: "button1", onClick: handleRegister }, ["Register"]),
+		Button({ class: "bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" ,id: "button1", onClick: handleRegister }, ["Register"]),
 	])
 }
