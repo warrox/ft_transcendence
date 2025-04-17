@@ -1,4 +1,19 @@
-import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps } from "./PongNode";
+import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps, ImgNode, ImgProps, H1Props, H1Node, H2Node} from "./PongNode";
+
+export function H2(props: H1Props, child?: Array<PongNode<any> | string>): H2Node {
+	const coerceChildren = child?.map(coerceChild);
+	return new H2Node ({...props, children: coerceChildren });
+}
+
+export function H1(props: H1Props, child?: Array<PongNode<any> | string>): H1Node {
+	const coerceChildren = child?.map(coerceChild);
+	return new H1Node ({...props, children: coerceChildren });
+}
+
+export function Image(props: ImgProps, child?: Array<PongNode<any> | string>): ImgNode {
+	const coerceChildren = child?.map(coerceChild);
+	return new ImgNode ({...props, children: coerceChildren });
+}
 
 export function Div(props?: DivProps, child?: Array<PongNode<any> | string>): DivNode {
 	const coercedChildren = child?.map(coerceChild);
