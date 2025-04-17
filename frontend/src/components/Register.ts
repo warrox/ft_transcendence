@@ -1,7 +1,6 @@
 import { Div, P, Button, Input } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import '../styles/cssFactory'
 import { inputRegister } from "../styles/cssFactory";
 
 export function Register(): PongNode<any> {
