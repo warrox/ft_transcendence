@@ -1,4 +1,4 @@
-import { Div, P, Button, Input, Image, H1, H2 } from "../lib/PongFactory";
+import { Div, P, Button, Input, Image, H1, H2, UList, Li } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
 import { inputCss } from "../styles/cssFactory";
@@ -74,6 +74,11 @@ export function Login(): PongNode<any> {
 		H1({ class: "text-3xl font-bold text-center"}, ["Login Page"]),
 		H2({ class: "text-2xl text-center"}, ["Login Page H2"]),
 		P({}, ["Login page!"]),
+		UList({}, [
+			Li({}, ["Item 1"]),
+			Li({}, ["Item 2"]),
+			Li({}, ["Item 3"]),
+		]),
 		testImg,
 		emailInput,
 		passwordInput,

@@ -1,3 +1,5 @@
+/********************************************************PARENT PONG_NODE**********************************************************/
+
 export abstract class PongNode<T = undefined> {
 	abstract render(): string;
 	protected props: T | undefined;
@@ -7,10 +9,54 @@ export abstract class PongNode<T = undefined> {
 	}
 }
 
-export interface H1Props {
-	// id: string;
+/*******************************************************LIST_NODE**********************************************************/
+
+export interface LiProps {
 	class?: string;
-	children?: PongNode<any>[],
+	children?: PongNode<any>[];
+}
+
+export class LiNode extends PongNode<LiProps> {
+
+	constructor(props?: LiProps) {
+		super(props);
+	}
+
+	render(): string {
+		const childHTML = this.props?.children?.map(child => child.render()).join("") || "";
+		const className = this.props?.class;
+	
+		return `<li${className ? ` class="${className}"` : ""}>${childHTML}</li>`;
+	}
+	
+}
+
+export interface UListProps {
+	class?: string;
+	children?: PongNode<any>[];
+}
+
+export class UListNode extends PongNode<UListProps> {
+
+	constructor(props?: UListProps) {
+		super(props);
+	}
+
+	render(): string {
+		const childHTML = this.props?.children?.map(child => child.render()).join("") || "";
+		const className = this.props?.class;
+	
+		return `<ul${className ? ` class="${className}"` : ""}>${childHTML}</ul>`;
+	}
+	
+}
+
+
+/********************************************************HEADERS_NODE**********************************************************/
+
+export interface H1Props {
+	class?: string;
+	children?: PongNode<any>[];
 }
 
 export class H1Node extends PongNode<H1Props> {
@@ -22,7 +68,6 @@ export class H1Node extends PongNode<H1Props> {
 	render(): string {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
 		const className = this.props?.class || "";
-		// const id = this.props?.id;
 
 		return `
 			<h1 class="${className}">
@@ -41,7 +86,6 @@ export class H2Node extends PongNode<H1Props> {
 	render(): string {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
 		const className = this.props?.class || "";
-		// const id = this.props?.id;
 
 		return `
 			<h2 class="${className}">
@@ -51,12 +95,12 @@ export class H2Node extends PongNode<H1Props> {
 	}
 }
 
+/********************************************************IMAGE_NODE**********************************************************/
+
 export interface ImgProps {
 	id: string;
-	// class?: string;
 	src: string;
 	alt?: string;
-	// onClick?: () => void,
 	children?: PongNode<any>[],
 }
 
@@ -67,7 +111,6 @@ export class ImgNode extends PongNode<ImgProps> {
 	}
 
 	render(): string {
-		// const className = this.props?.class || "";
 		const src = this.props?.src || "";
 		const alt = this.props?.alt || "";
 		const id = this.props?.id || "";
@@ -79,6 +122,8 @@ export class ImgNode extends PongNode<ImgProps> {
 		`
 	}
 }
+
+/********************************************************BUTTON_NODE**********************************************************/
 
 export interface ButtonProps {
 	children?: PongNode<any>[],
@@ -125,6 +170,8 @@ export class ButtonNode extends PongNode<ButtonProps> {
 	}
 }
 
+/********************************************************DIV_NODE**********************************************************/
+
 export interface DivProps {
 	class?: string,
 	children?: PongNode<any>[],
@@ -142,6 +189,9 @@ export class DivNode extends PongNode<DivProps> {
 	}
 }
 
+/********************************************************TEXTE_NODE**********************************************************/
+
+
 export class TextNode extends PongNode<undefined> {
 	constructor(private text: string) {
 		super();
@@ -151,6 +201,8 @@ export class TextNode extends PongNode<undefined> {
 		return this.text;
 	}
 }
+
+/*******************************************************LINK_NODE**********************************************************/
 
 export interface LinkProps {
 	href: string;
@@ -171,6 +223,8 @@ export class LinkNode extends PongNode<LinkProps> {
 	}
 }
 
+/*******************************************************PARAGRAPH_NODE**********************************************************/
+
 export interface PProps {
 	class?: string,
 	children?: PongNode<any>[],
@@ -188,6 +242,8 @@ export class PNode extends PongNode<PProps> {
 		`
 	}
 }
+
+/*******************************************************TEXTBOX_NODE**********************************************************/
 
 export interface InputProps {
 	class?: string,
