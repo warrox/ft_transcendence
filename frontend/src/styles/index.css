@@ -1,1 +1,62 @@
 @import "tailwindcss";
+
+@keyframes span1 {
+	0% { left: -200px; }
+	100% { left: 200px; }
+	}
+	@keyframes span2 {
+	0% { top: -70px; }
+	100% { top: 70px; }
+	}
+	@keyframes span3 {
+	0% { right: -200px; }
+	100% { right: 200px; }
+	}
+	@keyframes span4 {
+	0% { bottom: -70px; }
+	100% { bottom: 70px; }
+	}
+	
+	.fancy-button span {
+	@apply absolute block;
+	}
+	.fancy-button span:nth-child(1) {
+	height: 3px;
+	width: 200px;
+	top: 0;
+	left: -200px;
+	background: linear-gradient(to right, rgba(0,0,0,0), #f6e58d);
+	animation: span1 2s linear infinite;
+	animation-delay: 1s;
+	}
+	.fancy-button span:nth-child(2) {
+	height: 70px;
+	width: 3px;
+	top: -70px;
+	right: 0;
+	background: linear-gradient(to bottom, rgba(0,0,0,0), #f6e58d);
+	animation: span2 2s linear infinite;
+	animation-delay: 2s;
+	}
+	.fancy-button span:nth-child(3) {
+	height: 3px;
+	width: 200px;
+	right: -200px;
+	bottom: 0;
+	background: linear-gradient(to left, rgba(0,0,0,0), #f6e58d);
+	animation: span3 2s linear infinite;
+	animation-delay: 3s;
+	}
+	.fancy-button span:nth-child(4) {
+	height: 70px;
+	width: 3px;
+	bottom: -70px;
+	left: 0;
+	background: linear-gradient(to top, rgba(0,0,0,0), #f6e58d);
+	animation: span4 2s linear infinite;
+	animation-delay: 4s;
+	}
+	.fancy-button:hover span {
+	animation-play-state: paused;
+	}
+	

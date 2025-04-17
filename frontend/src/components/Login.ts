@@ -2,9 +2,9 @@ import { Div, P, Button, Input, Image, H1, H2 } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
 import { inputCss } from "../styles/cssFactory";
+import { fancyButtonCss, fancySpanCss } from "../styles/cssFactory";
+
 import logo from '../assets/logo.png';
-
-
 
 let loginStatus: null | "OK" | "KO" = null
 
@@ -77,7 +77,15 @@ export function Login(): PongNode<any> {
 		testImg,
 		emailInput,
 		passwordInput,
-		Button({ class: "bg-sky-500 hover:bg-sky-700 ..." ,id: "button1", onClick: handleLogin } , ["Log In"]),
+		Button({
+			class: fancyButtonCss,
+			id: "button1",
+			onClick: handleLogin
+		}, [
+			"Log In",
+			...fancySpanCss.map(css => Div({ class: css }))
+		]),
+		// Button({ class: "bg-sky-500 hover:bg-sky-700 ..." ,id: "button1", onClick: handleLogin } , ["Log In"]),
 		P({}, [`Login status: ${loginStatus ?? 'N/A'}`])
 	])
 }
