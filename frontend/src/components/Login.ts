@@ -1,12 +1,16 @@
-import { Div, P, Button, Input } from "../lib/PongFactory";
+import { Div, P, Button, Input, Image } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
-import { rerender } from "../router/router";
+// import { rerender } from "../router/router";
+import logo from '../assets/logo.png';
 
 import "tailwindcss"
 
 export function Login(): PongNode<any> {
 	const nameInput = Input({ id: "name", required: true, onChange: () => {}});
 	const passwordInput = Input({ id: "password", type: "password", required: true, onChange: () => {}});
+
+	// TESTING IMG
+	const testImg = Image({ id: "test_button", src: logo, alt: "my_logo"});
 
 	const handleLogin = () => {
 		const name = (document.querySelector("#name") as HTMLInputElement)?.value;
@@ -43,6 +47,7 @@ export function Login(): PongNode<any> {
 
 	return Div({}, [
 		P({}, ["Login page!"]),
+		testImg,
 		nameInput,
 		passwordInput,
 		Button({ class: "bg-sky-500 hover:bg-sky-700 ..." ,id: "button1", onClick: handleLogin } , ["Log In"])

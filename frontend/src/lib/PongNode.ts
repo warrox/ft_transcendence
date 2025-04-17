@@ -7,6 +7,35 @@ export abstract class PongNode<T = undefined> {
 	}
 }
 
+export interface ImgProps {
+	id: string;
+	// class?: string;
+	src: string;
+	alt?: string;
+	// onClick?: () => void,
+	children?: PongNode<any>[],
+}
+
+export class ImgNode extends PongNode<ImgProps> {
+
+	constructor(props?: ImgProps) {
+		super(props);
+	}
+
+	render(): string {
+		// const className = this.props?.class || "";
+		const src = this.props?.src || "";
+		const alt = this.props?.alt || "";
+		const id = this.props?.id || "";
+
+		return `
+			<img id = "${id}"
+			src = "${src}"
+			alt = "${alt}"/>
+		`;
+	}
+}
+
 export interface ButtonProps {
 	children?: PongNode<any>[],
 	onClick?: () => void,

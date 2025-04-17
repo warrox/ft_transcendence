@@ -1,4 +1,9 @@
-import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps } from "./PongNode";
+import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps, ImgNode, ImgProps } from "./PongNode";
+
+export function Image(props: ImgProps, child?: Array<PongNode<any> | string>): ImgNode {
+	const coerceChildren = child?.map(coerceChild);
+	return new ImgNode ({...props, children: coerceChildren });
+}
 
 export function Div(props?: DivProps, child?: Array<PongNode<any> | string>): DivNode {
 	const coercedChildren = child?.map(coerceChild);
