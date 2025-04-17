@@ -13,7 +13,7 @@ export function Navbar(): PongNode<any> {
 			Div({}, [link("/about", "About", linkCss)]),
 			Div({}, [link("/register", "Register", linkCss)]),
 			Div({}, [link("/login", "Login", linkCss)]),
-			Div({}, [link("/game", "game", linkCss)]),
+			Div({}, [link("/game", "Game", linkCss)]),
 
 		])
 	]);
