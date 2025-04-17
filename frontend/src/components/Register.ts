@@ -1,33 +1,33 @@
 import { Div, P, Button, Input } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import { inputRegister } from "../styles/cssFactory";
+import { inputCss } from "../styles/cssFactory";
 
 export function Register(): PongNode<any> {
 	const nameInput = Input({ 
 		id: "name", 
 		required: true, 
 		onChange: () => {},
-		class: inputRegister,
+		class: inputCss,
 	});
 	const lastNameInput = Input({
 		id: "lastname", 
 		required: true, 
 		onChange: () => {},
-		class: inputRegister,
+		class: inputCss,
 	});
 	const mailInput = Input({
 		id: "mail", 
 		required: true, 
 		onChange: () => {},
-		class: inputRegister,
+		class: inputCss,
 	});
 	const passwordInput = Input({
 		id: "password", 
 		type: "password", 
 		required: true, 
 		onChange: () => {},
-		class: inputRegister,
+		class: inputCss,
 	});
 
 	const handleRegister = () => {

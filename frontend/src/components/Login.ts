@@ -1,15 +1,27 @@
 import { Div, P, Button, Input, Image, H1, H2 } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
+import { inputCss } from "../styles/cssFactory";
 import logo from '../assets/logo.png';
 
-import "tailwindcss"
+
 
 let loginStatus: null | "OK" | "KO" = null
 
 export function Login(): PongNode<any> {
-	const emailInput = Input({ id: "emailInput", required: true, onChange: () => {}});
-	const passwordInput = Input({ id: "password", type: "password", required: true, onChange: () => {}});
+	const emailInput = Input({ 
+		id: "emailInput", 
+		required: true, 
+		onChange: () => {},
+		class: inputCss,
+	});
+	const passwordInput = Input({
+		id: "password",
+		type: "password",
+		required: true,
+		onChange: () => {},
+		class: inputCss,
+	});
 
 	// TESTING IMG
 	const testImg = Image({ id: "test_button", src: logo, alt: "my_logo"});

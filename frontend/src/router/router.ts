@@ -8,7 +8,6 @@ import { Div } from '../lib/PongFactory';
 import { Login } from '../components/Login';
 import { Game } from '../components/Game';
 
-
 type Route = {
 	path: string;
 	component: () => PongNode<any>;
