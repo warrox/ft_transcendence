@@ -53,7 +53,7 @@ export class H2Node extends PongNode<H1Props> {
 
 export interface ImgProps {
 	id: string;
-	// class?: string;
+	class?: string;
 	src: string;
 	alt?: string;
 	// onClick?: () => void,
@@ -67,15 +67,18 @@ export class ImgNode extends PongNode<ImgProps> {
 	}
 
 	render(): string {
-		// const className = this.props?.class || "";
+		const className = this.props?.class || "";
 		const src = this.props?.src || "";
 		const alt = this.props?.alt || "";
 		const id = this.props?.id || "";
 
 		return `
-			<img id = "${id}"
+			<img
+			class = "${className}
+			id = "${id}"
 			src = "${src}"
-			alt = "${alt}"/>
+			alt = "${alt}
+			"/>
 		`
 	}
 }

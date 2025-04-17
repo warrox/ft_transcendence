@@ -35,7 +35,7 @@ export function Login(): PongNode<any> {
 			password: password,
 		};
 	
-		fetch("http://localhost:3000/login", {
+		fetch("/api/login", {
 			method: "POST",
 			body: JSON.stringify(body),
 			headers: {

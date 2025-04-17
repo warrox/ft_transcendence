@@ -28,6 +28,7 @@ export default defineConfig({
 			'/api': {
 				target: 'http://node-app:3000', // Backend server
 				changeOrigin: true,
+				rewrite: path => path.replace(/^\/api/, ''),
 			},
 		},
 		cors: {

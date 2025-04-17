@@ -9,16 +9,15 @@ export function Navbar(): PongNode<any> {
 		Div({
 			class: "max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4"
 		}, [
-			Div({class: "flex items-center space-x-3 rtl:space-x-reverse" }, [link("/", "Home", linkCss)]),
-			Div({}, [link("/about", "About", linkCss)]),
-			Div({}, [link("/register", "Register", linkCss)]),
-			Div({}, [link("/login", "Login", linkCss)]),
-			Div({}, [link("/game", "Game", linkCss)]),
-
+			Div({}, [linkFn("/home", "Home", linkCss)]),
+			Div({}, [linkFn("/about", "About", linkCss)]),
+			Div({}, [linkFn("/register", "Register", linkCss)]),
+			Div({}, [linkFn("/login", "Login", linkCss)]),
+			Div({}, [linkFn("/game", "Game", linkCss)]),
 		])
 	]);
 }
 
-function link(href: string, text: string, css: string): PongNode<any> {
+export function linkFn(href: string, text: string, css: string): PongNode<any> {
 	return Link({ href, class: css}, [text]);
 }

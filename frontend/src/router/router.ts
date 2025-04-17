@@ -7,14 +7,17 @@ import { Register } from '../components/Register';
 import { Div } from '../lib/PongFactory';
 import { Login } from '../components/Login';
 import { Game } from '../components/Game';
+import { Landing } from '../components/Landing';
 
 type Route = {
 	path: string;
 	component: () => PongNode<any>;
+	showNavbar?: boolean,
 }
 
 const routes: Route[] = [
-	{ path: '/', component: Home },
+	{ path: '/', component: Landing, showNavbar: false},
+	{ path: '/home', component: Home },
 	{ path: '/about', component: About},
 	{ path: '/register', component: Register},
 	{ path: '/login', component: Login},
@@ -29,11 +32,14 @@ export function rerender() {
 	const app = document.getElementById('app');
 	if (!app) return;
 
+	const hash = location.hash.slice(1) || '/';
+	const route = routes.find(r => r.path === hash);
+	const showNavbar = route?.showNavbar !== false;
+	
 	const pageNode = currentPage();
-
 	renderToDOM(
 		Div({}, [
-			Navbar(),
+			...(showNavbar ? [Navbar()] : []),
 			pageNode,
 		]),
 		app
@@ -57,12 +63,12 @@ export function router() {
 	const route = routes.find(r => r.path == hash);
 
 	setCurrentPage(route?.component || NotFound);
-
+	const showNavbar = route?.showNavbar !== false;
 	const page = route ? route.component() : NotFound();
 
 	renderToDOM(
 		Div({}, [
-			Navbar(),
+			...(showNavbar ? [Navbar()] : []),
 			page
 		]),
 		app
