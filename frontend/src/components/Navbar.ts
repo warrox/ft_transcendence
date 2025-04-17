@@ -12,7 +12,7 @@ export function Navbar(): PongNode<any> {
 			Div({}, [link("/about", "About", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
 			Div({}, [link("/register", "Register", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
 			Div({}, [link("/login", "Login", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
-			Div({}, [link("/Game", "game", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
+			Div({}, [link("/game", "Game", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
 
 		])
 	]);
