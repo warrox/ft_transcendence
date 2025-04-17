@@ -1,4 +1,4 @@
-import { PongNode } from '../lib/PongNode';
+ import { PongNode } from '../lib/PongNode';
 import { Home } from '../components/Home';
 import { NotFound } from '../components/NotFound';
 import { About } from '../components/About';
