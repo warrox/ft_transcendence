@@ -1,18 +1,19 @@
 import { PongNode } from "../lib/PongNode";
 import { Div, Link } from "../lib/PongFactory";
+import { linkCss } from "../styles/cssFactory";
 
 export function Navbar(): PongNode<any> {
 	return Div({
 		class: "bg-white border-gray-200 dark:bg-gray-900"
 	}, [
 		Div({
-			class: "max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+			class: "max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4"
 		}, [
-			Div({class: "flex items-center space-x-3 rtl:space-x-reverse" }, [link("/", "Home", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
-			Div({}, [link("/about", "About", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
-			Div({}, [link("/register", "Register", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
-			Div({}, [link("/login", "Login", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
-			Div({}, [link("/Game", "game", "self-center text-2xl font-semibold whitespace-nowrap dark:text-white")]),
+			Div({class: "flex items-center space-x-3 rtl:space-x-reverse" }, [link("/", "Home", linkCss)]),
+			Div({}, [link("/about", "About", linkCss)]),
+			Div({}, [link("/register", "Register", linkCss)]),
+			Div({}, [link("/login", "Login", linkCss)]),
+			Div({}, [link("/game", "game", linkCss)]),
 
 		])
 	]);
