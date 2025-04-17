@@ -19,7 +19,7 @@ server.register(fCookie, {
 });
 server.register(cors, {
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['*'],
   credentials: true,
 });
@@ -39,7 +39,7 @@ function registerRoutes(server: FastifyInstance): void {
 	server.get('/checkJWT', getRoutes.checkJWT);
 	server.post('/register', getRoutes.register);
 	server.post('/login', getRoutes.login);
-	//server.post('/gsign', getRoutes.gsign );
+	server.post('/gsignin', getRoutes.gsignin );
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 

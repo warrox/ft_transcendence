@@ -1,35 +1,58 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<title>Mon App TS</title>
-		<meta name="google-signin-client_id" content="38147679342-b3t2eq1316n4uucavd5nah6agapoaa27.apps.googleusercontent.com">
-		<style>
-		.home { max-width: 800px; margin: 0 auto; padding: 20px; }
-		button { padding: 8px 16px; margin: 5px; }
-		nav { background: #f0f0f0; padding: 10px; }
-		</style>
-		<script src="https://apis.google.com/js/platform.js" async defer></script>
-	</head>
-	<body>
-		<div id="app"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mon App TS</title>
 
-		<div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <!-- Nouvelle API Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-		<script type="module" src="./main.ts"></script>
-		<script>
-		function onSignIn(googleUser) {
-			var profile = googleUser.getBasicProfile();
-			console.log('ID: ' + profile.getId());
-			console.log('Nom: ' + profile.getName());
-			console.log('Email: ' + profile.getEmail());
+    <style>
+      .home {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      button {
+        padding: 8px 16px;
+        margin: 5px;
+      }
+      nav {
+        background: #f0f0f0;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
 
-			// Vous pouvez également obtenir le token ID
-			var id_token = googleUser.getAuthResponse().id_token;
-			console.log('Token ID: ' + id_token);
+    <!-- Initialisation du bouton de connexion -->
+    <div
+      id="g_id_onload"
+      data-client_id="38147679342-b3t2eq1316n4uucavd5nah6agapoaa27.apps.googleusercontent.com"
+      data-callback="onSignIn"
+      data-auto_prompt="false"
+    ></div>
+    <div class="g_id_signin" data-type="standard"></div>
 
-			// Ici, vous pouvez envoyer le token à votre backend
-		}
-		</script>
-	</body>
+    <!-- Ton script principal -->
+    <script type="module" src="./main.ts"></script>
+
+    <!-- Callback Google Sign-In -->
+    <script>
+      function onSignIn(response) {
+        const idToken = response.credential;
+		  
+        // Envoi au backend ici si besoin
+        //fetch("http://localhost:3000/gsignin", { method: "POST",headers: { idToken}})
+		fetch("http://localhost:3000/gsignin", {
+			method: "POST",
+			headers: {
+			  "Content-Type": "application/json", // 👈 très important pour que Fastify comprenne que c’est du JSON
+    },
+    body: JSON.stringify({ token: idToken }), // 👈 token envoyé dans le body
+  });
+      }
+    </script>
+  </body>
 </html>
