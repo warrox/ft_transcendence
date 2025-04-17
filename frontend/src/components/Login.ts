@@ -1,4 +1,4 @@
-import { Div, P, Button, Input, Image } from "../lib/PongFactory";
+import { Div, P, Button, Input, Image, H1, H2 } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 // import { rerender } from "../router/router";
 import logo from '../assets/logo.png';
@@ -46,6 +46,9 @@ export function Login(): PongNode<any> {
 	}
 
 	return Div({}, [
+		// TESTING H1 | H2
+		H1({ class: "text-3xl font-bold text-center"}, ["Login Page"]),
+		H2({ class: "text-2xl text-center"}, ["Login Page H2"]),
 		P({}, ["Login page!"]),
 		testImg,
 		nameInput,

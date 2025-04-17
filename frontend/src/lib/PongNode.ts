@@ -7,6 +7,50 @@ export abstract class PongNode<T = undefined> {
 	}
 }
 
+export interface H1Props {
+	// id: string;
+	class?: string;
+	children?: PongNode<any>[],
+}
+
+export class H1Node extends PongNode<H1Props> {
+
+	constructor(props?: H1Props) {
+		super(props);
+	}
+
+	render(): string {
+		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
+		const className = this.props?.class || "";
+		// const id = this.props?.id;
+
+		return `
+			<h1 class="${className}">
+				${childHTML}
+			</h1>
+		`;
+	}
+}
+
+export class H2Node extends PongNode<H1Props> {
+
+	constructor(props?: H1Props) {
+		super(props);
+	}
+
+	render(): string {
+		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
+		const className = this.props?.class || "";
+		// const id = this.props?.id;
+
+		return `
+			<h2 class="${className}">
+				${childHTML}
+			</h2>
+		`;
+	}
+}
+
 export interface ImgProps {
 	id: string;
 	// class?: string;
@@ -32,7 +76,7 @@ export class ImgNode extends PongNode<ImgProps> {
 			<img id = "${id}"
 			src = "${src}"
 			alt = "${alt}"/>
-		`;
+		`
 	}
 }
 
