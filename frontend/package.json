@@ -14,6 +14,7 @@
     "vite": "^6.3.0"
   },
   "dependencies": {
-    "crypto-browserify": "^3.12.1"
+    "crypto-browserify": "^3.12.1",
+    "google-auth-library": "^9.15.1"
   }
 }

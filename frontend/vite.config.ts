@@ -16,6 +16,7 @@ export default defineConfig({
 			'Access-Control-Allow-Origin': '*',
 			'Access-Control-Allow-Methods': '*',
 			'Access-Control-Allow-Headers': '*',
+			'Content-Security-Policy': "default-src 'self'; font-src 'self' data:; img-src 'self' data:; script-src 'self' 'unsafe-inline' https://cdn.matomo.cloud https://accounts.google.com https://apis.google.com; frame-src https://accounts.google.com; connect-src 'self' https://accounts.google.com https://www.googleapis.com; object-src 'none'; style-src 'self' 'unsafe-inline';"
 		},
 		https: {
 			key: fs.readFileSync('/certs/localhost-key.pem'),
@@ -32,8 +33,8 @@ export default defineConfig({
 		},
 	},
 	resolve: {
-	alias: {
-		'@': path.resolve(__dirname, 'src'),
+		alias: {
+			'@': path.resolve(__dirname, 'src'),
+		},
 	},
-},
 })

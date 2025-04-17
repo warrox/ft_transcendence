@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Mon App TS</title>
-  <style>
-    .home { max-width: 800px; margin: 0 auto; padding: 20px; }
-    button { padding: 8px 16px; margin: 5px; }
-    nav { background: #f0f0f0; padding: 10px; }
-  </style>
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="./main.ts"></script>
-</body>
+	<head>
+		<meta charset="UTF-8">
+		<title>Mon App TS</title>
+		<meta name="google-signin-client_id" content="38147679342-b3t2eq1316n4uucavd5nah6agapoaa27.apps.googleusercontent.com">
+		<style>
+		.home { max-width: 800px; margin: 0 auto; padding: 20px; }
+		button { padding: 8px 16px; margin: 5px; }
+		nav { background: #f0f0f0; padding: 10px; }
+		</style>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+	</head>
+	<body>
+		<div id="app"></div>
+
+		<div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+		<script type="module" src="./main.ts"></script>
+		<script>
+		function onSignIn(googleUser) {
+			var profile = googleUser.getBasicProfile();
+			console.log('ID: ' + profile.getId());
+			console.log('Nom: ' + profile.getName());
+			console.log('Email: ' + profile.getEmail());
+
+			// Vous pouvez également obtenir le token ID
+			var id_token = googleUser.getAuthResponse().id_token;
+			console.log('Token ID: ' + id_token);
+
+			// Ici, vous pouvez envoyer le token à votre backend
+		}
+		</script>
+	</body>
 </html>

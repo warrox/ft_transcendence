@@ -7,7 +7,7 @@ export const server = fastify();
 import { getRoutes } from './GetRoutes.types';
 import * as dotenv from 'dotenv';
 
-
+/*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.apps.googleusercontent.com*/
 dotenv.config();
 const JWS =  process.env.JWTSECRETKEY;
 
@@ -39,6 +39,7 @@ function registerRoutes(server: FastifyInstance): void {
 	server.get('/checkJWT', getRoutes.checkJWT);
 	server.post('/register', getRoutes.register);
 	server.post('/login', getRoutes.login);
+	//server.post('/gsign', getRoutes.gsign );
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 

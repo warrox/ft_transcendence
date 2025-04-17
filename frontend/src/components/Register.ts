@@ -10,6 +10,7 @@ export function Register(): PongNode<any> {
 	const mailInput = Input({ id: "mail", required: true, onChange: () => {}});
 	const passwordInput = Input({ id: "password", type: "password", required: true, onChange: () => {}});
 
+	
 	const handleRegister = () => {
 		const name = (document.querySelector("#name") as HTMLInputElement)?.value;
 		const lastName = (document.querySelector("#lastname") as HTMLInputElement)?.value;
