@@ -130,6 +130,11 @@ export class ButtonNode extends PongNode<ButtonProps> {
 
 export interface DivProps {
 	class?: string,
+	id?: string,
+	dataType?: string,
+	dataClientId?: string,
+	dataCallback?: string,
+	dataAutoPrompt?: string,
 	children?: PongNode<any>[],
 }
 
@@ -137,8 +142,20 @@ export class DivNode extends PongNode<DivProps> {
 	render(): string {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
 		const className = this.props?.class || "";
+		const idName = this.props?.id || "";
+		const dataTypeName = this.props?.dataType || "";
+		const dataClientIdName = this.props?.dataClientId || "";
+		const dataCallbackName = this.props?.dataCallback || "";
+		const dataAutoPromptName = this.props?.dataAutoPrompt || "";
 		return `
-			<div class="${className}">
+			<div 
+				class="${className}"
+				id="${idName}" 
+				data-type="${dataTypeName}"
+				data-client_id="${dataClientIdName}"
+				data-callback="${dataCallbackName}"
+				data-auto_prompt="${dataAutoPromptName}"
+			>
 				${childHTML}
 			</div>
 		`

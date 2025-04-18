@@ -68,6 +68,41 @@ export function Register(): PongNode<any> {
 		// rerender()
 	}
 
+	(window as any).onSignIn = (response: any) => {
+		const idToken = response.credential;
+
+		fetch("http://localhost:3000/gsignin", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ token: idToken }),
+		})
+		.then(res => {
+			if (!res.ok)
+				throw new Error(`HTTP error! Status: ${res.status}`);
+			return res.text();
+		})
+		.then(body => {
+			console.log("Google Sign-in response:", body);
+		})
+		.catch(e => console.error("Erreur Google Sign-in :", e));
+	};
+
+	setTimeout(() => {
+		if (window.google && window.google.accounts?.id) {
+			window.google.accounts.id.initialize({
+				client_id: "38147679342-b3t2eq1316n4uucavd5nah6agapoaa27.apps.googleusercontent.com",
+				callback: window.onSignIn,
+			});
+			window.google.accounts.id.renderButton(
+				document.getElementById("google-button-container"),
+				{ theme: "outline", size: "large" }
+			);
+		}
+	}, 0);
+
+
 	return Div({}, [
 		P({}, ["Register to our service"]),
 		nameInput,
@@ -75,5 +110,6 @@ export function Register(): PongNode<any> {
 		mailInput,
 		passwordInput,
 		Button({ class: "bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" ,id: "button1", onClick: handleRegister }, ["Register"]),
+		Div({ id: "google-button-container" })
 	])
 }
