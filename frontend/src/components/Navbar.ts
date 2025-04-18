@@ -1,20 +1,23 @@
 import { PongNode } from "../lib/PongNode";
 import { Div, Link } from "../lib/PongFactory";
+import { linkCss } from "../styles/cssFactory";
 
 export function Navbar(): PongNode<any> {
 	return Div({
-		style: "navbar"
+		class: "bg-white border-gray-200 dark:bg-gray-900"
 	}, [
 		Div({
-			style: "nav-links"
+			class: "max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4"
 		}, [
-			Div({}, [link("/", "Home")]),
-			Div({}, [link("/about", "About")]),
-			Div({}, [link("/register", "Register")]),
+			Div({}, [linkFn("/home", "Home", linkCss)]),
+			Div({}, [linkFn("/about", "About", linkCss)]),
+			Div({}, [linkFn("/register", "Register", linkCss)]),
+			Div({}, [linkFn("/login", "Login", linkCss)]),
+			Div({}, [linkFn("/game", "Game", linkCss)]),
 		])
 	]);
 }
 
-function link(href: string, text: string): PongNode<any> {
-	return Link({ href, style: "link"}, [text]);
+export function linkFn(href: string, text: string, css: string): PongNode<any> {
+	return Link({ href, class: css}, [text]);
 }

@@ -9,12 +9,16 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.4",
     "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
     "typescript": "~5.7.2",
     "vite": "^6.3.0"
   },
-  "dependencies": {
-    "crypto-browserify": "^3.12.1",
+  "dependencies": {  
     "google-auth-library": "^9.15.1"
+    "@tailwindcss/vite": "^4.1.4",
+    "crypto-browserify": "^3.12.1",
+    "tailwindcss": "^4.1.4"
   }
 }

@@ -1,10 +1,13 @@
 import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
 import fs from 'fs'
 
 export default defineConfig({
 	root: path.resolve(__dirname, 'src'),
-	plugins: [],
+	plugins: [
+		tailwindcss(),
+	],
 	build: {
 		outDir: "build",
 	},
@@ -25,6 +28,7 @@ export default defineConfig({
 			'/api': {
 				target: 'http://node-app:3000', // Backend server
 				changeOrigin: true,
+				rewrite: path => path.replace(/^\/api/, ''),
 			},
 		},
 		cors: {
