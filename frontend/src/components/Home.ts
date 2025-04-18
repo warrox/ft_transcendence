@@ -1,7 +1,6 @@
 import { PongNode } from "../lib/PongNode";
 import { Div, P, Button } from "../lib/PongFactory"
 
-
 export function Home(): PongNode<any> {
 
 	const body = {
@@ -39,7 +38,7 @@ export function Home(): PongNode<any> {
 
 	return Div({}, [
 		P({}, ["Welcome to Home page !"]),
-		Button({id: "b2", onClick: sendBody }, ["Login test"]),
+		Button({id: "b2", onClick: sendBody, class: "bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" }, ["Login test"]),
 		
 	]);
 }

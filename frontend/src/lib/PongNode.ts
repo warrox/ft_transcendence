@@ -7,10 +7,87 @@ export abstract class PongNode<T = undefined> {
 	}
 }
 
+export interface H1Props {
+	// id: string;
+	class?: string;
+	children?: PongNode<any>[],
+}
+
+export class H1Node extends PongNode<H1Props> {
+
+	constructor(props?: H1Props) {
+		super(props);
+	}
+
+	render(): string {
+		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
+		const className = this.props?.class || "";
+		// const id = this.props?.id;
+
+		return `
+			<h1 class="${className}">
+				${childHTML}
+			</h1>
+		`;
+	}
+}
+
+export class H2Node extends PongNode<H1Props> {
+
+	constructor(props?: H1Props) {
+		super(props);
+	}
+
+	render(): string {
+		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
+		const className = this.props?.class || "";
+		// const id = this.props?.id;
+
+		return `
+			<h2 class="${className}">
+				${childHTML}
+			</h2>
+		`;
+	}
+}
+
+export interface ImgProps {
+	id: string;
+	class?: string;
+	src: string;
+	alt?: string;
+	// onClick?: () => void,
+	children?: PongNode<any>[],
+}
+
+export class ImgNode extends PongNode<ImgProps> {
+
+	constructor(props?: ImgProps) {
+		super(props);
+	}
+
+	render(): string {
+		const className = this.props?.class || "";
+		const src = this.props?.src || "";
+		const alt = this.props?.alt || "";
+		const id = this.props?.id || "";
+
+		return `
+			<img
+			class = "${className}
+			id = "${id}"
+			src = "${src}"
+			alt = "${alt}
+			"/>
+		`
+	}
+}
+
 export interface ButtonProps {
 	children?: PongNode<any>[],
 	onClick?: () => void,
 	id: string,
+	class?: string,
 }
 
 export class ButtonNode extends PongNode<ButtonProps> {
@@ -40,9 +117,11 @@ export class ButtonNode extends PongNode<ButtonProps> {
 
 	render(): string {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
+		const className = this.props?.class || "";
 
 		return `
-			<button id="${this.props && this.props.id}">
+			<button id="${this.props && this.props.id}"
+				class="${className}">
 				${childHTML}
 			</button>
 		`
@@ -50,16 +129,16 @@ export class ButtonNode extends PongNode<ButtonProps> {
 }
 
 export interface DivProps {
-	style?: string,
+	class?: string,
 	children?: PongNode<any>[],
 }
 
 export class DivNode extends PongNode<DivProps> {
 	render(): string {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
-
+		const className = this.props?.class || "";
 		return `
-			<div class="${this.props && this.props.style || ""}">
+			<div class="${className}">
 				${childHTML}
 			</div>
 		`
@@ -79,14 +158,16 @@ export class TextNode extends PongNode<undefined> {
 export interface LinkProps {
 	href: string;
 	children?: PongNode<any>[];
-	style?: string;
+	class?: string;
 }
 
 export class LinkNode extends PongNode<LinkProps> {
 	render():string {
 		const childHTML = this.props?.children?.map(child => child.render()).join("") || "";
+		const className = this.props?.class || "";
+
 		return `
-			<a href="#${this.props?.href}" class="${this.props?.style || ""}">
+			<a href="#${this.props?.href}" class="${className}">
 				${childHTML}
 			</a>
 		`;
@@ -94,16 +175,17 @@ export class LinkNode extends PongNode<LinkProps> {
 }
 
 export interface PProps {
-	style?: string,
+	class?: string,
 	children?: PongNode<any>[],
 }
 
 export class PNode extends PongNode<PProps> {
 	render(): string {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
-		
+		const className = this.props?.class || "";
+
 		return `
-		<p class="${this.props && this.props.style || ""}">
+		<p class="${className}">
 		${childHTML}
 		</p>
 		`
@@ -111,7 +193,7 @@ export class PNode extends PongNode<PProps> {
 }
 
 export interface InputProps {
-	style?: string,
+	class?: string,
 	children?: PongNode<any>[],
 	type?: string,
 	id: string,
@@ -146,17 +228,23 @@ export class InputNode extends PongNode<InputProps> {
 		observer.observe(document.body, { childList: true, subtree: true });
 	}
 
-	render():string {
-		const childHTML = this.props?.children?.map(child => child.render()).join("") || "";
-		return `
-			<input class="${this.props && this.props.style ? this.props.style: ""}"
-				id="${this.props && this.props.id || ""}"
-				type="${this.props && this.props.type || ""}" 
-				required="${this.props && this.props.required || ""}"
-				minlength="${this.props && this.props.minlength || ""}"
-				maxlength="${this.props && this.props.maxlength || ""}">
-				${childHTML}
-			</input>
-		`;
+	render(): string {
+		const {
+			class: className,
+			id,
+			type,
+			required,
+			minlength,
+			maxlength,
+		} = this.props || {};
+
+		return `<input
+			class="${className || ""}"
+			id="${id}"
+			${type ? `type="${type}"` : ""}
+			${required ? `required` : ""}
+			${minlength ? `minlength="${minlength}"` : ""}
+			${maxlength ? `maxlength="${maxlength}"` : ""}
+		/>`;
 	}
 }

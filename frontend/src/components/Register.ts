@@ -1,14 +1,34 @@
 import { Div, P, Button, Input } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-
-import './Register.css'
+import { inputCss } from "../styles/cssFactory";
 
 export function Register(): PongNode<any> {
-	const nameInput = Input({ id: "name", required: true, onChange: () => {}});
-	const lastNameInput = Input({ id: "lastname", required: true, onChange: () => {}});
-	const mailInput = Input({ id: "mail", required: true, onChange: () => {}});
-	const passwordInput = Input({ id: "password", type: "password", required: true, onChange: () => {}});
+	const nameInput = Input({ 
+		id: "name", 
+		required: true, 
+		onChange: () => {},
+		class: inputCss,
+	});
+	const lastNameInput = Input({
+		id: "lastname", 
+		required: true, 
+		onChange: () => {},
+		class: inputCss,
+	});
+	const mailInput = Input({
+		id: "mail", 
+		required: true, 
+		onChange: () => {},
+		class: inputCss,
+	});
+	const passwordInput = Input({
+		id: "password", 
+		type: "password", 
+		required: true, 
+		onChange: () => {},
+		class: inputCss,
+	});
 
 	const handleRegister = () => {
 		const name = (document.querySelector("#name") as HTMLInputElement)?.value;
@@ -22,7 +42,7 @@ export function Register(): PongNode<any> {
 			password: password,
 		}
 
-		fetch("http://localhost:3000/register", {
+		fetch("/api/register", {
 			method: "POST",
 			body: JSON.stringify(body),
 			headers: {
@@ -53,6 +73,6 @@ export function Register(): PongNode<any> {
 		lastNameInput,
 		mailInput,
 		passwordInput,
-		Button({ id: "button1", onClick: handleRegister }, ["Register"]),
+		Button({ class: "bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" ,id: "button1", onClick: handleRegister }, ["Register"]),
 	])
 }
