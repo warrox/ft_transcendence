@@ -26,7 +26,6 @@
   <body>
     <div id="app"></div>
 
-    <!-- Initialisation du bouton de connexion -->
     <div
       id="g_id_onload"
       data-client_id="38147679342-b3t2eq1316n4uucavd5nah6agapoaa27.apps.googleusercontent.com"
@@ -35,22 +34,18 @@
     ></div>
     <div class="g_id_signin" data-type="standard"></div>
 
-    <!-- Ton script principal -->
     <script type="module" src="./main.ts"></script>
 
-    <!-- Callback Google Sign-In -->
     <script>
       function onSignIn(response) {
         const idToken = response.credential;
 		  
-        // Envoi au backend ici si besoin
-        //fetch("http://localhost:3000/gsignin", { method: "POST",headers: { idToken}})
 		fetch("http://localhost:3000/gsignin", {
 			method: "POST",
 			headers: {
-			  "Content-Type": "application/json", // 👈 très important pour que Fastify comprenne que c’est du JSON
+			  "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token: idToken }), // 👈 token envoyé dans le body
+    body: JSON.stringify({ token: idToken }),
   });
       }
     </script>

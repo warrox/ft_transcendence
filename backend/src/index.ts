@@ -33,6 +33,10 @@ export interface User {
   password: string;
 }
 
+export interface GoogleTokenRequest {
+	token: string;
+}
+
 function registerRoutes(server: FastifyInstance): void {
 	server.get('/me', getRoutes.me);
 	server.get('/users', getRoutes.users);
@@ -40,6 +44,7 @@ function registerRoutes(server: FastifyInstance): void {
 	server.post('/register', getRoutes.register);
 	server.post('/login', getRoutes.login);
 	server.post('/gsignin', getRoutes.gsignin );
+	server.post('/glogin', getRoutes.glogin);
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 
