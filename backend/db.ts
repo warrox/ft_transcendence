@@ -13,7 +13,7 @@ const db = new sqlite3.Database('database.db', (err: Error | null) => {
 db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       name VARCHAR(16) UNIQUE NOT NULL,
       surname TEXT UNIQUE NOT NULL,
       email TEXT UNIQUE NOT NULL,

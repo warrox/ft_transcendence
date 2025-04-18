@@ -7,7 +7,7 @@ export const server = fastify();
 import { getRoutes } from './GetRoutes.types';
 import * as dotenv from 'dotenv';
 
-
+/*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.apps.googleusercontent.com*/
 dotenv.config();
 const JWS =  process.env.JWTSECRETKEY;
 
@@ -19,7 +19,7 @@ server.register(fCookie, {
 });
 server.register(cors, {
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['*'],
   credentials: true,
 });
@@ -33,12 +33,18 @@ export interface User {
   password: string;
 }
 
+export interface GoogleTokenRequest {
+	token: string;
+}
+
 function registerRoutes(server: FastifyInstance): void {
 	server.get('/me', getRoutes.me);
 	server.get('/users', getRoutes.users);
 	server.get('/checkJWT', getRoutes.checkJWT);
 	server.post('/register', getRoutes.register);
 	server.post('/login', getRoutes.login);
+	server.post('/gsignin', getRoutes.gsignin );
+	server.post('/glogin', getRoutes.glogin);
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 

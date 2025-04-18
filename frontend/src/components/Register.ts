@@ -30,6 +30,7 @@ export function Register(): PongNode<any> {
 		class: inputCss,
 	});
 
+	
 	const handleRegister = () => {
 		const name = (document.querySelector("#name") as HTMLInputElement)?.value;
 		const lastName = (document.querySelector("#lastname") as HTMLInputElement)?.value;

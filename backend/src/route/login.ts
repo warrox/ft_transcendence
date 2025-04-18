@@ -27,10 +27,8 @@ export const login = async (request: FastifyRequest<{ Body: User }>,reply: Fasti
 					try {
 						const isMatch = await server.bcrypt.compare(password, row.password);
 						if (isMatch) {
-							console.log("Arreirerr !!!!");
 							resolve({code: 200, message: "Login successful" });
 						} else {
-							console.log("Crotte");
 							resolve({code: 401, message: "Invalid email or password" });
 						}
 					} catch (err) {
@@ -48,7 +46,6 @@ export const login = async (request: FastifyRequest<{ Body: User }>,reply: Fasti
 	} catch (e: any) {
 		return reply.status(500).send({ error: "Erreur serveur"});
 	}
-	console.log("pffffffffff");
 };
 //if(!email || !password)
 //	//  if yes go to 2 
