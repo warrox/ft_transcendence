@@ -21,6 +21,6 @@ export const disappearingTextCss = "group-hover:opacity-0 group-hover:translate-
 export const appearingTextCss = "group-hover:translate-x-0 group-hover:opacity-100 absolute translate-x-full opacity-0 transition-all duration-200";
 export const fancyRightBorderCss = "group-hover:w-full absolute right-0 h-full w-5 border-y border-r border-blue-500 transition-all duration-500";
 
-export const inputScaleCss: string = "transform transition duration-300 ease-in-out hover:scale-105 w-[250px] text-base border shadow-[1px_1px_3px_rgba(0,0,0,0.1)] p-2.5 rounded-[5px] border-solid border-[#ccc]";
+export const inputScaleCss: string = "transform transition duration-200 ease-in-out hover:scale-105 w-[250px] text-base border shadow-[1px_1px_3px_rgba(0,0,0,0.1)] p-2.5 rounded-[5px] border-solid border-[#ccc]";
 
-export const backgroundCss: string = "bg-[radial-gradient(circle,_#001f7f,_#000000)]";;
+export const backgroundCss: string = "bg-[radial-gradient(circle,_#001f7f,_#000000)]";

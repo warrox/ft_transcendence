@@ -1,62 +1,51 @@
 @import "tailwindcss";
 
-@keyframes span1 {
-	0% { left: -200px; }
-	100% { left: 200px; }
-	}
-	@keyframes span2 {
-	0% { top: -70px; }
-	100% { top: 70px; }
-	}
-	@keyframes span3 {
-	0% { right: -200px; }
-	100% { right: 200px; }
-	}
-	@keyframes span4 {
-	0% { bottom: -70px; }
-	100% { bottom: 70px; }
-	}
-	
-	.fancy-button span {
-	@apply absolute block;
-	}
-	.fancy-button span:nth-child(1) {
-	height: 3px;
-	width: 200px;
+.area {
+	width: 100%;
+	height: 100vh;
+	position: relative;
+	overflow: hidden;
+  }
+  
+  .circles {
+	position: absolute;
 	top: 0;
-	left: -200px;
-	background: linear-gradient(to right, rgba(0,0,0,0), #f6e58d);
-	animation: span1 2s linear infinite;
-	animation-delay: 1s;
-	}
-	.fancy-button span:nth-child(2) {
-	height: 70px;
-	width: 3px;
-	top: -70px;
-	right: 0;
-	background: linear-gradient(to bottom, rgba(0,0,0,0), #f6e58d);
-	animation: span2 2s linear infinite;
-	animation-delay: 2s;
-	}
-	.fancy-button span:nth-child(3) {
-	height: 3px;
-	width: 200px;
-	right: -200px;
-	bottom: 0;
-	background: linear-gradient(to left, rgba(0,0,0,0), #f6e58d);
-	animation: span3 2s linear infinite;
-	animation-delay: 3s;
-	}
-	.fancy-button span:nth-child(4) {
-	height: 70px;
-	width: 3px;
-	bottom: -70px;
 	left: 0;
-	background: linear-gradient(to top, rgba(0,0,0,0), #f6e58d);
-	animation: span4 2s linear infinite;
-	animation-delay: 4s;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	z-index: 0;
+  }
+  
+  .circle {
+	position: absolute;
+	display: block;
+	list-style: none;
+	background: rgba(255, 255, 255, 0.1);
+	bottom: -150px;
+	animation: animate 25s linear infinite;
+	border-radius: 50%;
+  }
+  
+  .circle1 { width: 80px; height: 80px; left: 25%; animation-delay: 0s; }
+  .circle2 { width: 20px; height: 20px; left: 10%; animation-delay: 2s; animation-duration: 12s; }
+  .circle3 { width: 20px; height: 20px; left: 70%; animation-delay: 4s; }
+  .circle4 { width: 60px; height: 60px; left: 40%; animation-delay: 0s; animation-duration: 18s; }
+  .circle5 { width: 20px; height: 20px; left: 65%; animation-delay: 0s; }
+  .circle6 { width: 110px; height: 110px; left: 75%; animation-delay: 3s; }
+  .circle7 { width: 150px; height: 150px; left: 35%; animation-delay: 7s; }
+  .circle8 { width: 25px; height: 25px; left: 50%; animation-delay: 15s; animation-duration: 45s; }
+  .circle9 { width: 15px; height: 15px; left: 20%; animation-delay: 2s; animation-duration: 35s; }
+  .circle10 { width: 150px; height: 150px; left: 85%; animation-delay: 0s; animation-duration: 11s; }
+  
+  @keyframes animate {
+	0% {
+	  transform: translateY(0) rotate(0deg);
+	  opacity: 1;
 	}
-	.fancy-button:hover span {
-	animation-play-state: paused;
+	100% {
+	  transform: translateY(-1000px) rotate(720deg);
+	  opacity: 0;
 	}
+  }
 	

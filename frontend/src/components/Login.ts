@@ -1,4 +1,4 @@
-import { Div, P, Button, Input, Span } from "../lib/PongFactory";
+import { Div, P, Button, Input, Span, Li, UList } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
 import { backgroundCss, fancyButtonCss, fancyLeftBorderCss, fancyRightBorderCss, disappearingTextCss, appearingTextCss, loginWrapperCss, loginCardCss, headerCss, headerTextCss, inputWrapperCss, statusWrapperCss, statusKoCss, statusOkCss, inputScaleCss } from "../styles/cssFactory";
@@ -63,31 +63,44 @@ export function Login(): PongNode<any> {
 		});
 	}
 
-	return Div({ class: `${loginWrapperCss} ${backgroundCss}` }, [
-		Div({ class: loginCardCss }, [
-			Div({ class: headerCss }, [
-				P({ class: headerTextCss }, ["Login Page"]),
-			]),
-			Div({ class: inputWrapperCss }, [
-				emailInput,
-				passwordInput,
-			]),
-			Button({
-				id: "button1",
-				onClick: handleLogin,
-				class: fancyButtonCss
-			}, [
-				Div({ class: fancyLeftBorderCss }),
-				P({ class: disappearingTextCss }, ["Click here"]),
-				Span({ class: appearingTextCss }, ["Login"]),
-				Div({ class: fancyRightBorderCss })
-			]),
-			...(loginStatus !== null
-				? [Div({ class: statusWrapperCss }, [
-					P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`])
-				])]
-				: [])
+	return Div({ class: "area" }, [
+		UList({ class: "circlesContainerCss" }, [
+			Li({ class: "circle circle1" }),
+			Li({ class: "circle circle2" }),
+			Li({ class: "circle circle3" }),
+			Li({ class: "circle circle4" }),
+			Li({ class: "circle circle5" }),
+			Li({ class: "circle circle6" }),
+			Li({ class: "circle circle7" }),
+			Li({ class: "circle circle8" }),
+			Li({ class: "circle circle9" }),
+			Li({ class: "circle circle10" }),
+		]),
+		Div({ class: `${loginWrapperCss} ${backgroundCss}` }, [
+			Div({ class: loginCardCss }, [
+				Div({ class: headerCss }, [
+					P({ class: headerTextCss }, ["Login Page"]),
+				]),
+				Div({ class: inputWrapperCss }, [
+					emailInput,
+					passwordInput,
+				]),
+				Button({
+					id: "button1",
+					onClick: handleLogin,
+					class: fancyButtonCss
+				}, [
+					Div({ class: fancyLeftBorderCss }),
+					P({ class: disappearingTextCss }, ["Click here"]),
+					Span({ class: appearingTextCss }, ["Login"]),
+					Div({ class: fancyRightBorderCss })
+				]),
+				...(loginStatus !== null
+					? [Div({ class: statusWrapperCss }, [
+						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`])
+					])]
+					: [])
+			])
 		])
 	]);
-	
 }
