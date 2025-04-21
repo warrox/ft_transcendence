@@ -243,6 +243,26 @@ export class PNode extends PongNode<PProps> {
 	}
 }
 
+/*******************************************************SPAN_NODE**********************************************************/
+
+export interface SpanProps {
+	class?: string,
+	children?: PongNode<any>[],
+}
+
+export class SpanNode extends PongNode<SpanProps> {
+	render(): string {
+		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
+		const className = this.props?.class || "";
+
+		return `
+		<span class="${className}">
+		${childHTML}
+		</span>
+		`;
+	}
+}
+
 /*******************************************************TEXTBOX_NODE**********************************************************/
 
 export interface InputProps {

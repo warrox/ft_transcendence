@@ -1,4 +1,9 @@
-import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps, ImgNode, ImgProps, H1Props, H1Node, H2Node, LiProps, LiNode, UListProps, UListNode } from "./PongNode";
+import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps, ImgNode, ImgProps, H1Props, H1Node, H2Node, LiProps, LiNode, UListProps, UListNode, SpanProps, SpanNode } from "./PongNode";
+
+export function Span(props: SpanProps, child?: Array<PongNode<any> | string>): SpanNode {
+	const coerceChildren = child?.map(coerceChild);
+	return new SpanNode ({...props, children: coerceChildren});
+}
 
 export function Li(props: LiProps, child?: Array<PongNode<any> | string>): LiNode {
 	const coerceChildren = child?.map(coerceChild);
