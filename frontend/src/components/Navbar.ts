@@ -4,7 +4,7 @@ import { linkCss } from "../styles/cssFactory";
 
 export function Navbar(): PongNode<any> {
 	return Div({
-		class: "bg-white border-gray-200 dark:bg-gray-900"
+		class: "fixed top-0 left-0 w-full z-50 bg-[radial-gradient(circle,_#001f7f,_#000000)] border-gray-200 dark:bg-gray-900"
 	}, [
 		Div({
 			class: "max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4"
