@@ -24,3 +24,23 @@ export const fancyRightBorderCss = "group-hover:w-full absolute right-0 h-full w
 export const inputScaleCss: string = "transform transition duration-200 ease-in-out hover:scale-105 w-[250px] text-base border shadow-[1px_1px_3px_rgba(0,0,0,0.1)] p-2.5 rounded-[5px] border-solid border-[#ccc]";
 
 export const backgroundCss: string = "bg-[radial-gradient(circle,_#001f7f,_#000000)]";
+
+// BACKGROUND ANIMATION AREA
+export const areaCss = "w-full h-screen relative overflow-hidden";
+export const circlesCss = "absolute top-0 left-0 w-full h-full overflow-hidden z-0";
+export const circleBaseCss = "absolute block list-none bg-[rgba(255,255,255,0.1)] rounded-full animate-[moveHorizontal_20s_linear_infinite]";
+
+// Circles with size, position and animation delay
+export const circle1Css = `${circleBaseCss} w-[80px] h-[80px] top-[20%] left-[-80px] [animation-delay:0s]`;
+export const circle2Css = `${circleBaseCss} w-[20px] h-[20px] top-[30%] left-[-20px] [animation-delay:2s]`;
+export const circle3Css = `${circleBaseCss} w-[20px] h-[20px] top-[50%] left-[-20px] [animation-delay:4s]`;
+export const circle4Css = `${circleBaseCss} w-[60px] h-[60px] top-[80%] left-[-60px] [animation-delay:0s]`;
+export const circle5Css = `${circleBaseCss} w-[20px] h-[20px] top-[25%] left-[-20px] [animation-delay:0s]`;
+export const circle6Css = `${circleBaseCss} w-[110px] h-[110px] top-[40%] left-[-110px] [animation-delay:3s]`;
+export const circle7Css = `${circleBaseCss} w-[150px] h-[150px] top-[10%] left-[-150px] [animation-delay:7s]`;
+export const circle8Css = `${circleBaseCss} w-[25px] h-[25px] top-[60%] left-[-25px] [animation-delay:15s]`;
+export const circle9Css = `${circleBaseCss} w-[15px] h-[15px] top-[70%] left-[-15px] [animation-delay:2s]`;
+export const circle10Css = `${circleBaseCss} w-[150px] h-[150px] top-[90%] left-[-150px] [animation-delay:0s]`;
+
+// Neon text
+export const neonTextCss = "text-2xl text-white animate-[glow_1.5s_alternate_infinite]";

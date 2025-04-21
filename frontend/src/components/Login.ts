@@ -1,9 +1,39 @@
 import { Div, P, Button, Input, Span, Li, UList } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import { backgroundCss, fancyButtonCss, fancyLeftBorderCss, fancyRightBorderCss, disappearingTextCss, appearingTextCss, loginWrapperCss, loginCardCss, headerCss, headerTextCss, inputWrapperCss, statusWrapperCss, statusKoCss, statusOkCss, inputScaleCss } from "../styles/cssFactory";
+import {
+	backgroundCss,
+	fancyButtonCss,
+	fancyLeftBorderCss,
+	fancyRightBorderCss,
+	disappearingTextCss,
+	appearingTextCss,
+	loginWrapperCss,
+	loginCardCss,
+	headerCss,
+	neonTextCss,
+	inputWrapperCss,
+	statusWrapperCss,
+	statusKoCss,
+	statusOkCss,
+	inputScaleCss,
+	areaCss,
+	circlesCss,
+	circle1Css,
+	circle2Css,
+	circle3Css,
+	circle4Css,
+	circle5Css,
+	circle6Css,
+	circle7Css,
+	circle8Css,
+	circle9Css,
+	circle10Css
+} from "../styles/cssFactory";
 
-let loginStatus: null | "OK" | "KO" = null
+import "../styles/index.css";
+
+let loginStatus: null | "OK" | "KO" = null;
 
 export function Login(): PongNode<any> {
 	const emailInput = Input({ 
@@ -23,12 +53,12 @@ export function Login(): PongNode<any> {
 	const handleLogin = () => {
 		const email = (document.querySelector("#emailInput") as HTMLInputElement)?.value;
 		const password = (document.querySelector("#password") as HTMLInputElement)?.value;
-	
+
 		const body = {
-			email: email,
-			password: password,
+			email,
+			password,
 		};
-	
+
 		fetch("http://localhost:3000/login", {
 			method: "POST",
 			body: JSON.stringify(body),
@@ -44,12 +74,8 @@ export function Login(): PongNode<any> {
 			try {
 				const parseBody = JSON.parse(text);
 				console.log("Response parsed from JSON :", parseBody);
-				if (parseBody.success === true)
-					loginStatus = "OK";
-				else
-					loginStatus = "KO";
-			}
-			catch (e) {
+				loginStatus = parseBody.success === true ? "OK" : "KO";
+			} catch (e) {
 				console.log("Error parsing JSON: ", e);
 				loginStatus = "KO";
 			}
@@ -61,25 +87,25 @@ export function Login(): PongNode<any> {
 		.finally(() => {
 			rerender();
 		});
-	}
+	};
 
-	return Div({ class: "area" }, [
-		UList({ class: "circlesContainerCss" }, [
-			Li({ class: "circle circle1" }),
-			Li({ class: "circle circle2" }),
-			Li({ class: "circle circle3" }),
-			Li({ class: "circle circle4" }),
-			Li({ class: "circle circle5" }),
-			Li({ class: "circle circle6" }),
-			Li({ class: "circle circle7" }),
-			Li({ class: "circle circle8" }),
-			Li({ class: "circle circle9" }),
-			Li({ class: "circle circle10" }),
+	return Div({ class: areaCss }, [
+		UList({ class: circlesCss }, [
+			Li({ class: circle1Css }),
+			Li({ class: circle2Css }),
+			Li({ class: circle3Css }),
+			Li({ class: circle4Css }),
+			Li({ class: circle5Css }),
+			Li({ class: circle6Css }),
+			Li({ class: circle7Css }),
+			Li({ class: circle8Css }),
+			Li({ class: circle9Css }),
+			Li({ class: circle10Css }),
 		]),
 		Div({ class: `${loginWrapperCss} ${backgroundCss}` }, [
 			Div({ class: loginCardCss }, [
 				Div({ class: headerCss }, [
-					P({ class: headerTextCss }, ["Login Page"]),
+					P({ class: neonTextCss }, ["Login Page"]),
 				]),
 				Div({ class: inputWrapperCss }, [
 					emailInput,
@@ -88,12 +114,12 @@ export function Login(): PongNode<any> {
 				Button({
 					id: "button1",
 					onClick: handleLogin,
-					class: fancyButtonCss
+					class: fancyButtonCss,
 				}, [
 					Div({ class: fancyLeftBorderCss }),
 					P({ class: disappearingTextCss }, ["Click here"]),
 					Span({ class: appearingTextCss }, ["Login"]),
-					Div({ class: fancyRightBorderCss })
+					Div({ class: fancyRightBorderCss }),
 				]),
 				...(loginStatus !== null
 					? [Div({ class: statusWrapperCss }, [

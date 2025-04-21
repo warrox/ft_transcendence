@@ -1,51 +1,26 @@
 @import "tailwindcss";
 
-.area {
-	width: 100%;
-	height: 100vh;
-	position: relative;
-	overflow: hidden;
+/* Animation pour les cercles */
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
   }
-  
-  .circles {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	z-index: 0;
+  50% {
+    transform: translateX(100vw);
+    opacity: 0.6;
   }
-  
-  .circle {
-	position: absolute;
-	display: block;
-	list-style: none;
-	background: rgba(255, 255, 255, 0.1);
-	bottom: -150px;
-	animation: animate 25s linear infinite;
-	border-radius: 50%;
+  100% {
+    transform: translateX(0);
+    opacity: 1;
   }
-  
-  .circle1 { width: 80px; height: 80px; left: 25%; animation-delay: 0s; }
-  .circle2 { width: 20px; height: 20px; left: 10%; animation-delay: 2s; animation-duration: 12s; }
-  .circle3 { width: 20px; height: 20px; left: 70%; animation-delay: 4s; }
-  .circle4 { width: 60px; height: 60px; left: 40%; animation-delay: 0s; animation-duration: 18s; }
-  .circle5 { width: 20px; height: 20px; left: 65%; animation-delay: 0s; }
-  .circle6 { width: 110px; height: 110px; left: 75%; animation-delay: 3s; }
-  .circle7 { width: 150px; height: 150px; left: 35%; animation-delay: 7s; }
-  .circle8 { width: 25px; height: 25px; left: 50%; animation-delay: 15s; animation-duration: 45s; }
-  .circle9 { width: 15px; height: 15px; left: 20%; animation-delay: 2s; animation-duration: 35s; }
-  .circle10 { width: 150px; height: 150px; left: 85%; animation-delay: 0s; animation-duration: 11s; }
-  
-  @keyframes animate {
-	0% {
-	  transform: translateY(0) rotate(0deg);
-	  opacity: 1;
-	}
-	100% {
-	  transform: translateY(-1000px) rotate(720deg);
-	  opacity: 0;
-	}
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #0000ff, 0 0 10px #0000ff, 0 0 20px #0000ff, 0 0 40px #0000ff, 0 0 80px #0000ff;
   }
-	
+  100% {
+    text-shadow: 0 0 5px #000000, 0 0 10px #000000, 0 0 20px #000000, 0 0 40px #000000, 0 0 80px #000000;
+  }
+}
