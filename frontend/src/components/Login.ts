@@ -1,7 +1,7 @@
 import { Div, P, Button, Input, Span } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import { inputCss, fancyButtonCss, fancyLeftBorderCss, fancyRightBorderCss, disappearingTextCss, appearingTextCss, loginWrapperCss, loginCardCss, headerCss, headerTextCss, inputWrapperCss, statusWrapperCss, statusKoCss, statusOkCss } from "../styles/cssFactory";
+import { backgroundCss, fancyButtonCss, fancyLeftBorderCss, fancyRightBorderCss, disappearingTextCss, appearingTextCss, loginWrapperCss, loginCardCss, headerCss, headerTextCss, inputWrapperCss, statusWrapperCss, statusKoCss, statusOkCss, inputScaleCss } from "../styles/cssFactory";
 
 let loginStatus: null | "OK" | "KO" = null
 
@@ -10,14 +10,14 @@ export function Login(): PongNode<any> {
 		id: "emailInput", 
 		required: true, 
 		onChange: () => {},
-		class: inputCss,
+		class: inputScaleCss,
 	});
 	const passwordInput = Input({
 		id: "password",
 		type: "password",
 		required: true,
 		onChange: () => {},
-		class: inputCss,
+		class: inputScaleCss,
 	});
 
 	const handleLogin = () => {
@@ -63,7 +63,7 @@ export function Login(): PongNode<any> {
 		});
 	}
 
-	return Div({ class: loginWrapperCss }, [
+	return Div({ class: `${loginWrapperCss} ${backgroundCss}` }, [
 		Div({ class: loginCardCss }, [
 			Div({ class: headerCss }, [
 				P({ class: headerTextCss }, ["Login Page"]),
