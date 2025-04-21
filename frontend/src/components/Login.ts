@@ -1,7 +1,7 @@
 import { Div, P, Button, Input, Span } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import { inputCss } from "../styles/cssFactory";
+import { inputCss, fancyButtonCss, fancyLeftBorderCss, fancyRightBorderCss, disappearingTextCss, appearingTextCss, loginWrapperCss, loginCardCss, headerCss, headerTextCss, inputWrapperCss, statusWrapperCss, statusKoCss, statusOkCss } from "../styles/cssFactory";
 
 let loginStatus: null | "OK" | "KO" = null
 
@@ -63,105 +63,31 @@ export function Login(): PongNode<any> {
 		});
 	}
 
-	return Div({
-		class: "flex items-center justify-center min-h-screen bg-gray-100"
-	}, [
-		Div({
-			class: "space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
-		}, [
-			// Header
-			Div({ class: "text-center" }, [
-				P({ class: "text-2xl font-bold text-gray-800" }, ["Login Page"]),
+	return Div({ class: loginWrapperCss }, [
+		Div({ class: loginCardCss }, [
+			Div({ class: headerCss }, [
+				P({ class: headerTextCss }, ["Login Page"]),
 			]),
-	
-			// Inputs
-			Div({ class: "flex flex-col space-y-4 self-start ml-16" }, [
+			Div({ class: inputWrapperCss }, [
 				emailInput,
 				passwordInput,
 			]),
-	
-			// Button
-
-			Div({ class: "flex justify-center" }, [
-				Button({
-					id: "button1",
-					onClick: handleLogin,
-					class: `
-						group
-						p-5
-						cursor-pointer 
-						relative  
-						text-xl 
-						font-normal 
-						border-0 
-						flex 
-						items-center 
-						justify-center
-						bg-transparent
-						text-blue-500 
-						h-auto  
-						w-[170px]  
-						overflow-hidden   
-						transition-all
-						duration-100`
-				}, [
-					Div({ class: `
-						group-hover:w-full
-						absolute 
-						left-0 
-						h-full 
-						w-5 
-						border-y
-						border-l
-						border-blue-500
-						transition-all
-						duration-500`
-					}),
-					P({
-						class: `
-							group-hover:opacity-0 
-							group-hover:translate-x-[-100%] 
-							absolute 
-							translate-x-0 
-							transition-all 
-							duration-200`
-					}, ["Click here"]),
-					Span({
-						class: `
-							group-hover:translate-x-0  
-							group-hover:opacity-100 
-							absolute  
-							translate-x-full 
-							opacity-0  
-							transition-all 
-							duration-200`
-					}, ["Login"]),
-					Div({
-						class: `
-							group-hover:w-full 
-							absolute 
-							right-0 
-							h-full 
-							w-5  
-							border-y 
-							border-r  
-							border-blue-500 
-							transition-all 
-							duration-500`
-					})
-				])
+			Button({
+				id: "button1",
+				onClick: handleLogin,
+				class: fancyButtonCss
+			}, [
+				Div({ class: fancyLeftBorderCss }),
+				P({ class: disappearingTextCss }, ["Click here"]),
+				Span({ class: appearingTextCss }, ["Login"]),
+				Div({ class: fancyRightBorderCss })
 			]),
-	
-			// Status
 			...(loginStatus !== null
-				? [Div({ class: "text-center text-sm" }, [
-					P({
-						class: loginStatus === "OK"
-							? "text-green-500"
-							: "text-red-500"
-					}, [`Login status: ${loginStatus}`])
+				? [Div({ class: statusWrapperCss }, [
+					P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`])
 				])]
 				: [])
 		])
-	])	
+	]);
+	
 }

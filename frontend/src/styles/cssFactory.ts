@@ -5,17 +5,19 @@ export const inputCss: string = "@apply w-[250px] text-base border shadow-[1px_1
 // NAVBAR
 export const linkCss: string = "self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
 
-//BUTTON TEST
-export const fancyButtonCss: string = `
-	@apply relative w-[200px] h-[70px] text-white text-[23px] tracking-[3px] font-semibold 
-	overflow-hidden transition-all duration-500 cursor-pointer shadow-md 
-	bg-gradient-to-tr from-[#c32c71] to-[#b33771] 
-	hover:rotate-[-3deg] hover:scale-[1.1] hover:shadow-lg;
-`;
+//BUTTON 
+export const loginWrapperCss = "flex items-center justify-center min-h-screen bg-gray-100";
+export const loginCardCss = "space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md";
+export const headerCss = "text-center";
+export const headerTextCss = "text-2xl font-bold text-gray-800";
+export const inputWrapperCss = "flex flex-col space-y-4 self-start ml-16";
+export const statusWrapperCss = "text-center text-sm";
+export const statusOkCss = "text-green-500";
+export const statusKoCss = "text-red-500";
 
-export const fancySpanCss = [
-	"absolute block h-[3px] w-full top-0 left-[-100%] bg-gradient-to-r from-transparent to-[#f6e58d] rounded-r-sm animate-span1",
-	"absolute block h-full w-[3px] top-[-100%] right-0 bg-gradient-to-b from-transparent to-[#f6e58d] rounded-b-sm animate-span2",
-	"absolute block h-[3px] w-full bottom-0 right-[-100%] bg-gradient-to-l from-transparent to-[#f6e58d] rounded-l-sm animate-span3",
-	"absolute block h-full w-[3px] bottom-[-100%] left-0 bg-gradient-to-t from-transparent to-[#f6e58d] rounded-t-sm animate-span4"
-	];
+export const fancyButtonCss = "group p-5 cursor-pointer relative text-xl font-normal border-0 flex items-center justify-center bg-transparent text-blue-500 h-auto w-[170px] overflow-hidden transition-all duration-100";
+export const fancyLeftBorderCss = "group-hover:w-full absolute left-0 h-full w-5 border-y border-l border-blue-500 transition-all duration-500";
+export const disappearingTextCss = "group-hover:opacity-0 group-hover:translate-x-[-100%] absolute translate-x-0 transition-all duration-200";
+export const appearingTextCss = "group-hover:translate-x-0 group-hover:opacity-100 absolute translate-x-full opacity-0 transition-all duration-200";
+export const fancyRightBorderCss = "group-hover:w-full absolute right-0 h-full w-5 border-y border-r border-blue-500 transition-all duration-500";
+
