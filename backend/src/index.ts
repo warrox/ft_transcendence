@@ -3,10 +3,24 @@ import fjwt from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import bcrypt from 'fastify-bcrypt';
-export const server = fastify();
 import { getRoutes } from './GetRoutes.types';
 import * as dotenv from 'dotenv';
+export const server = fastify();
 
+
+//server.register(require('fastify-mailer'), {
+//  defaults: { from: 'Transcendance <warren.hamdi@gmail.com>' },
+//  transport: {
+//    host: 'smtp.gmail.com',
+//    port: 465,
+//    secure: true, // use TLS
+//    auth: {
+//      user: 'warren.hamdi',
+//      pass: 'soa92200'
+//    }
+//  }
+//})
+//
 /*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.apps.googleusercontent.com*/
 dotenv.config();
 const JWS =  process.env.JWTSECRETKEY;
@@ -23,7 +37,6 @@ server.register(cors, {
   allowedHeaders: ['*'],
   credentials: true,
 });
-
 
 export interface User {
   id?: number;

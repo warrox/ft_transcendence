@@ -4,7 +4,7 @@ import {User} from '../index'
 
 // Route pour récupérer tous les utilisateurs (sans mot de passe)
 export const users = async (_request: FastifyRequest, reply: FastifyReply) => {
-	const rows = await new Promise((resolve, reject) => db.all('SELECT id, name, surname, email FROM users', [], (err, rows: Omit<User, 'password'>[]) => {
+	const rows = await new Promise((resolve, reject) => db.all('SELECT id,is_2FA, name, surname, email FROM users', [], (err, rows: Omit<User, 'password'>[]) => {
 		if (err) {
 			return reject();
 		}

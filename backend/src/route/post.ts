@@ -47,7 +47,7 @@ export const register = async (request: FastifyRequest<{ Body: User }>, reply: F
 			secure: true,
 			maxAge: 3600
 		});
-
+		//todo remove this line
 		return reply.status(201).send({ accessToken: token, message: "Utilisateur créé avec succès" });
 	} catch (e: any) {
 		console.error(e);
