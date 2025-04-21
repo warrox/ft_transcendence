@@ -7,6 +7,41 @@ export abstract class PongNode<T = undefined> {
 	}
 }
 
+export interface SpanProps {
+	class?: string;
+	children?: PongNode<any>[],
+}
+
+export class SpanNode extends PongNode<SpanProps> {
+
+	constructor(props?: SpanProps) {
+		super(props);
+	}
+
+	render(): string {
+		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
+		const className = this.props?.class || "";
+
+		return `
+			<span class="${className}">
+				${childHTML}
+			</span>
+		`;
+	}
+}
+
+export class BrNode extends PongNode<undefined>{
+	constructor() {
+		super();
+	}
+
+	render(): string {
+		return `
+			<br />
+		`
+	}
+}
+
 export interface H1Props {
 	// id: string;
 	class?: string;
@@ -128,6 +163,7 @@ export class ButtonNode extends PongNode<ButtonProps> {
 	}
 }
 
+
 export interface DivProps {
 	class?: string,
 	id?: string,
@@ -138,7 +174,10 @@ export interface DivProps {
 	children?: PongNode<any>[],
 }
 
+
 export class DivNode extends PongNode<DivProps> {
+	elementRef: HTMLElement | null = null;
+
 	render(): string {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
 		const className = this.props?.class || "";
@@ -263,5 +302,11 @@ export class InputNode extends PongNode<InputProps> {
 			${minlength ? `minlength="${minlength}"` : ""}
 			${maxlength ? `maxlength="${maxlength}"` : ""}
 		/>`;
+	}
+}
+
+export class RawNode extends PongNode<{ html: string }> {
+	render(): string {
+		return this.props?.html || "";
 	}
 }

@@ -6,6 +6,7 @@
 
 
 import { router } from './router/router';
+import './types/window.d.ts';
 // import './styles/tailwind.css';
 
 

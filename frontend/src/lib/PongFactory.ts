@@ -1,4 +1,14 @@
-import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps, ImgNode, ImgProps, H1Props, H1Node, H2Node} from "./PongNode";
+import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps, ImgNode, ImgProps, H1Props, H1Node, H2Node, SpanProps, SpanNode, BrNode, RawNode} from "./PongNode";
+
+
+export function Span(props: SpanProps, child?: Array<PongNode<any> | string>): SpanNode {
+	const coerceChildren = child?.map(coerceChild);
+	return new H2Node ({...props, children: coerceChildren });
+}
+
+export function Br() {
+	return new BrNode;
+}
 
 export function H2(props: H1Props, child?: Array<PongNode<any> | string>): H2Node {
 	const coerceChildren = child?.map(coerceChild);
@@ -39,6 +49,11 @@ export function Input(props: InputProps, child?: Array<PongNode<any> | string>):
 	const coercedChildren = child?.map(coerceChild);
 	return new InputNode({ ...props, children: coercedChildren });
 }
+
+export function RawHTML(html: string): PongNode<any> {
+	return new RawNode({ html });
+}
+
 function coerceChild(child: PongNode<any> | string): PongNode<any> {
 	if (typeof child === "string") {
 		return new TextNode(child);

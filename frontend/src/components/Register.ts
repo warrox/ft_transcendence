@@ -110,6 +110,6 @@ export function Register(): PongNode<any> {
 		mailInput,
 		passwordInput,
 		Button({ class: "bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" ,id: "button1", onClick: handleRegister }, ["Register"]),
-		Div({ id: "google-button-container" })
+		Div({ id: "google-button-container", class: "w-fit mx-auto" })
 	])
 }
