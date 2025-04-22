@@ -1,1 +1,45 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
 @import "tailwindcss";
+
+
+@theme {
+	/* --font-orbitron: 'Orbitron', 'sans-serif', */
+	--font-orbitron: 'Orbitron', 'sans-serif'
+}
+
+/* Animation pour les cercles */
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(100vw);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes glow {
+	0% {
+	  text-shadow:
+		0 0 5px #ffe0b2,
+		0 0 10px #ffb74d,
+		0 0 20px #ff9800,
+		0 0 40px #f57c00,
+		0 0 80px #ef6c00;
+	}
+	100% {
+	  text-shadow:
+		0 0 5px #666,
+		0 0 10px #333,
+		0 0 20px #111,
+		0 0 40px #000,
+		0 0 80px #000;
+	}
+  }
+  

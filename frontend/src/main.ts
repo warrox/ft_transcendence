@@ -6,7 +6,7 @@
 
 
 import { router } from './router/router';
-// import './styles/tailwind.css';
+import './types/window.d.ts';
 
 
 window.addEventListener('DOMContentLoaded', router);
