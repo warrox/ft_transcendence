@@ -65,29 +65,25 @@ function main(): PongNode<any> {
 	return Div({
 		class: "relative min-h-screen bg-black"
 	}, [
-		// Barres de Pong
-		Div({ class: "fixed left-10 top-1/2 transform -translate-y-1/2 z-20 w-4 h-32 bg-yellow-400 rounded" }),
-		Div({ class: "fixed right-10 top-1/2 transform -translate-y-1/2 z-20 w-4 h-32 bg-yellow-400 rounded" }),
-
 		Div({
 			class: "relative z-10 container mx-auto px-4 py-20"
 		}, [
+
 			Div({
 				class: "text-center mb-16"
 			}, [
-				H1({ class: "font-bold leading-snug mb-8" }, [
-					Span({ class: "block md:text-7xl text-white" }, ["Jouez et devenez"]),
-					Span({ class: "block md:text-7xl text-yellow-400" }, ["un meilleur pongiste sur Transcendance"]),
-					Span({ class: "block md:text-3xl text-gray-300 pt-10 mb-8"}, ["Level up your skills with game and challenges."]),
+				H1({ class: "animate-fade-down font-bold leading-snug mb-8" }, [
+					Span({ class: "block font-orbitron md:text-7xl text-yellow-400" }, ["Play Pong."]),
+					Span({ class: "block font-orbitron md:text-7xl text-white" }, ["Have Fun. Build table tennis skills."]),
+					Span({ class: "block md:text-3xl text-gray-300 pt-10 mb-8"}, ["Level up your skills with game and tournament."]),
 					Button({
 						id: "playButton",
 						class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-3 px-6 border-b-4 border-yellow-700 hover:border-yellow-500 rounded text-lg"
-					}, [linkFn("/game", " ➡️ Start Playing", "")]),
+					}, [linkFn("/game", "➡️ Start Playing", "")]),
 					Span({class: "block md:text-xl text-gray-500 pt-4"}, ["Discover why 42 developers love Transcendence. 100% free."]),
 				]),
 			]),
 
-			// Video
 			Div({
 				class: "mx-auto max-w-4xl rounded-xl overflow-hidden shadow-2xl mb-20"
 			}, [
