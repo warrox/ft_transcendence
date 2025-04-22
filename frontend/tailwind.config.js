@@ -1,7 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
 	content: [
-	  "./src/**/*.{html,ts,tsx,js,jsx}", // scanne tous tes fichiers de composant
+		"./src/**/*.{html,ts,tsx,js,jsx}",
 	],
 	safelist: [
 		"bg-blue-500",
@@ -14,10 +15,10 @@ export default {
 		"border-blue-700",
 		"hover:border-blue-500",
 		"rounded",
-	  ],
+	],
 	theme: {
-	  extend: {},
+		extend: {
+		}
 	},
 	plugins: [],
-  }
-  
+}
