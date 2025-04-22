@@ -7,6 +7,7 @@
 
 import { router } from './router/router';
 import './types/window.d.ts';
+import './styles/index.css'
 
 
 window.addEventListener('DOMContentLoaded', router);

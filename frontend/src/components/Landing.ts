@@ -63,7 +63,7 @@ function navLanding() : PongNode<any> {
 
 function main(): PongNode<any> {
 	return Div({
-		class: "relative min-h-screen bg-black"
+		class: "relative min-h-screen bg-gray-950"
 	}, [
 		Div({
 			class: "relative z-10 container mx-auto px-4 py-20"
@@ -72,7 +72,8 @@ function main(): PongNode<any> {
 			Div({
 				class: "text-center mb-16"
 			}, [
-				H1({ class: "animate-fade-down font-bold leading-snug mb-8" }, [
+				H1({ class: "font-bold leading-snug mb-8 animate-fade-down" }, 
+				[
 					Span({ class: "block font-orbitron md:text-7xl text-yellow-400" }, ["Play Pong."]),
 					Span({ class: "block font-orbitron md:text-7xl text-white" }, ["Have Fun. Build table tennis skills."]),
 					Span({ class: "block md:text-3xl text-gray-300 pt-10 mb-8"}, ["Level up your skills with game and tournament."]),
@@ -85,7 +86,7 @@ function main(): PongNode<any> {
 			]),
 
 			Div({
-				class: "mx-auto max-w-4xl rounded-xl overflow-hidden shadow-2xl mb-20"
+				class: "mt-20 animate-fade-up animate-delay-[300ms] mx-auto max-w-4xl rounded-xl overflow-hidden shadow-2xl"
 			}, [
 				RawHTML(`
 					<video autoplay muted loop playsinline class="w-full h-auto">
@@ -93,6 +94,13 @@ function main(): PongNode<any> {
 						Your browser does not support the video tag.
 					</video>
 				`)
+			]),
+
+			Div({
+				class: "flex-wrap justify-center  mt-40",
+			}, [
+				H1({ class: "font-bold text-white font-orbitron md:text-5xl animate-rotate-x animate-delay-1000"}, ["Play on 42 + maps"]),
+				H1({ class: "font-bold text-white font-orbitron md:text-1xl"}, ["Show off your Pong skills in a tournament or brush up your fingers while destroying an AI opponent."])
 			])
 		])
 	]);
