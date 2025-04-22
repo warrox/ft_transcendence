@@ -5,6 +5,3 @@ declare module 'fastify' {
     jwt: JWT
   }	
 }
-
-
-

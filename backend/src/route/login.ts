@@ -6,6 +6,18 @@ import { User } from "../index";
 import { FastifyReply, FastifyRequest } from "fastify";
 import db from "../../db";
 import { server } from "../index";
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // true for port 465, false for other ports
+  auth: {
+		// TODO put mail and mdp to ,env
+    user: "warren.hamdi@gmail.com",
+    pass: "fdvk omxq myyi ilqt",
+  },
+});
 
 export const login = async (
 	request: FastifyRequest<{ Body: User }>,
@@ -21,10 +33,10 @@ export const login = async (
 		return reply.status(400).send({ error: "Invalid email format" });
 	}
 
-	let is2FA = false;
+	let is2FA: number = 0;
 	try {
-		is2FA = await new Promise<boolean>((resolve, reject) => {
-			db.get<{ check2FA: string }>(
+		is2FA = await new Promise<number>((resolve, reject) => {
+			db.get<{ check2FA: number }>(
 				"SELECT is_2FA as check2FA FROM users WHERE email = ?",
 				[email],
 				(err, row) => {
@@ -33,9 +45,13 @@ export const login = async (
 						return reject(err);
 					}
 					if (!row) return reject(new Error("User not found"));
-					resolve(row.check2FA === "true" || row.check2FA === "1");
+					resolve(row.check2FA === 1 ? 1 : 0);
+					
 				}
 			);
+			console.log(is2FA);
+			
+			
 		});
 	} catch (e: any) {
 		console.warn("No 2FA found or user not found:", e.message);
@@ -77,24 +93,27 @@ export const login = async (
 			}
 		);
 
-		//if (result.code === 200 && is2FA) {
-		//	// TODO: envoyer code MAIL ICI 
-		//	try {
-		//		await server.mailer.sendMail({
-		//			to: email,
-		//			subject: '2FA check for transcandence',
-		//			text : 'The 2FA code is : random number'
-		//		});
-		//	}catch(e:any){
-		//
-		//	}
-		//	return reply.status(200).send({
-		//		success: true,
-		//		twoFA: true,
-		//		message: "2FA activated, check your email",
-		//	});
-		//}
+		if (result.code === 200 && is2FA) {
+			// TODO: envoyer code MAIL ICI 
+			async function send_2FA() {
+				// send mail with defined transport object
+				const info = await transporter.sendMail({
+					from: '"Transcendance" <maddison53@ethereal.email>', // sender address
+					to: "ninoclasseau01@gmail.com", // list of receivers
+					subject: "Hello ✔", // Subject line
+					text: "Hello world?", // plain text body
+					html: "<b>Hello world?</b>", // html body
+				});
 
+				console.log("Message sent: %s", info.messageId);
+				// Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
+			}
+
+			send_2FA().catch(console.error);
+		}
+
+
+// async..await is not allowed in global scope, must use a wrapper
 		switch (result.code) {
 			case 200:
 				return reply

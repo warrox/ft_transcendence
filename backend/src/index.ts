@@ -5,22 +5,15 @@ import cors from '@fastify/cors';
 import bcrypt from 'fastify-bcrypt';
 import { getRoutes } from './GetRoutes.types';
 import * as dotenv from 'dotenv';
+
+//import type { Send } from 'nodemailer';
+//import module from '../node_modules/nodemailer';
+
+' use strict'
+
 export const server = fastify();
 
 
-//server.register(require('fastify-mailer'), {
-//  defaults: { from: 'Transcendance <warren.hamdi@gmail.com>' },
-//  transport: {
-//    host: 'smtp.gmail.com',
-//    port: 465,
-//    secure: true, // use TLS
-//    auth: {
-//      user: 'warren.hamdi',
-//      pass: 'soa92200'
-//    }
-//  }
-//})
-//
 /*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.apps.googleusercontent.com*/
 dotenv.config();
 const JWS =  process.env.JWTSECRETKEY;
@@ -31,12 +24,14 @@ server.register(fCookie, {
   secret: 'some-secret-key',
   hook: 'preHandler',
 });
+
 server.register(cors, {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['*'],
   credentials: true,
 });
+
 
 export interface User {
   id?: number;
@@ -50,7 +45,8 @@ export interface GoogleTokenRequest {
 	token: string;
 }
 
-function registerRoutes(server: FastifyInstance): void {
+async function registerRoutes(server: FastifyInstance): Promise<any> {
+
 	server.get('/me', getRoutes.me);
 	server.get('/users', getRoutes.users);
 	server.get('/checkJWT', getRoutes.checkJWT);
@@ -58,6 +54,7 @@ function registerRoutes(server: FastifyInstance): void {
 	server.post('/login', getRoutes.login);
 	server.post('/gsignin', getRoutes.gsignin );
 	server.post('/glogin', getRoutes.glogin);
+ 
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 
