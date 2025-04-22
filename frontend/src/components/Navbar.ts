@@ -4,7 +4,7 @@ import { linkCss } from "../styles/cssFactory";
 
 export function Navbar(): PongNode<any> {
 	return Div({
-		class: "fixed top-0 left-0 w-full z-50 bg-[radial-gradient(circle,_#001f7f,_#000000)] border-gray-200 dark:bg-gray-900"
+		class: "top-0 left-0 w-full z-50 bg-black border-gray-200"
 	}, [
 		Div({
 			class: "max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4"
@@ -13,7 +13,7 @@ export function Navbar(): PongNode<any> {
 			Div({}, [link("/about", "About", linkCss)]),
 			Div({}, [link("/register", "Register", linkCss)]),
 			Div({}, [link("/login", "Login", linkCss)]),
-			Div({}, [link("/game", "game", linkCss)]),
+			Div({}, [link("/game", "Game", linkCss)]),
 
 		])
 	]);
