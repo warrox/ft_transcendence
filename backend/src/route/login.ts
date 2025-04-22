@@ -95,21 +95,31 @@ export const login = async (
 
 		if (result.code === 200 && is2FA) {
 			// TODO: envoyer code MAIL ICI 
+			let r =  Math.floor(1000 + Math.random() * 9000) ;
 			async function send_2FA() {
+				// generate a random 
+				console.log(r);
 				// send mail with defined transport object
 				const info = await transporter.sendMail({
-					from: '"Transcendance" <maddison53@ethereal.email>', // sender address
-					to: "ninoclasseau01@gmail.com", // list of receivers
-					subject: "Hello ✔", // Subject line
-					text: "Hello world?", // plain text body
-					html: "<b>Hello world?</b>", // html body
+					from: '"Transcendance" <Transcendance@trans.com>', // sender address
+					to: email, // list of receivers
+					subject: "Authentification 2FA to transcendance", // Subject line
+					text: "copy/paste your unique code : " + r.toString(), // plain text body
+					html: "<b>copy/paste your unique code : </b>", // html body
 				});
 
 				console.log("Message sent: %s", info.messageId);
 				// Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
 			}
-
 			send_2FA().catch(console.error);
+			if(request.body.code2FA === r.toString()){
+				return (reply.status(200)
+				.send({success: true, twoFA: false, message: "2FA code correct, successfully logged"}));
+			}
+			else{
+				return ( reply.status(401)
+				.send(({error: "Wrong 2FA code"})));
+			}
 		}
 
 

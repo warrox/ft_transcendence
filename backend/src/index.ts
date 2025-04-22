@@ -39,6 +39,7 @@ export interface User {
   surname: string;
   email: string;
   password: string;
+  code2FA?: string;
 }
 
 export interface GoogleTokenRequest {
