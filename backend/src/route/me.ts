@@ -6,6 +6,15 @@ type JWTClaims = {
 	email: string,
 };
 
+const dbGet = (sql: string, params: any[]) => {
+	return new Promise<any>((resolve, reject) => {
+		db.get(sql, params, (err, row) => {
+			if (err) return reject(err);
+			resolve(row);
+		});
+	});
+};
+
 export const me = async (request: FastifyRequest, reply: FastifyReply) => {
 	try {
 		const token = request.cookies["access_token"];
@@ -15,21 +24,20 @@ export const me = async (request: FastifyRequest, reply: FastifyReply) => {
 
 		const claims = request.server.jwt.decode<JWTClaims>(token);
 		const userId = claims!.id;
-		console.log(userId);
 
-		db.get('SELECT id, name, surname, email FROM users WHERE id = ?', [userId], (err, row) => {
-			if (err) {
-				return reply.status(500).send({ error: 'Erreur serveur' });
-			}
+		const row = await dbGet(
+			'SELECT id, is_2FA, name, surname, email FROM users WHERE id = ?',
+			[userId]
+		);
 
-			if (!row) {
-				return reply.status(404).send({ error: 'Utilisateur non trouvé' });
-			}
+		if (!row) {
+			return reply.status(404).send({ error: 'Utilisateur non trouvé' });
+		}
 
-			return reply.send(row);
-		});
+		return reply.status(200).send(row);
 
 	} catch (err) {
-		return reply.status(401).send({ error: 'JWT invalide ou expiré' });
+		console.error(err);
+		return reply.status(401).send({ error: 'JWT invalide, expiré ou erreur serveur' });
 	}
-}
+};
