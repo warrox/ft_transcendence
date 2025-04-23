@@ -123,7 +123,6 @@ export const login = async (
 		}
 
 
-// async..await is not allowed in global scope, must use a wrapper
 		switch (result.code) {
 			case 200:
 				return reply

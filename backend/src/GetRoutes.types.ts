@@ -7,6 +7,7 @@ import { register } from "./route/post"
 import { login } from "./route/login"
 import { gsignin } from "./route/gsignin"
 import { glogin } from "./route/glogin"
+import { post2Fa } from "./route/post2Fa";
 export interface GetRoutes {
 	me (request: FastifyRequest, reply: FastifyReply): any
 	users (request: FastifyRequest, reply: FastifyReply): any
@@ -15,6 +16,7 @@ export interface GetRoutes {
 	login( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 	gsignin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
 	glogin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
+	post2Fa( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 }
 
 export const getRoutes: GetRoutes = {
@@ -24,5 +26,6 @@ export const getRoutes: GetRoutes = {
 	register: register,
 	login: login,
 	gsignin: gsignin,
-	glogin: glogin
+	glogin: glogin,
+	post2Fa:post2Fa
 };
