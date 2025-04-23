@@ -6,7 +6,9 @@
 
 @theme {
 	/* --font-orbitron: 'Orbitron', 'sans-serif', */
-	--font-orbitron: 'Orbitron', 'sans-serif'
+	--font-orbitron: 'Orbitron', 'sans-serif';
+	--color-bgGray: #1b1e22;
+	--color-borderGray: #282c32;
 }
 
 /* Animation pour les cercles */

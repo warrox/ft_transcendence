@@ -57,6 +57,7 @@ export class UListNode extends PongNode<UListProps> {
 export interface H1Props {
 	class?: string;
 	children?: PongNode<any>[];
+	[key: string]: any;
 }
 
 export class H1Node extends PongNode<H1Props> {
@@ -67,13 +68,13 @@ export class H1Node extends PongNode<H1Props> {
 
 	render(): string {
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
-		const className = this.props?.class || "";
-
-		return `
-			<h1 class="${className}">
-				${childHTML}
-			</h1>
-		`;
+	
+		const attributes = Object.entries(this.props || {})
+			.filter(([key, value]) => key !== "children" && value != undefined)
+			.map(([key, value]) => `${key}="${value}"`)
+			.join(" ");
+	
+		return `<h1 ${attributes}>${childHTML}</h1>`;
 	}
 }
 
@@ -241,7 +242,7 @@ export class LinkNode extends PongNode<LinkProps> {
 		const className = this.props?.class || "";
 
 		return `
-			<a href="#${this.props?.href}" class="${className}">
+			<a href="${this.props?.href}" class="${className}">
 				${childHTML}
 			</a>
 		`;
@@ -298,6 +299,7 @@ export interface InputProps {
 	required?: boolean,
 	minlength?: string,
 	maxlength?: string,
+	placeholder?: string,
 	onChange?: () => void,
 }
 
@@ -334,6 +336,7 @@ export class InputNode extends PongNode<InputProps> {
 			required,
 			minlength,
 			maxlength,
+			placeholder,
 		} = this.props || {};
 
 		return `<input
@@ -343,6 +346,7 @@ export class InputNode extends PongNode<InputProps> {
 			${required ? `required` : ""}
 			${minlength ? `minlength="${minlength}"` : ""}
 			${maxlength ? `maxlength="${maxlength}"` : ""}
+			${placeholder ? `placeholder="${placeholder}"` : ""}
 		/>`;
 	}
 }

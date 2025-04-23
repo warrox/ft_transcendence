@@ -1,7 +1,15 @@
 import { H1Node, PongNode } from "../lib/PongNode";
-import { Div, Image, Button, H1, Span, RawHTML } from "../lib/PongFactory";
+import { Div, Image, Button, H1, Span, RawHTML, P } from "../lib/PongFactory";
 import { linkFn } from "./Navbar";
 import { rerender } from "../router/router";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+AOS.init({
+	once: true,
+	duration: 800,
+	offset: 120,
+  });
 
 let navExpanded = false;
 
@@ -97,10 +105,15 @@ function main(): PongNode<any> {
 			]),
 
 			Div({
-				class: "flex-wrap justify-center  mt-40",
+				class: "flex flex-col items-center mt-40",
 			}, [
-				H1({ class: "font-bold text-white font-orbitron md:text-5xl animate-rotate-x animate-delay-1000"}, ["Play on 42 + maps"]),
-				H1({ class: "font-bold text-white font-orbitron md:text-1xl"}, ["Show off your Pong skills in a tournament or brush up your fingers while destroying an AI opponent."])
+				H1({ 
+					class: "font-bold text-white font-orbitron md:text-5xl",
+					"data-aos": "flip-down",
+					"data-aos-delay": "200"
+				},
+					["Play on multiple maps"]),
+				P({ class: "font-bold text-white font-orbitron md:text-xl text-center mt-20"}, ["Show off your Pong skills in a tournament or brush up your fingers while destroying an AI opponent."])
 			])
 		])
 	]);

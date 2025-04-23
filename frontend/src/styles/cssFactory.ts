@@ -25,10 +25,10 @@ export const fancyLeftBorderCss =
   "group-hover:w-full absolute left-0 h-full w-5 border-y border-l border-[rgba(239,177,0,1)] transition-all duration-500";
 
 export const disappearingTextCss =
-  "group-hover:opacity-0 group-hover:translate-x-[-100%] absolute translate-x-0 transition-all duration-200";
+  "font-orbitron group-hover:opacity-0 group-hover:translate-x-[-100%] absolute translate-x-0 transition-all duration-200";
 
 export const appearingTextCss =
-  "group-hover:translate-x-0 group-hover:opacity-100 absolute translate-x-full opacity-0 transition-all duration-200";
+  "font-orbitron group-hover:translate-x-0 group-hover:opacity-100 absolute translate-x-full opacity-0 transition-all duration-200";
 
 export const fancyRightBorderCss =
   "group-hover:w-full absolute right-0 h-full w-5 border-y border-r border-[rgba(239,177,0,1)] transition-all duration-500";
@@ -56,4 +56,4 @@ export const circle9Css = `${circleBaseCss} w-[15px] h-[15px] top-[70%] left-[-1
 export const circle10Css = `${circleBaseCss} w-[15px] h-[15px] top-[90%] left-[-150px] [animation-delay:0s]`;
 
 // Neon text
-export const neonTextCss = "text-2xl text-white animate-[glow_1.5s_alternate_infinite]";
+export const neonTextCss = "font-orbitron text-2xl text-white animate-[glow_1.5s_alternate_infinite]";

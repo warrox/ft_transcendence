@@ -1,7 +1,6 @@
  import { PongNode } from '../lib/PongNode';
 import { Home } from '../components/Home';
 import { NotFound } from '../components/NotFound';
-import { About } from '../components/About';
 import { Navbar } from '../components/Navbar';
 import { Register } from '../components/Register';
 import { Div } from '../lib/PongFactory';
@@ -18,7 +17,6 @@ type Route = {
 const routes: Route[] = [
 	{ path: '/', component: Landing, showNavbar: false},
 	{ path: '/home', component: Home },
-	{ path: '/about', component: About},
 	{ path: '/register', component: Register},
 	{ path: '/login', component: Login},
 	{ path: '/game', component: Game}
@@ -32,9 +30,9 @@ export function rerender() {
 	const app = document.getElementById('app');
 	if (!app) return;
 
-	const hash = location.hash.slice(1) || '/';
-	const route = routes.find(r => r.path === hash);
-	const showNavbar = route?.showNavbar !== false;
+	const path = window.location.pathname || '/';
+	const route = routes.find(r => r.path == path);
+	const showNavbar = route?.showNavbar != false;
 	
 	const pageNode = currentPage();
 	renderToDOM(
@@ -53,17 +51,37 @@ export function setCurrentPage(page: () => PongNode<any>) {
 	rerender();
 }
 
+// export function router() {
+	// const app = document.getElementById('app');
+	// if (!app) return;
+// 
+	// console.log('Hash:', location.hash);
+// 
+	// const hash = location.hash.slice(1) || '/';
+	// const route = routes.find(r => r.path == hash);
+// 
+	// setCurrentPage(route?.component || NotFound);
+	// const showNavbar = route?.showNavbar !== false;
+	// const page = route ? route.component() : NotFound();
+// 
+	// renderToDOM(
+		// Div({}, [
+			// ...(showNavbar ? [Navbar()] : []),
+			// page
+		// ]),
+		// app
+	// );
+// }
+
 export function router() {
 	const app = document.getElementById('app');
 	if (!app) return;
 
-	console.log('Hash:', location.hash);
-
-	const hash = location.hash.slice(1) || '/';
-	const route = routes.find(r => r.path == hash);
+	const path = window.location.pathname || '/';
+	const route = routes.find(r => r.path == path);
 
 	setCurrentPage(route?.component || NotFound);
-	const showNavbar = route?.showNavbar !== false;
+	const showNavbar = route?.showNavbar != false;
 	const page = route ? route.component() : NotFound();
 
 	renderToDOM(
@@ -72,5 +90,10 @@ export function router() {
 			page
 		]),
 		app
-	);
+	)
+}
+
+export function navigateTo(path: string) {
+	history.pushState({}, "", path);
+	router(); // Re-render
 }

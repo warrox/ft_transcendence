@@ -10,7 +10,6 @@ export function Navbar(): PongNode<any> {
 			class: "max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4"
 		}, [
 			Div({}, [linkFn("/home", "Home", linkCss)]),
-			Div({}, [linkFn("/about", "About", linkCss)]),
 			Div({}, [linkFn("/register", "Register", linkCss)]),
 			Div({}, [linkFn("/login", "Login", linkCss)]),
 			Div({}, [linkFn("/game", "Game", linkCss)]),

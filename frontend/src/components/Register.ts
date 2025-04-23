@@ -1,25 +1,44 @@
-import { Div, P, Button, Input } from "../lib/PongFactory";
+import { Div, P, Button, Input, Span } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import { inputCss } from "../styles/cssFactory";
+import {
+	backgroundCss,
+	fancyButtonCss,
+	fancyLeftBorderCss,
+	fancyRightBorderCss,
+	disappearingTextCss,
+	appearingTextCss,
+	loginWrapperCss,
+	loginCardCss,
+	headerCss,
+	neonTextCss,
+	inputWrapperCss,
+	statusWrapperCss,
+	statusKoCss,
+	statusOkCss,
+	inputCss,
+} from "../styles/cssFactory";
 
 export function Register(): PongNode<any> {
 	const nameInput = Input({ 
 		id: "name", 
 		required: true, 
 		onChange: () => {},
+		placeholder: "name",
 		class: inputCss,
 	});
 	const lastNameInput = Input({
 		id: "lastname", 
 		required: true, 
 		onChange: () => {},
+		placeholder: "last name",
 		class: inputCss,
 	});
 	const mailInput = Input({
 		id: "mail", 
 		required: true, 
 		onChange: () => {},
+		placeholder: "email",
 		class: inputCss,
 	});
 	const passwordInput = Input({
@@ -27,6 +46,7 @@ export function Register(): PongNode<any> {
 		type: "password", 
 		required: true, 
 		onChange: () => {},
+		placeholder: "password",
 		class: inputCss,
 	});
 
@@ -102,14 +122,37 @@ export function Register(): PongNode<any> {
 		}
 	}, 0);
 
+	const registerWrapperCss = "flex items-center justify-center min-h-screen"
+	const registerCardCss = "bg-bgGray border-borderGray border rounded-xl backdrop-blur-md space-y-6 p-8 rounded-2xl w-full max-w-md";
+	"rounded-xl border-white/30 bg-white/10 border backdrop-blur-md space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md";
 
-	return Div({}, [
-		P({}, ["Register to our service"]),
-		nameInput,
-		lastNameInput,
-		mailInput,
-		passwordInput,
-		Button({ class: "bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" ,id: "button1", onClick: handleRegister }, ["Register"]),
-		Div({ id: "google-button-container", class: "w-fit mx-auto" })
+	return Div({
+		class: "relative min-h-screen bg-[url(./assets/bgtest.png)]"
+	}, [
+		Div({ class: registerWrapperCss}, 
+		[
+			Div({ class: registerCardCss }, [
+				Div({ class: headerCss }, [
+					P({ class: neonTextCss }, ["Sign In"]),
+				]),
+				Div({ class: inputWrapperCss }, [
+					nameInput,
+					lastNameInput,
+					mailInput,
+					passwordInput,
+				]),
+				Div({ id: "google-button-container", class: "w-fit mx-auto" }),
+				Button({
+					id: "button1",
+					onClick: handleRegister,
+					class: fancyButtonCss,
+				}, [
+					Div({ class: fancyLeftBorderCss }),
+					P({ class: disappearingTextCss }, ["Click here"]),
+					Span({ class: appearingTextCss }, ["Register"]),
+					Div({ class: fancyRightBorderCss }),
+				]),
+			])
+		])
 	])
 }
