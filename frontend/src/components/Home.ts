@@ -1,44 +1,37 @@
 import { PongNode } from "../lib/PongNode";
-import { Div, P, Button } from "../lib/PongFactory"
+import { Div, UList, Li} from "../lib/PongFactory"
+import {
+	areaCss,
+	circlesCss,
+	circle1Css,
+	circle2Css,
+	circle3Css,
+	circle4Css,
+	circle5Css,
+	circle6Css,
+	circle7Css,
+	circle8Css,
+	circle9Css,
+	circle10Css,
+	loginWrapperCss,
+	backgroundCss
+} from "../styles/cssFactory";
 
 export function Home(): PongNode<any> {
 
-	const body = {
-		// name: "test2",
-		// surname: "test2eeee",
-		email: "test2@gmail.com",
-		password: "jspppffff"
-	};
-
-	const sendBody = () => {
-		fetch("http://localhost:3000/login", {
-			method: "POST",
-			body: JSON.stringify(body),
-			headers: {
-				'Content-Type': 'application/json',
-			}
-		})
-		.then(res => {
-			if (!res.ok)
-				throw new Error(`HTTP error! Status: ${res.status}`);
-			return res.text();
-		})
-		.then(body => {
-			console.log("res brute :", body);
-			try {
-			  const parsedBody = JSON.parse(body);
-			  console.log("Body parsed:", parsedBody);
-			} catch (e) {
-			  console.error("Erreur de parsing JSON :", e);
-			}
-		})
-		.catch(e => console.error("Erreur :", e));
-	}
-
-
-	return Div({}, [
-		P({}, ["Welcome to Home page !"]),
-		Button({id: "b2", onClick: sendBody, class: "bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" }, ["Login test"]),
-		
+	return Div({ class: areaCss }, [
+		UList({ class: circlesCss }, [
+			Li({ class: circle1Css }),
+			Li({ class: circle2Css }),
+			Li({ class: circle3Css }),
+			Li({ class: circle4Css }),
+			Li({ class: circle5Css }),
+			Li({ class: circle6Css }),
+			Li({ class: circle7Css }),
+			Li({ class: circle8Css }),
+			Li({ class: circle9Css }),
+			Li({ class: circle10Css }),
+		]),
+		Div({ class: `${loginWrapperCss} ${backgroundCss}` }) // Corrected this line
 	]);
 }
