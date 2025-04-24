@@ -9,7 +9,7 @@ export const linkCss: string = "font-orbitron text-white transition duration-300
 // export const linkCss = "text-white transition duration-300 ease-in-out";
 
 //BUTTON 
-export const loginWrapperCss = "shadow-lg flex items-center justify-center min-h-screen bg-gray-100";
+export const WrapperCss = "shadow-lg flex items-center justify-center min-h-screen bg-gray-100";
 export const loginCardCss = "rounded-xl border-white/30 bg-white/10 border backdrop-blur-md space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md";
 export const headerCss = "text-center";
 export const headerTextCss = "text-2xl font-bold text-gray-800";

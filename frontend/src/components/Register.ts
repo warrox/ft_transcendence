@@ -8,7 +8,7 @@ import {
 	fancyRightBorderCss,
 	disappearingTextCss,
 	appearingTextCss,
-	loginWrapperCss,
+	WrapperCss,
 	loginCardCss,
 	headerCss,
 	neonTextCss,

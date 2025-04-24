@@ -13,7 +13,7 @@ import {
 	circle8Css,
 	circle9Css,
 	circle10Css,
-	loginWrapperCss,
+	WrapperCss,
 	backgroundCss
 } from "../styles/cssFactory";
 
@@ -32,6 +32,6 @@ export function Home(): PongNode<any> {
 			Li({ class: circle9Css }),
 			Li({ class: circle10Css }),
 		]),
-		Div({ class: `${loginWrapperCss} ${backgroundCss}` }) // Corrected this line
+		Div({ class: `${WrapperCss} ${backgroundCss}` })
 	]);
 }
