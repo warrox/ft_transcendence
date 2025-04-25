@@ -6,6 +6,8 @@ import { User } from "../index";
 import { FastifyReply, FastifyRequest } from "fastify";
 import db from "../../db";
 import { server } from "../index";
+
+import * as dotenv from 'dotenv';
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -14,8 +16,8 @@ const transporter = nodemailer.createTransport({
   secure: true, // true for port 465, false for other ports
   auth: {
 		// TODO put mail and mdp to ,env
-    user: "warren.hamdi@gmail.com",
-    pass: "fdvk omxq myyi ilqt",
+    user: process.env.HOSTMAIL,
+    pass: process.env.GMAILPASSWORD,
   },
 });
 
@@ -104,8 +106,8 @@ export const login = async (
 					from: '"Transcendance" <Transcendance@trans.com>', // sender address
 					to: email, // list of receivers
 					subject: "Authentification 2FA to transcendance", // Subject line
-					text: "copy/paste your unique code : " + r.toString(), // plain text body
-					html: "<b>copy/paste your unique code : </b>", // html body
+					text: "copy/paste your unique code : " + r, // plain text body
+					html: `<b>copy/paste your unique code : </b><span>${r}</span>`,
 				});
 
 				console.log("Message sent: %s", info.messageId);
