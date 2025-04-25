@@ -127,7 +127,7 @@ export function Register(): PongNode<any> {
 	"rounded-xl border-white/30 bg-white/10 border backdrop-blur-md space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md";
 
 	return Div({
-		class: "relative min-h-screen bg-[url(./assets/bgtest.png)]"
+		class: "relative min-h-screen bg-gray-950"
 	}, [
 		Div({ class: registerWrapperCss}, 
 		[
