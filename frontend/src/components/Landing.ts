@@ -87,8 +87,8 @@ function main(): PongNode<any> {
 					Span({ class: "block md:text-3xl text-gray-300 pt-10 mb-8"}, ["Level up your skills with game and tournament."]),
 					Button({
 						id: "playButton",
-						class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-3 px-6 border-b-4 border-yellow-700 hover:border-yellow-500 rounded text-lg"
-					}, [linkFn("/game", "➡️ Start Playing", "")]),
+						class: "font-orbitron bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-3 px-6 border-b-4 border-yellow-700 hover:border-yellow-500 rounded text-lg"
+					}, [linkFn("/game", "Start Playing", "")]),
 					Span({class: "block md:text-xl text-gray-500 pt-4"}, ["Discover why 42 developers love Transcendence. 100% free."]),
 				]),
 			]),
@@ -123,6 +123,6 @@ export function Landing() : PongNode<any> {
 	return Div({}, [
 		navLanding(),
 		main(),
-		// main()
+
 	]);
 }

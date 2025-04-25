@@ -1,4 +1,4 @@
-import { Div, P, Button, Input, Span } from "../lib/PongFactory";
+import { Div, P, Button, Input, Span, Li, UList } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
 import {
@@ -13,10 +13,19 @@ import {
 	headerCss,
 	neonTextCss,
 	inputWrapperCss,
-	statusWrapperCss,
-	statusKoCss,
-	statusOkCss,
 	inputCss,
+	areaCss,
+	circlesCss,
+	circle1Css,
+	circle2Css,
+	circle3Css,
+	circle4Css,
+	circle5Css,
+	circle6Css,
+	circle7Css,
+	circle8Css,
+	circle9Css,
+	circle10Css
 } from "../styles/cssFactory";
 
 export function Register(): PongNode<any> {
@@ -122,37 +131,46 @@ export function Register(): PongNode<any> {
 		}
 	}, 0);
 
-	const registerWrapperCss = "flex items-center justify-center min-h-screen"
-	const registerCardCss = "bg-bgGray border-borderGray border rounded-xl backdrop-blur-md space-y-6 p-8 rounded-2xl w-full max-w-md";
-	"rounded-xl border-white/30 bg-white/10 border backdrop-blur-md space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md";
+	// const registerWrapperCss = "flex items-center justify-center min-h-screen"
+	// const registerCardCss = "bg-bgGray border-borderGray border rounded-xl backdrop-blur-md space-y-6 p-8 rounded-2xl w-full max-w-md";
+	// "rounded-xl border-white/30 bg-white/10 border backdrop-blur-md space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md";
 
-	return Div({
-		class: "relative min-h-screen bg-gray-950"
-	}, [
-		Div({ class: registerWrapperCss}, 
-		[
-			Div({ class: registerCardCss }, [
-				Div({ class: headerCss }, [
-					P({ class: neonTextCss }, ["Sign In"]),
-				]),
-				Div({ class: inputWrapperCss }, [
-					nameInput,
-					lastNameInput,
-					mailInput,
-					passwordInput,
-				]),
-				Div({ id: "google-button-container", class: "w-fit mx-auto" }),
-				Button({
-					id: "button1",
-					onClick: handleRegister,
-					class: fancyButtonCss,
-				}, [
-					Div({ class: fancyLeftBorderCss }),
-					P({ class: disappearingTextCss }, ["Click here"]),
-					Span({ class: appearingTextCss }, ["Register"]),
-					Div({ class: fancyRightBorderCss }),
-				]),
+		return Div({ class: areaCss }, [
+			UList({ class: circlesCss }, [
+				Li({ class: circle1Css }),
+				Li({ class: circle2Css }),
+				Li({ class: circle3Css }),
+				Li({ class: circle4Css }),
+				Li({ class: circle5Css }),
+				Li({ class: circle6Css }),
+				Li({ class: circle7Css }),
+				Li({ class: circle8Css }),
+				Li({ class: circle9Css }),
+				Li({ class: circle10Css }),
+			]),
+			Div({ class: `${loginWrapperCss} ${backgroundCss}` }, [
+				Div({ class: loginCardCss }, [
+					Div({ class: headerCss }, [
+						P({ class: neonTextCss }, ["Register Page"]),
+					]),
+					Div({ class: inputWrapperCss }, [
+						nameInput,
+						lastNameInput,
+						mailInput,
+						passwordInput,
+					]),
+					Div({ id: "google-button-container", class: "w-fit mx-auto" }),
+					Button({
+						id: "button1",
+						onClick: handleRegister,
+						class: fancyButtonCss,
+					}, [
+						Div({ class: fancyLeftBorderCss }),
+						P({ class: disappearingTextCss }, ["Click here"]),
+						Span({ class: appearingTextCss }, ["Sign In"]),
+						Div({ class: fancyRightBorderCss }),
+					]),
+				])
 			])
-		])
-	])
+		]);
 }
