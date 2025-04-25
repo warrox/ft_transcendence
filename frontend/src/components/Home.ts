@@ -1,5 +1,5 @@
 import { PongNode } from "../lib/PongNode";
-import { Div, UList, Li, Span, Image, Button } from "../lib/PongFactory";
+import { Div, UList, Li, Span, Image, Button, RawHTML } from "../lib/PongFactory";
 import {
 	areaCss,
 	circlesCss,
@@ -50,20 +50,27 @@ export function Home(): PongNode<any> {
 					Div({ class: cardBackCss }, [Span({}, ["Card 1 Back"])])
 				])
 			]),
-			// Carte 2 : Game (avec bouton)
+			// Carte 2 : Game (avec vidéo et bouton)
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
 						Span({ class: neonTitleCss }, ["Game"]),
 						Image({ id: "game_img", src: "../assets/pong.png", alt: "game_img", class: "imageCenter" })
 					]),
-					// Ajout du bouton en bas de la carte
-					Div({ class: `${cardBackCss} relative` }, [
-						// Contenu de l'arrière de la carte
+					// Contenu du dos de la carte centré avec Flexbox
+					Div({ class: `${cardBackCss} flex flex-col items-center justify-center text-center p-6` }, [
+						// Vidéo entre le titre et le bouton
+						RawHTML(`
+							<video autoplay muted loop playsinline class="w-full h-auto mb-4">
+								<source src="/assets/backgroundL2.mp4" type="video/mp4" />
+								Your browser does not support the video tag.
+							</video>
+						`),
+						// Texte entre la vidéo et le bouton
 						Span({}, ["Pong like you’ve never played it before..."]),
 						
-						// Bouton en bas, positionné absolument
-						Div({ class: "absolute bottom-0 left-0 right-0 mb-6 flex justify-center" }, [
+						// Bouton centré
+						Div({ class: "mt-4 flex justify-center" }, [
 							Button({
 								id: "play_button",
 								class: playButtonDarkCss,
