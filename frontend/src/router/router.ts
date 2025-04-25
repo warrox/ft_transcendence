@@ -17,7 +17,7 @@ type Route = {
 }
 
 const routes: Route[] = [
-	{ path: '/', component: Landing, showNavbar: false},
+	{ path: '/landing', component: Landing, showNavbar: false},
 	{ path: '/home', component: Home },
 	{ path: '/register', component: Register},
 	{ path: '/login', component: Login},
@@ -56,51 +56,14 @@ export function setCurrentPage(page: () => PongNode<any>) {
 	rerender();
 }
 
-export async function router() {
-	const app = document.getElementById('app');
-	if (!app) return;
-	
-	if (!AuthStore.user)
-		await AuthStore.fetchMe();
-
-	const path = window.location.pathname || '/';
-	const route = routes.find(r => r.path == path);
-
-	setCurrentPage(route?.component || NotFound);
-	const showNavbar = route?.showNavbar != false;
-	const page = route ? route.component() : NotFound();
-
-	renderToDOM(
-		Div({}, [
-			...(showNavbar ? [Navbar()] : []),
-			page
-		]),
-		app
-	)
-}
-
-export function navigateTo(path: string) {
-	history.pushState({}, "", path);
-	router(); // Re-render
-}
-
-
 // export async function router() {
 // 	const app = document.getElementById('app');
 // 	if (!app) return;
 	
 // 	if (!AuthStore.user)
 // 		await AuthStore.fetchMe();
-	
-// 	let path = window.location.pathname || '/';
-	
-// 	if (path === '/') {
-// 		if (AuthStore.isLoggedIn) {
-// 			path = '/home';
-// 			history.replaceState({}, "", path);
-// 		}
-// 	}
 
+// 	const path = window.location.pathname || '/';
 // 	const route = routes.find(r => r.path == path);
 
 // 	setCurrentPage(route?.component || NotFound);
@@ -115,3 +78,38 @@ export function navigateTo(path: string) {
 // 		app
 // 	)
 // }
+
+export function navigateTo(path: string) {
+	history.pushState({}, "", path);
+	router(); // Re-render
+}
+
+
+export async function router() {
+	const app = document.getElementById('app');
+	if (!app) return;
+	
+	if (!AuthStore.user)
+		await AuthStore.fetchMe();
+	
+	let path = window.location.pathname || '/';
+	
+	if (path === '/') {
+		path = AuthStore.isLoggedIn ? '/home' : '/landing';
+		history.replaceState({}, "", path);
+	}
+
+	const route = routes.find(r => r.path == path);
+
+	setCurrentPage(route?.component || NotFound);
+	const showNavbar = route?.showNavbar != false;
+	const page = route ? route.component() : NotFound();
+
+	renderToDOM(
+		Div({}, [
+			...(showNavbar ? [Navbar()] : []),
+			page
+		]),
+		app
+	)
+}
