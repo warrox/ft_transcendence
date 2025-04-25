@@ -57,3 +57,43 @@ export const circle10Css = `${circleBaseCss} w-[15px] h-[15px] top-[90%] left-[-
 
 // Neon text
 export const neonTextCss = "font-orbitron text-2xl text-white animate-[glow_1.5s_alternate_infinite]";
+
+export const cardsContainerCss = `
+  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+  flex justify-evenly gap-12 w-full max-w-7xl px-10 z-10
+`;
+// export const cardCss = "rounded-2xl bg-white shadow-xl p-6 w-[220px] h-[360px] flex flex-col items-center justify-center text-center font-medium text-gray-800 transition duration-300 hover:scale-105 hover:shadow-2xl";
+
+export const cardNeonHoverCss = `
+  relative rounded-2xl bg-white p-6 w-[260px] h-[460px]
+  flex flex-col items-center justify-center text-center font-medium text-gray-800
+  transition duration-300 hover:scale-105 
+  hover:shadow-[0_0_25px_#ffe600] hover:border-[2px] hover:border-yellow-400 hover:bg-white/90 z-10
+`;
+
+// Conteneur de la card (flip zone)
+export const cardFlipCss = `
+  w-[260px] h-[460px] perspective-[1500px]
+`;
+
+// Inner wrapper qui pivote
+export const cardInnerCss = `
+  relative w-full h-full transition-transform duration-700 
+  transform-style-preserve-3d hover:rotate-y-180
+`;
+
+
+// Faces (front & back)
+export const cardFaceBaseCss = `
+  absolute w-full h-full backface-hidden 
+  rounded-2xl shadow-xl text-center p-6
+`;
+
+
+export const cardFrontCss = `
+  ${cardFaceBaseCss} bg-white text-gray-800
+`;
+
+export const cardBackCss = `
+  ${cardFaceBaseCss} bg-yellow-400 text-black transform rotate-y-180
+`;
