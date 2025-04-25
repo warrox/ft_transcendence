@@ -47,7 +47,7 @@ export const neonTextCss = "font-orbitron text-2xl text-white animate-[glow_1.5s
 export const cardsContainerCss = `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-evenly gap-12 w-full max-w-7xl px-10 z-10`;
 export const cardNeonHoverCss = ` relative rounded-2xl bg-white p-6 w-[260px] h-[460px] flex flex-col items-center justify-center text-center font-medium text-gray-800 transition duration-300 hover:scale-105 hover:shadow-[0_0_25px_#ffe600] hover:border-[2px] hover:border-yellow-400 hover:bg-white/90 z-10`;
 export const cardFlipCss = `
-  w-[260px] h-[460px] perspective-[400px] will-change: transform
+  w-[920px] h-[520px] perspective-[400px] will-change: transform
 `;
 
 export const cardInnerCss = `
