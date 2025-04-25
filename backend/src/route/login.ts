@@ -1,3 +1,6 @@
+export const twoFAStore : { code : number} = {
+	code:0
+};
 
 // *******************8 if is 2fa ok -> send mail to user and boolean to front to wait. **************************
 
@@ -97,33 +100,23 @@ export const login = async (
 
 		if (result.code === 200 && is2FA) {
 			// TODO: envoyer code MAIL ICI 
-			let r =  Math.floor(1000 + Math.random() * 9000) ;
+			twoFAStore.code =  Math.floor(1000 + Math.random() * 9000) ;
 			async function send_2FA() {
 				// generate a random 
-				console.log(r);
+				console.log(twoFAStore.code);
 				// send mail with defined transport object
 				const info = await transporter.sendMail({
 					from: '"Transcendance" <Transcendance@trans.com>', // sender address
 					to: email, // list of receivers
 					subject: "Authentification 2FA to transcendance", // Subject line
-					text: "copy/paste your unique code : " + r, // plain text body
-					html: `<b>copy/paste your unique code : </b><span>${r}</span>`,
+					text: "copy/paste your unique code : " + twoFAStore.code, // plain text body
+					html: `<b>copy/paste your unique code : </b><span>${twoFAStore.code}</span>`,
 				});
-
 				console.log("Message sent: %s", info.messageId);
 				// Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
 			}
 			send_2FA().catch(console.error);
-			if(request.body.code2FA === r.toString()){
-				return (reply.status(200)
-				.send({success: true, twoFA: false, message: "2FA code correct, successfully logged"}));
-			}
-			else{
-				return ( reply.status(401)
-				.send(({error: "Wrong 2FA code"})));
-			}
 		}
-
 
 		switch (result.code) {
 			case 200:
