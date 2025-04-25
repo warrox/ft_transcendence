@@ -1,5 +1,5 @@
 import { PongNode } from "../lib/PongNode";
-import { Div, UList, Li, Span } from "../lib/PongFactory"
+import { Div, UList, Li, Span, Image } from "../lib/PongFactory"
 import {
 	areaCss,
 	circlesCss,
@@ -21,8 +21,11 @@ import {
 	cardFlipCss,
 	cardInnerCss,
 	cardFrontCss,
-	cardBackCss
+	cardBackCss,
+	neonTitleCss
 } from "../styles/cssFactory";
+
+// import "../assets/profil.png";
 
 export function Home(): PongNode<any> {
 	return Div({ class: areaCss }, [
@@ -40,34 +43,47 @@ export function Home(): PongNode<any> {
 		]),
 		Div({ class: `${WrapperCss} ${backgroundCss}` }),
 		Div({ class: cardsContainerCss }, [
-			// Carte 1
+			// Carte 1 avec image sous Profil
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
-					Div({ class: cardFrontCss }, [Span({}, ["Card 1 Front"])]),
+					Div({ class: cardFrontCss }, [
+						Span({ class: neonTitleCss }, ["Profil"]),
+						Image({ id: "profil_img", src: "../assets/profil.png", alt: "profil_img", class: "imageCenter" })
+					]),
 					Div({ class: cardBackCss }, [Span({}, ["Card 1 Back"])])
 				])
 			]),
 			// Carte 2
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
-					Div({ class: cardFrontCss }, [Span({}, ["Card 2 Front"])]),
+					Div({ class: cardFrontCss }, [
+						Span({ class: neonTitleCss }, ["Game"]),
+						Image({ id: "game_img", src: "../assets/pong.png", alt: "game_img", class: "imageCenter" })
+					]),
 					Div({ class: cardBackCss }, [Span({}, ["Card 2 Back"])])
 				])
 			]),
 			// Carte 3
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
-					Div({ class: cardFrontCss }, [Span({}, ["Card 3 Front"])]),
+					Div({ class: cardFrontCss }, [
+						Span({ class: neonTitleCss }, ["Dashboard"]),
+						Image({ id: "dash_img", src: "../assets/dashboard.png", alt: "dash_img", class: "imageCenter" })
+					]),
 					Div({ class: cardBackCss }, [Span({}, ["Card 3 Back"])])
 				])
 			]),
 			// Carte 4
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
-					Div({ class: cardFrontCss }, [Span({}, ["Card 4 Front"])]),
+					Div({ class: cardFrontCss }, [
+						Span({ class: neonTitleCss }, ["Settings"]),
+						Image({ id: "settings_img", src: "../assets/settings.png", alt: "settings_img", class: "imageCenter" })
+					]),
 					Div({ class: cardBackCss }, [Span({}, ["Card 4 Back"])])
 				])
 			])
 		])
 	]);
 }
+
