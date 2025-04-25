@@ -2,53 +2,16 @@
 <html lang="fr">
 
   <head>
-    <meta charset="UTF-8" />
-    <title>Mon App TS</title>
+	<meta charset="UTF-8" />
+	<title>Mon App TS</title>
 	<link href="styles/index.css" rel="stylesheet">
-    <!-- Nouvelle API Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+	<!-- Nouvelle API Google Identity Services -->
+	<script src="https://accounts.google.com/gsi/client" async defer></script>
 
-    <style>
-      .home {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      button {
-        padding: 8px 16px;
-        margin: 5px;
-      }
-      nav {
-        background: #f0f0f0;
-        padding: 10px;
-      }
-    </style>
   </head>
   <body>
-    <div id="app"></div>
+	<div id="app"></div>
+	<script type="module" src="./main.ts"></script>
 
-    <div
-      id="g_id_onload"
-      data-client_id="38147679342-b3t2eq1316n4uucavd5nah6agapoaa27.apps.googleusercontent.com"
-      data-callback="onSignIn"
-      data-auto_prompt="false"
-    ></div>
-    <div class="g_id_signin" data-type="standard"></div>
-
-    <script type="module" src="./main.ts"></script>
-
-    <script>
-      function onSignIn(response) {
-        const idToken = response.credential;
-		  
-		fetch("http://localhost:3000/gsignin", {
-			method: "POST",
-			headers: {
-			  "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ token: idToken }),
-  });
-      }
-    </script>
   </body>
 </html>

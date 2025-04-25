@@ -1,12 +1,17 @@
 import { H1Node, PongNode } from "../lib/PongNode";
-import { Div, P, Image, Button, H1, H2 } from "../lib/PongFactory";
+import { Div, Image, Button, H1, Span, RawHTML, P } from "../lib/PongFactory";
 import { linkFn } from "./Navbar";
-import { linkCss } from "../styles/cssFactory";
 import { rerender } from "../router/router";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
+AOS.init({
+	once: true,
+	duration: 800,
+	offset: 120,
+  });
 
 let navExpanded = false;
-
 
 function navLanding() : PongNode<any> {
 
@@ -21,7 +26,7 @@ function navLanding() : PongNode<any> {
 		Div({
 			class: "fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-black shadow-md"
 		}, [
-			Image({ id: "img", src: "/assets/42logo.png", class: "h-10" }),
+			Image({ id: "img", src: "/assets/42logoT.png", class: "h-10" }),
 			Div({ class: "flex gap-4"}, [
 				// Button({
 				// 	id: "burgerButton",
@@ -66,19 +71,53 @@ function navLanding() : PongNode<any> {
 
 function main(): PongNode<any> {
 	return Div({
-		class: "flex flex-col items-center justify-center h-[calc(100vh-80px)] text-center px-4"
+		class: "relative min-h-screen bg-gray-950"
 	}, [
-		H1({
-			class: "text-4xl md:text-6xl font-bold text-yellow"
-		}, ["Jouez et devenez un meilleur pongiste sur Transcendence."]),
-		H2({
-			class: "text-4xl md:text-6xl font-bold text-yellow",
-		}, ["Améliorez vos compétences en ping-pong avec des parties a gogo et des challenges."])
+		Div({
+			class: "relative z-10 container mx-auto px-4 py-20"
+		}, [
+
+			Div({
+				class: "text-center mb-16"
+			}, [
+				H1({ class: "font-bold leading-snug mb-8 animate-fade-down" }, 
+				[
+					Span({ class: "block font-orbitron md:text-7xl text-yellow-400" }, ["Play Pong."]),
+					Span({ class: "block font-orbitron md:text-7xl text-white" }, ["Have Fun. Build table tennis skills."]),
+					Span({ class: "block md:text-3xl text-gray-300 pt-10 mb-8"}, ["Level up your skills with game and tournament."]),
+					Button({
+						id: "playButton",
+						class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-3 px-6 border-b-4 border-yellow-700 hover:border-yellow-500 rounded text-lg"
+					}, [linkFn("/game", "➡️ Start Playing", "")]),
+					Span({class: "block md:text-xl text-gray-500 pt-4"}, ["Discover why 42 developers love Transcendence. 100% free."]),
+				]),
+			]),
+
+			Div({
+				class: "mt-20 animate-fade-up animate-delay-[300ms] mx-auto max-w-4xl rounded-xl overflow-hidden shadow-2xl"
+			}, [
+				RawHTML(`
+					<video autoplay muted loop playsinline class="w-full h-auto">
+						<source src="/assets/backgroundL2.mp4" type="video/mp4" />
+						Your browser does not support the video tag.
+					</video>
+				`)
+			]),
+
+			Div({
+				class: "flex flex-col items-center mt-40",
+			}, [
+				H1({ 
+					class: "font-bold text-white font-orbitron md:text-5xl",
+					"data-aos": "flip-down",
+					"data-aos-delay": "200"
+				},
+					["Play on multiple maps"]),
+				P({ class: "font-bold text-white font-orbitron md:text-xl text-center mt-20"}, ["Show off your Pong skills in a tournament or brush up your fingers while destroying an AI opponent."])
+			])
+		])
 	]);
 }
-
-
-
 
 export function Landing() : PongNode<any> {
 	return Div({}, [

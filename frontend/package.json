@@ -10,8 +10,11 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.4",
+    "@types/aos": "^3.0.7",
     "@types/node": "^22.14.0",
+    "aos": "^2.3.4",
     "autoprefixer": "^10.4.21",
+    "tailwindcss-animated": "^2.0.0",
     "typescript": "~5.7.2",
     "vite": "^6.3.0"
   },

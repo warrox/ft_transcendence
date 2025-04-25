@@ -1,4 +1,19 @@
-import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps, ImgNode, ImgProps, H1Props, H1Node, H2Node} from "./PongNode";
+import { DivNode, ButtonNode, TextNode, DivProps, PongNode, ButtonProps, LinkNode, LinkProps, PNode, PProps, InputNode, InputProps, ImgNode, ImgProps, H1Props, H1Node, H2Node, LiProps, LiNode, UListProps, UListNode, SpanProps, SpanNode, RawNode } from "./PongNode";
+
+export function Span(props: SpanProps, child?: Array<PongNode<any> | string>): SpanNode {
+	const coerceChildren = child?.map(coerceChild);
+	return new SpanNode ({...props, children: coerceChildren});
+}
+
+export function Li(props: LiProps, child?: Array<PongNode<any> | string>): LiNode {
+	const coerceChildren = child?.map(coerceChild);
+	return new LiNode ({...props, children: coerceChildren });
+}
+
+export function UList(props: UListProps, child?: Array<PongNode<any> | string>): UListNode {
+	const coerceChildren = child?.map(coerceChild);
+	return new UListNode ({...props, children: coerceChildren });
+}
 
 export function H2(props: H1Props, child?: Array<PongNode<any> | string>): H2Node {
 	const coerceChildren = child?.map(coerceChild);
@@ -39,6 +54,11 @@ export function Input(props: InputProps, child?: Array<PongNode<any> | string>):
 	const coercedChildren = child?.map(coerceChild);
 	return new InputNode({ ...props, children: coercedChildren });
 }
+
+export function RawHTML(html: string): PongNode<any> {
+	return new RawNode({ html });
+}
+
 function coerceChild(child: PongNode<any> | string): PongNode<any> {
 	if (typeof child === "string") {
 		return new TextNode(child);

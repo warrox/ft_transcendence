@@ -6,8 +6,9 @@
 
 
 import { router } from './router/router';
-// import './styles/tailwind.css';
-
+import './types/window.d.ts';
+// import './styles/index.css'
 
 window.addEventListener('DOMContentLoaded', router);
-window.addEventListener('hashchange', router);
+window.addEventListener('popstate', router);
+// window.addEventListener('hashchange', router);
