@@ -85,3 +85,28 @@ export const imageCenter = `
 `;
 
 export const neonTitleCss = "text-center mb-6 font-orbitron text-2xl text-white animate-[glow_1.5s_alternate_infinite]";
+
+export const neonPulseBtnCss = `
+  relative px-6 py-4 text-lg font-semibold text-white bg-black border-2 border-cyan-400
+  shadow-[0_0_10px_rgba(0,255,255,0.3)] cursor-pointer overflow-visible transition-all duration-400 z-10
+  before:content-[''] before:absolute before:inset-[-4px] before:border-2 before:border-cyan-400 before:rounded-inherit before:animate-[pulseOut_2s_ease-out_infinite] before:opacity-0
+  after:content-[''] after:absolute after:inset-[-4px] after:border-2 after:border-cyan-400 after:rounded-inherit after:animate-[pulseOut_2s_ease-out_infinite] after:opacity-0 after:[animation-delay:1s]
+`;
+
+export const playButtonDarkCss = `
+  bg-black
+  text-yellow-400
+  font-bold
+  px-6
+  py-2
+  rounded-lg
+  border
+  border-yellow-400
+  shadow-[0_0_10px_rgba(253,224,71,0.6)]
+  hover:bg-violet-500
+  hover:text-black
+  hover:border-violet-400
+  hover:shadow-[0_0_20px_rgba(139,92,246,0.9)]
+  transition
+  duration-300
+`;

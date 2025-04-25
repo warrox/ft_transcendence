@@ -1,5 +1,5 @@
 import { PongNode } from "../lib/PongNode";
-import { Div, UList, Li, Span, Image } from "../lib/PongFactory"
+import { Div, UList, Li, Span, Image, Button } from "../lib/PongFactory";
 import {
 	areaCss,
 	circlesCss,
@@ -16,16 +16,13 @@ import {
 	WrapperCss,
 	backgroundCss,
 	cardsContainerCss,
-	// cardCss,
-	// cardNeonHoverCss
 	cardFlipCss,
 	cardInnerCss,
 	cardFrontCss,
 	cardBackCss,
-	neonTitleCss
+	neonTitleCss,
+	playButtonDarkCss
 } from "../styles/cssFactory";
-
-// import "../assets/profil.png";
 
 export function Home(): PongNode<any> {
 	return Div({ class: areaCss }, [
@@ -43,7 +40,7 @@ export function Home(): PongNode<any> {
 		]),
 		Div({ class: `${WrapperCss} ${backgroundCss}` }),
 		Div({ class: cardsContainerCss }, [
-			// Carte 1 avec image sous Profil
+			// Carte 1 : Profil
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
@@ -53,17 +50,30 @@ export function Home(): PongNode<any> {
 					Div({ class: cardBackCss }, [Span({}, ["Card 1 Back"])])
 				])
 			]),
-			// Carte 2
+			// Carte 2 : Game (avec bouton)
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
 						Span({ class: neonTitleCss }, ["Game"]),
 						Image({ id: "game_img", src: "../assets/pong.png", alt: "game_img", class: "imageCenter" })
 					]),
-					Div({ class: cardBackCss }, [Span({}, ["Card 2 Back"])])
+					// Ajout du bouton en bas de la carte
+					Div({ class: `${cardBackCss} relative` }, [
+						// Contenu de l'arrière de la carte
+						Span({}, ["Pong like you’ve never played it before..."]),
+						
+						// Bouton en bas, positionné absolument
+						Div({ class: "absolute bottom-0 left-0 right-0 mb-6 flex justify-center" }, [
+							Button({
+								id: "play_button",
+								class: playButtonDarkCss,
+								onClick: () => console.log("Play button clicked"),
+							}, ["Let's play"])
+						])
+					])
 				])
-			]),
-			// Carte 3
+			]),			
+			// Carte 3 : Dashboard
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
@@ -73,7 +83,7 @@ export function Home(): PongNode<any> {
 					Div({ class: cardBackCss }, [Span({}, ["Card 3 Back"])])
 				])
 			]),
-			// Carte 4
+			// Carte 4 : Settings
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
@@ -86,4 +96,3 @@ export function Home(): PongNode<any> {
 		])
 	]);
 }
-

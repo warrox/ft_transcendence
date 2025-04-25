@@ -59,3 +59,26 @@
 	  transform: rotateY(180deg);
 	}
   }
+
+  .btn {
+	@apply px-4 py-2 rounded-xl text-white font-bold transition duration-300;
+  }
+  
+  .neon-pulse {
+	@apply bg-black border-2 border-cyan-400;
+	box-shadow: 0 0 10px #22d3ee, 0 0 20px #22d3ee;
+	animation: pulseOut 2s infinite;
+  }
+  
+  @keyframes pulseOut {
+	0% {
+	  box-shadow: 0 0 5px #22d3ee, 0 0 10px #22d3ee;
+	}
+	50% {
+	  box-shadow: 0 0 20px #22d3ee, 0 0 40px #22d3ee;
+	}
+	100% {
+	  box-shadow: 0 0 5px #22d3ee, 0 0 10px #22d3ee;
+	}
+  }
+  
