@@ -8,7 +8,7 @@ import {
 	fancyRightBorderCss,
 	disappearingTextCss,
 	appearingTextCss,
-	loginWrapperCss,
+	WrapperCss,
 	loginCardCss,
 	headerCss,
 	neonTextCss,
@@ -105,7 +105,7 @@ export function Login(): PongNode<any> {
             Li({ class: circle9Css }),
             Li({ class: circle10Css }),
         ]),
-        Div({ class: `${loginWrapperCss} ${backgroundCss}` }, [
+        Div({ class: `${WrapperCss} ${backgroundCss}` }, [
             Div({ class: loginCardCss }, [
                 Div({ class: headerCss }, [
                     P({ class: neonTextCss }, ["Login Page"]),
