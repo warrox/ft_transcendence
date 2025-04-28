@@ -23,9 +23,55 @@ import {
 	neonTitleCss,
 	playButtonDarkCss
 } from "../styles/cssFactory";
-import { navigateTo } from "../router/router";
+import { navigateTo, rerender } from "../router/router";
+
+// Initialisation de userInfo comme étant null au départ
+let userInfo: UserInfo | null = null;
+
+// Définition explicite du type pour `userInfo`
+interface UserInfo {
+	login: string;
+	email: string;
+}
+
+interface MeData {
+	id: number,
+	is_2FA: boolean, 
+	name: string,
+	surname: string,
+	email: string,
+};
 
 export function Home(): PongNode<any> {
+	// Fonction pour récupérer les infos de l'utilisateur
+	const fetchUserInfo = () => {
+		if (userInfo !== null) return;
+
+		fetch("/api/me", {
+			credentials: "include",
+		})
+			.then((res) => {
+				if (!res.ok) throw new Error("/api/me: Failed");
+				return res.json();
+			})
+			.then((data: MeData) => {
+				userInfo = {
+					login: data.name,
+					email: data.email,
+				};
+				rerender();
+			})
+			.catch((e) => console.error(e));
+	}
+	
+	fetchUserInfo();
+	const userLogin = userInfo ? userInfo.login : "Loading...";
+	const userEmail = userInfo ? userInfo.email : "Loading...";
+	// Appel de la fonction lors du montage du composant
+	
+	// Affichage conditionnel selon la présence des données dans userInfo
+
+	// Structure de retour
 	return Div({ class: areaCss }, [
 		UList({ class: circlesCss }, [
 			Li({ class: circle1Css }),
@@ -48,7 +94,18 @@ export function Home(): PongNode<any> {
 						Span({ class: neonTitleCss }, ["Profil"]),
 						Image({ id: "profil_img", src: "../assets/profil.png", alt: "profil_img", class: "imageCenter" })
 					]),
-					Div({ class: cardBackCss }, [Span({}, ["Card 1 Back"])])
+					Div({ class: `${cardBackCss} flex flex-col justify-between text-center p-6` }, [
+						// Partie haute (titre + image)
+						Div({ class: "flex flex-col items-center" }, [
+							Span({ class: "text-xl font-bold mb-4" }, ["User Info"]),
+							Image({ id: "infos_img", src: "../assets/infos.png", alt: "infos_img", class: "imageCenter w-20" })
+						]),
+						// Partie basse (login + email)
+						Div({ class: "flex flex-col items-center justify-center flex-grow" }, [
+							Span({ class: "text-md mb-2" }, [userLogin]),
+							Span({ class: "text-md" }, [userEmail])
+						])
+					])
 				])
 			]),
 			// Carte 2 : Game (avec vidéo et bouton)
@@ -81,7 +138,7 @@ export function Home(): PongNode<any> {
 						])
 					])
 				])
-			]),			
+			]),
 			// Carte 3 : Dashboard
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
