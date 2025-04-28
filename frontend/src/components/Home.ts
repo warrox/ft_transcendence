@@ -97,7 +97,7 @@ export function Home(): PongNode<any> {
 					Div({ class: `${cardBackCss} flex flex-col justify-between text-center p-6` }, [
 						// Partie haute (titre + image)
 						Div({ class: "flex flex-col items-center" }, [
-							Span({ class: "text-xl font-bold mb-4" }, ["User Info"]),
+							Span({ class: "text-xl font-bold mb-4" }, ["Informations"]),
 							Image({ id: "infos_img", src: "../assets/infos.png", alt: "infos_img", class: "imageCenter w-20" })
 						]),
 						// Partie basse (login + email)
