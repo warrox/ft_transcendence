@@ -46,14 +46,18 @@ export const neonTextCss = "font-orbitron text-2xl text-white animate-[glow_1.5s
 // HOME PAGE CSS
 export const cardsContainerCss = `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-evenly gap-12 w-full max-w-7xl px-10 z-10`;
 export const cardNeonHoverCss = ` relative rounded-2xl bg-white p-6 w-[260px] h-[460px] flex flex-col items-center justify-center text-center font-medium text-gray-800 transition duration-300 hover:scale-105 hover:shadow-[0_0_25px_#ffe600] hover:border-[2px] hover:border-yellow-400 hover:bg-white/90 z-10`;
+// Parent gère le hover
 export const cardFlipCss = `
-  w-[920px] h-[520px] perspective-[400px] will-change: transform
+  w-[920px] h-[520px] perspective-[400px] will-change-transform
+  group
 `;
 
+// Inner ne gère que la transition et la rotation SANS hover directement
 export const cardInnerCss = `
   relative w-full h-full transition-transform duration-400 transform-style-preserve-3d
-  hover:rotate-y-180
+  group-hover:rotate-y-180
 `;
+
 
 export const cardFaceBaseCss = `absolute w-full h-full backface-hidden rounded-2xl shadow-xl text-center p-6`;
 
@@ -69,8 +73,8 @@ export const cardFrontCss = `
   flex flex-col items-center justify-center
   text-center
   min-h-[200px]
-  pt-4  /* Ajouter un peu d'espace en haut */
-  pb-6  /* Ajouter un peu d'espace en bas pour "Profil" */
+  pt-4 
+  pb-6 
   text-center
 `;
 

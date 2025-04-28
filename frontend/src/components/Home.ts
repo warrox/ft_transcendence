@@ -23,6 +23,7 @@ import {
 	neonTitleCss,
 	playButtonDarkCss
 } from "../styles/cssFactory";
+import { navigateTo } from "../router/router";
 
 export function Home(): PongNode<any> {
 	return Div({ class: areaCss }, [
@@ -41,9 +42,9 @@ export function Home(): PongNode<any> {
 		Div({ class: `${WrapperCss} ${backgroundCss}` }),
 		Div({ class: cardsContainerCss }, [
 			// Carte 1 : Profil
-			Div({ class: cardFlipCss }, [
-				Div({ class: cardInnerCss }, [
-					Div({ class: cardFrontCss }, [
+			Div({ id: "first", class: cardFlipCss }, [
+				Div({ id: "second", class: cardInnerCss }, [
+					Div({ id: "third", class: cardFrontCss }, [
 						Span({ class: neonTitleCss }, ["Profil"]),
 						Image({ id: "profil_img", src: "../assets/profil.png", alt: "profil_img", class: "imageCenter" })
 					]),
@@ -74,7 +75,8 @@ export function Home(): PongNode<any> {
 							Button({
 								id: "play_button",
 								class: playButtonDarkCss,
-								onClick: () => console.log("Play button clicked"),
+								// onClick: () => console.log("Play button clicked"),
+								onClick: () => navigateTo("/game"),
 							}, ["Let's play"])
 						])
 					])
