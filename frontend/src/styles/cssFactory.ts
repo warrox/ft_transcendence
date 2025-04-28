@@ -85,3 +85,8 @@ export const imageCenter = `
 `;
 
 export const neonTitleCss = "text-center mb-6 font-orbitron text-2xl text-white animate-[glow_1.5s_alternate_infinite]";
+
+
+
+// register 
+export const errorTextCss = "text-red-500 text-sm mt-1";
