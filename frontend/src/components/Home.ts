@@ -30,7 +30,9 @@ let userInfo: UserInfo | null = null;
 
 interface UserInfo {
 	login: string;
+	surname: string;
 	email: string;
+	is_2FA: boolean;
 }
 
 interface MeData {
@@ -56,6 +58,8 @@ export function Home(): PongNode<any> {
 				userInfo = {
 					login: data.name,
 					email: data.email,
+					surname: data.surname,
+					is_2FA: data.is_2FA,
 				};
 				rerender();
 			})
@@ -66,14 +70,21 @@ export function Home(): PongNode<any> {
 
 	const userLogin = userInfo ? userInfo.login : "Loading...";
 	const userEmail = userInfo ? userInfo.email : "Loading...";
+	const userSurname = userInfo ? userInfo.surname : "Loading...";
+	const user2FAStatus = userInfo ? userInfo.is_2FA : false;
 
-	const toggleLoginInput = () => {
+	const toggleLoginForm = () => {
 		const loginInputContainer = document.getElementById('login-input-container');
-		if (loginInputContainer) {
-			loginInputContainer.style.display = loginInputContainer.style.display === 'none' ? 'flex' : 'none';
+		const confirmButtonContainer = document.getElementById('confirm-button-container');
+	
+		if (loginInputContainer && confirmButtonContainer) {
+			const shouldShow = loginInputContainer.style.display === 'none' || loginInputContainer.style.display === '';
+	
+			loginInputContainer.style.display = shouldShow ? 'flex' : 'none';
+			confirmButtonContainer.style.display = shouldShow ? 'flex' : 'none';
 		}
 	};
-
+		
 	return Div({ class: areaCss }, [
 		UList({ class: circlesCss }, [
 			Li({ class: circle1Css }),
@@ -104,31 +115,58 @@ export function Home(): PongNode<any> {
 						]),
 						// Partie basse
 						Div({ class: "flex flex-col flex-grow items-center" }, [
-							Div({ class: "flex flex-col items-start w-full mt-8 mb-8" }, [ // <- Ajoute plus de haut ET bas
+							Div({ class: "flex flex-col items-start w-full mt-3 mb-3" }, [ // <- Ajoute plus de haut ET bas
 								Div({ class: "flex items-center mb-2" }, [
-									Image({ id: "test", src: "../assets/user.png", alt: "user", class: "w-5 h-5 mr-2" }),
+									Image({ id: "test", src: "../assets/login.png", alt: "login", class: "w-8 h-8 mr-2" }),
 									Span({ class: "text-md" }, [userLogin]),
 								]),
 								Div({ class: "flex items-center mb-2" }, [
-									Image({ id: "test1", src: "../assets/email.png", alt: "email", class: "w-5 h-5 mr-2" }),
+									Image({ id: "test1", src: "../assets/surname.png", alt: "surname", class: "w-8 h-8 mr-2" }),
+									Span({ class: "text-md" }, [userSurname]),
+								]),
+								Div({ class: "flex items-center mb-2" }, [
+									Image({ id: "test2", src: "../assets/email.png", alt: "email", class: "w-8 h-8 mr-2" }),
 									Span({ class: "text-md" }, [userEmail]),
+								]),
+								Div({ class: "flex items-center mb-2" }, [
+									Image({ id: "test3", src: "../assets/2fa.png", alt: "2fa", class: "w-8 h-8 mr-2" }),
+									Span({ 
+										class: `text-md font-semibold ${user2FAStatus ? 'text-green-400' : 'text-red-400'}`
+									}, [user2FAStatus ? "Enabled" : "Disabled"]),
 								]),
 							]),
 							// Bouton
-							Div({ class: "flex justify-center w-full mt-15" }, [ // <- Rapproche le bouton
+							Div({ class: "flex justify-center w-full mt-1" }, [ // <- Rapproche le bouton
 								Button({
 									id: "test",
 									class: `${playButtonDarkCss}`,
-									onClick: toggleLoginInput
+									onClick: toggleLoginForm,
 								}, ["Change login"]),
 							]),
 							// Input
+							// Input container
 							Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
 								Input({
 									id: "login-input",
 									class: inputScaleCss,
 									placeholder: "Enter new login",
 								}),
+							]),
+
+							// Confirm button container
+							Div({ id: "confirm-button-container", class: "hidden mt-3 w-full flex justify-center" }, [
+								Button({
+									id: "confirm-button",
+									class: `${playButtonDarkCss}`,
+									onClick: () => {
+										// Tu peux ajouter ici la logique pour envoyer le nouveau login
+										const inputElement = document.getElementById('login-input') as HTMLInputElement;
+										if (inputElement && inputElement.value.trim() !== '') {
+											console.log('New login:', inputElement.value); // ici envoyer via fetch par ex
+										}
+										toggleLoginForm;
+									}
+								}, ["Confirm"]),
 							]),
 						]),
 					])
@@ -149,7 +187,7 @@ export function Home(): PongNode<any> {
 							</video>
 						`),
 						Span({}, ["Pong like you’ve never played it before..."]),
-						Div({ class: "mt-4 flex justify-center" }, [
+						Div({ class: "mt-10 flex justify-center" }, [
 							Button({
 								id: "play_button",
 								class: playButtonDarkCss,
