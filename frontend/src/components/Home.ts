@@ -115,21 +115,21 @@ export function Home(): PongNode<any> {
 						]),
 						// Partie basse
 						Div({ class: "flex flex-col flex-grow items-center" }, [
-							Div({ class: "flex flex-col items-start w-full mt-3 mb-3" }, [ // <- Ajoute plus de haut ET bas
+							Div({ class: "flex flex-col items-start w-full mt-.1 mb-.1" }, [ // <- Ajoute plus de haut ET bas
 								Div({ class: "flex items-center mb-2" }, [
-									Image({ id: "test", src: "../assets/login.png", alt: "login", class: "w-8 h-8 mr-2" }),
+									Image({ id: "test", src: "../assets/login.png", alt: "login", class: "w-10 h-10 mr-2" }),
 									Span({ class: "text-md" }, [userLogin]),
 								]),
 								Div({ class: "flex items-center mb-2" }, [
-									Image({ id: "test1", src: "../assets/surname.png", alt: "surname", class: "w-8 h-8 mr-2" }),
+									Image({ id: "test1", src: "../assets/surname.png", alt: "surname", class: "w-10 h-10 mr-2" }),
 									Span({ class: "text-md" }, [userSurname]),
 								]),
 								Div({ class: "flex items-center mb-2" }, [
-									Image({ id: "test2", src: "../assets/email.png", alt: "email", class: "w-8 h-8 mr-2" }),
+									Image({ id: "test2", src: "../assets/email.png", alt: "email", class: "w-10 h-10 mr-2" }),
 									Span({ class: "text-md" }, [userEmail]),
 								]),
 								Div({ class: "flex items-center mb-2" }, [
-									Image({ id: "test3", src: "../assets/2fa.png", alt: "2fa", class: "w-8 h-8 mr-2" }),
+									Image({ id: "test3", src: "../assets/2fa.png", alt: "2fa", class: "w-10 h-10 mr-2" }),
 									Span({ 
 										class: `text-md font-semibold ${user2FAStatus ? 'text-green-400' : 'text-red-400'}`
 									}, [user2FAStatus ? "Enabled" : "Disabled"]),
@@ -164,7 +164,7 @@ export function Home(): PongNode<any> {
 										if (inputElement && inputElement.value.trim() !== '') {
 											console.log('New login:', inputElement.value); // ici envoyer via fetch par ex
 										}
-										toggleLoginForm;
+										toggleLoginForm();
 									}
 								}, ["Confirm"]),
 							]),
