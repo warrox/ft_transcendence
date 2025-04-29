@@ -100,14 +100,18 @@ export function Register(): PongNode<any> {
 				rerender();
 				setTimeout(() => {
 					navigateTo('/login')
-				}, 2000);
+				}, 1000);
 			} catch (e) {
 				console.error("Erreur de parsing JSON :", e);
 				registerState = "error";
 				rerender();
 			}
 		})
-		.catch(e => console.error("Erreur :", e));
+		.catch(e => {
+			console.error("Erreur :", e);
+			registerState = "error";
+			rerender();
+		});
 	}
 
 	(window as any).onSignIn = (response: any) => {

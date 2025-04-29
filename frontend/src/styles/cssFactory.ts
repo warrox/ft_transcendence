@@ -116,4 +116,3 @@ export const playButtonDarkCss = `
   transition
   duration-300
 `;
-

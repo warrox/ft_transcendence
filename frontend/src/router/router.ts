@@ -81,12 +81,12 @@ export function setCurrentPage(page: () => PongNode<any>) {
 
 export function navigateTo(path: string) {
 
-	console.log("path = ", path);
-	if (path === '/game' && !AuthStore.isLoggedIn) {
-		history.pushState(({}), "", '/login');
-		router();
-		return;
-	}
+	// console.log("path = ", path);
+	// if (path === '/game' && !AuthStore.isLoggedIn) {
+	// 	history.pushState(({}), "", '/login');
+	// 	router();
+	// 	return;
+	// }
 
 	history.pushState({}, "", path);
 	router();

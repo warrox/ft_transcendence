@@ -82,7 +82,7 @@ export function Login(): PongNode<any> {
 				loginStatus = parseBody.success === true ? "OK" : "KO";
 				setTimeout(() => {
 					navigateTo('/home');
-				}, 2000);
+				}, 1500);
 			} catch (e) {
 				console.log("Error parsing JSON: ", e);
 				loginStatus = "KO";
@@ -110,6 +110,32 @@ export function Login(): PongNode<any> {
 			Li({ class: circle8Css }),
 			Li({ class: circle9Css }),
 			Li({ class: circle10Css }),
+		]),
+		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
+			Div({ class: loginCardCss }, [
+				Div({ class: headerCss }, [
+					P({ class: neonTextCss }, ["Login Page"]),
+				]),
+				Div({ class: inputWrapperCss }, [
+					emailInput,
+					passwordInput,
+				]),
+				Button({
+					id: "button1",
+					onClick: handleLogin,
+					class: fancyButtonCss,
+				}, [
+					Div({ class: fancyLeftBorderCss }),
+					P({ class: disappearingTextCss }, ["Click here"]),
+					Span({ class: appearingTextCss }, ["Login"]),
+					Div({ class: fancyRightBorderCss }),
+				]),
+				...(loginStatus !== null
+					? [Div({ class: statusWrapperCss }, [
+						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`])
+					])]
+					: [])
+			])
 		]),
 		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
 			Div({ class: loginCardCss }, [

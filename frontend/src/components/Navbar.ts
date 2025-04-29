@@ -35,16 +35,14 @@ export function Navbar(): PongNode<any> {
 			console.log(res)
 			return res.text();
 		})
-		.then(body => {
+		.then(async body => {
 			console.log("res brute :", body);
 			try {
 				const parsedBody = JSON.parse(body);
 				console.log("Body parsed:", parsedBody);
-				//// !!!!!!!!!!!!!!!!!!!!!
-				setTimeout(() => {
-					navigateTo('/home')
-				}, 2000);
-				rerender();
+				
+				await AuthStore.fetchMe();
+				navigateTo('/');
 			} catch (e) {
 				console.error("Erreur de parsing JSON :", e);
 				rerender();
