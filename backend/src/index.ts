@@ -21,7 +21,7 @@ const JWS =  process.env.JWTSECRETKEY;
 server.register(bcrypt, { saltWorkFactor: 12 });
 server.register(fjwt, { secret: JWS!});
 server.register(fCookie, {
-  secret: 'some-secret-key',
+  secret: process.env.SECRETCOOKIE,
   hook: 'preHandler',
 });
 
