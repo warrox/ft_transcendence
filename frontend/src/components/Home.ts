@@ -144,7 +144,6 @@ export function Home(): PongNode<any> {
 								}, ["Change login"]),
 							]),
 							// Input
-							// Input container
 							Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
 								Input({
 									id: "login-input",

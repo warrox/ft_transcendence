@@ -10,21 +10,16 @@ const db = new sqlite3.Database('database.db', (err: Error | null) => {
   }
 });
 
-db.run(`DROP TABLE "users";`);
-
 db.serialize(() => {
   db.run(`
-    CREATE TABLE "users" (
+    CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      is_2FA INTEGER DEFAULT 0, 
-      admin INTEGER DEFAULT 0,
+	  is_2FA INTEGER DEFAULT 0, 
       name VARCHAR(16) UNIQUE NOT NULL,
       surname TEXT UNIQUE NOT NULL,
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL
-    );
-    INSERT INTO "users" (name, surname, email, password, admin)
-    VALUES ("admin", "admin", "admin@mail.com", "1234", 1);
+    )
   `);
 });
 
