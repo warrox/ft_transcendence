@@ -233,16 +233,46 @@ export class TextNode extends PongNode<undefined> {
 export interface LinkProps {
 	href: string;
 	children?: PongNode<any>[];
+	onClick?: (e: MouseEvent) => void;
 	class?: string;
+	id: string,
 }
 
 export class LinkNode extends PongNode<LinkProps> {
+
+	constructor(props?: LinkProps) {
+		super(props);
+
+		if (props && props.id && props.onClick) {
+			this.handleOnClick(props.id, props.onClick);
+		}
+	}
+
+	private handleOnClick(id:string, onClick: (e: MouseEvent) => void) {
+		const observer = new MutationObserver(() => {
+		  const button = document.querySelector(`#${id}`);
+		  if (button) {
+			const clone = button.cloneNode(true) as HTMLElement;
+			button.replaceWith(clone);
+
+			clone.addEventListener('click', (e) => {
+				e.preventDefault();
+				onClick(e);
+			})
+			observer.disconnect();
+		  }
+		});
+
+		observer.observe(document.body, { childList: true, subtree: true });
+	}
+
 	render():string {
 		const childHTML = this.props?.children?.map(child => child.render()).join("") || "";
 		const className = this.props?.class || "";
+		const id = this.props?.id ? `id="${this.props.id}"` : "";
 
 		return `
-			<a href="${this.props?.href}" class="${className}">
+			<a ${id} href="${this.props?.href}" class="${className}">
 				${childHTML}
 			</a>
 		`;
@@ -303,6 +333,7 @@ export interface InputProps {
 	maxlength?: string,
 	placeholder?: string,
 	onChange?: () => void,
+	pattern?: string,
 }
 
 export class InputNode extends PongNode<InputProps> {
@@ -339,6 +370,7 @@ export class InputNode extends PongNode<InputProps> {
 			minlength,
 			maxlength,
 			placeholder,
+			pattern,
 		} = this.props || {};
 
 		return `<input
@@ -349,6 +381,7 @@ export class InputNode extends PongNode<InputProps> {
 			${minlength ? `minlength="${minlength}"` : ""}
 			${maxlength ? `maxlength="${maxlength}"` : ""}
 			${placeholder ? `placeholder="${placeholder}"` : ""}
+			${pattern ? `pattern="${pattern}"` : ""}
 		/>`;
 	}
 }

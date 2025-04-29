@@ -80,9 +80,21 @@ export function setCurrentPage(page: () => PongNode<any>) {
 // }
 
 export function navigateTo(path: string) {
+
+	// console.log("path = ", path);
+	// if (path === '/game' && !AuthStore.isLoggedIn) {
+	// 	history.pushState(({}), "", '/login');
+	// 	router();
+	// 	return;
+	// }
+
 	history.pushState({}, "", path);
-	router(); // Re-render
+	router();
 }
+
+// function protectPath(path: any, pathString: string, isLoggedIn: boolean) {
+// 	if (path === pathString && isLoggedIn)
+// }
 
 
 export async function router() {
@@ -97,6 +109,21 @@ export async function router() {
 	if (path === '/') {
 		path = AuthStore.isLoggedIn ? '/home' : '/landing';
 		history.replaceState({}, "", path);
+	}
+
+	if (path === '/home' && !AuthStore.isLoggedIn) {
+		path = '/landing';
+		history.replaceState({}, "", path);
+	}
+
+	if (path === '/game' && !AuthStore.isLoggedIn) {
+		path = '/landing';
+		history.replaceState({}, "", path);
+	}
+
+	if ((path === '/register' || path === '/login') && AuthStore.isLoggedIn) {
+		path = '/home';
+		history.replaceState({}, "" , path)
 	}
 
 	const route = routes.find(r => r.path == path);
