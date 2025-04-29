@@ -8,6 +8,8 @@ import { login } from "./route/login"
 import { gsignin } from "./route/gsignin"
 import { glogin } from "./route/glogin"
 import { post2Fa } from "./route/post2Fa";
+import{ verify2Fa } from "./route/verify2Fa"
+import { logout } from "./route/logout"
 export interface GetRoutes {
 	me (request: FastifyRequest, reply: FastifyReply): any
 	users (request: FastifyRequest, reply: FastifyReply): any
@@ -17,6 +19,8 @@ export interface GetRoutes {
 	gsignin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
 	glogin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
 	post2Fa( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
+	verify2Fa( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
+	logout( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 }
 
 export const getRoutes: GetRoutes = {
@@ -27,5 +31,7 @@ export const getRoutes: GetRoutes = {
 	login: login,
 	gsignin: gsignin,
 	glogin: glogin,
-	post2Fa:post2Fa
+	post2Fa:post2Fa,
+	verify2Fa:verify2Fa,
+	logout:logout
 };

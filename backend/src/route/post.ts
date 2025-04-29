@@ -39,16 +39,7 @@ export const register = async (request: FastifyRequest<{ Body: User }>, reply: F
 			console.log(test);
 			
 		});
-
-		const token = server.jwt.sign({ id: userId, email: email}, {expiresIn: 3600 }); 
-		reply.setCookie('access_token', token, {
-			path: '/',
-			httpOnly: true,
-			secure: true,
-			maxAge: 3600
-		});
-		//todo remove this line
-		return reply.status(201).send({ accessToken: token, message: "Utilisateur créé avec succès" });
+		return reply.status(201).send({ message: "Utilisateur créé avec succès" });
 	} catch (e: any) {
 		console.error(e);
 		return reply.status(500).send({ error: "Erreur serveur" });
