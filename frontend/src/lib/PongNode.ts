@@ -272,17 +272,19 @@ export class PNode extends PongNode<PProps> {
 /*******************************************************SPAN_NODE**********************************************************/
 
 export interface SpanProps {
+	id?: string,
 	class?: string,
 	children?: PongNode<any>[],
 }
 
 export class SpanNode extends PongNode<SpanProps> {
 	render(): string {
+		const id = this.props?.id || "";
 		const childHTML = this.props?.children?.map(item => item.render()).join("") || "";
 		const className = this.props?.class || "";
 
 		return `
-		<span class="${className}">
+		<span class="${className}" id="${id}">
 		${childHTML}
 		</span>
 		`;
