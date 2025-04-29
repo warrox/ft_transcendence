@@ -8,6 +8,8 @@ let gameStarted = false;
 
 let mapIndex = 0;
 
+
+
 export function Game(): PongNode<any> {
 	setTimeout(() => {
 		loadMap();
@@ -16,19 +18,28 @@ export function Game(): PongNode<any> {
 	}, 0);
 
 	const mapStyles: { [key: string]: string} = {
-		"yellow": "yellow-400",
-		"blue": "green-500",
-		"default": "neutral-500",
+		"Default": "yellow-400",
+		"Classic": "neutral-400",
+		"Emerald": "emerald-500",
+		"Cyan": "cyan-500",
+		"Rose": "rose-600",
+		"Fushia": "fuchsia-400",
+		"Indigo": "indigo-900",
 	};
 
-	// const mapStyles = new Map<string, string>([
-	// 	["yellow", "bg-yellow-400"],
-	// 	["default", "bg-zinc-900"],
-	// ]);
-
+	const hoverStyles: { [key: string]: string} = {
+		"Default": "yellow-500",
+		"Classic": "neutral-500",
+		"Emerald": "emerald-600",
+		"Cyan": "cyan-600",
+		"Rose": "rose-700",
+		"Fushia": "fuchsia-500",
+		"Indigo": "indigo-950",
+	}
 
 	const mapKeys = Object.keys(mapStyles);
 	let PongColor = mapStyles[mapKeys[mapIndex]];
+	let hoverColor = hoverStyles[mapKeys[mapIndex]];
 
 	const prev_color = () => {
 		if (mapIndex != 0) {
@@ -40,7 +51,7 @@ export function Game(): PongNode<any> {
 	};
 
 	const next_color = () => {
-		if (mapIndex != 2) {
+		if (mapIndex != 6) {
 			mapIndex++;
 			PongColor = mapStyles[mapKeys[mapIndex]];
 			console.log(PongColor);
@@ -54,31 +65,31 @@ export function Game(): PongNode<any> {
 			return Div({ class: "flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
 				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, ["Pong like you’ve never played it before."]),
 				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, ["Choose your map:"]),
-				//PlayerSelector(),
+				Div({ class: "flex items-center"} , [Span({ class: `block font-orbitron md:text-2xl text-${PongColor}`}, [`${mapKeys[mapIndex]}`])]),
 				Div({ class: "flex justify-between items-center" }, [
-					Button({ id: "left-arrow", class: `bg-${PongColor} hover:bg-yellow-300 text-xl text-white px-4 py-2 rounded mr-10`, onClick: prev_color }, ["<"]),
+					Button({ id: "left-arrow", class: `bg-${PongColor} hover:bg-${hoverColor} text-xl text-white px-4 py-2 rounded mr-10`, onClick: prev_color }, ["<"]),
 					Div({ id: "game-area", class: "relative w-[600px] h-[400px] bg-zinc-900 overflow-hidden" }, [
 						Div({ id: "ball", class: `absolute w-[20px] h-[20px] bg-${PongColor} rounded-full` }),
 						Div({ id: "leftpad", class:`absolute w-[15px] h-[80px] bg-${PongColor} rounded-full left-[5px] top-[160px]` }),
 						Div({ id: "rightpad", class:`absolute w-[15px] h-[80px] bg-${PongColor} rounded-full left-[580px] top-[160px]` })
 					]),
-					Button({ id: "right-arrow", class: `bg-${PongColor} hover:bg-yellow-300 text-xl text-white px-4 py-2 rounded ml-10`, onClick: next_color }, [">"]),
+					Button({ id: "right-arrow", class: `bg-${PongColor} hover:bg-${hoverColor} text-xl text-white px-4 py-2 rounded ml-10`, onClick: next_color }, [">"]),
 				]),
 				Div({ class: "flex flex-col justify-around items-center h-30"}, [
 					Span({ class: `block font-orbitron md:text-2xl text-${PongColor}` }, ["Go solo or battle your friends!:" ]),
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton",
-							class: `bg-${PongColor}  hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded`},
+							class: `bg-${PongColor}  hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							["Single Player"]),
 						Button({id: "mgplayerButton",
 							onClick: () => {
 								gameStarted = true;
 								rerender();
 							},
-							class: `bg-${PongColor} hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded`},
+							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							["Multiple Player"]),
 						Button({id: "tournamentButton",
-							class: `bg-${PongColor} hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded`},
+							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							["Tournament Mode"]),
 					]),
 				]),
@@ -87,16 +98,16 @@ export function Game(): PongNode<any> {
 	else
 	{
 		return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
-			Div({ class: "text-yellow-400 font-orbitron text-4xl mb-4" }, [
+			Div({ class: `text-${PongColor} font-orbitron text-4xl mb-4` }, [
 				Span({ id: "score-left", class: "mx-8" }, ["0"]),
 				Span({}, [" : "]),
 				Span({ id: "score-right", class: "mx-8" }, ["0"]),
 			]),
             Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
-				Div({ id: "midline", class: "absolute top-0 left-1/2 w-[4px] h-full bg-yellow-400 opacity-40 transform -translate-x-1/2" }),
-                Div({ id: "ball", class: "absolute w-[20px] h-[20px] bg-yellow-400 rounded-full" }),
-				Div({ id: "leftpad", class:"absolute w-[15px] h-[90px] bg-yellow-400 left-[5px] top-[360px]" }),
-				Div({ id: "rightpad", class:"absolute w-[15px] h-[90px] bg-yellow-400 left-[1580px] top-[360px]" }),
+				Div({ id: "midline", class: `absolute top-0 left-1/2 w-[4px] h-full bg-${PongColor} opacity-40 transform -translate-x-1/2` }),
+                Div({ id: "ball", class: `absolute w-[20px] h-[20px] bg-${PongColor} rounded-full"`}),
+				Div({ id: "leftpad", class:`absolute w-[15px] h-[90px] bg-${PongColor} left-[5px] top-[360px]` }),
+				Div({ id: "rightpad", class:`absolute w-[15px] h-[90px] bg-${PongColor} left-[1580px] top-[360px]` }),
 			]),
 		]);
 	}
