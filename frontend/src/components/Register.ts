@@ -25,7 +25,8 @@ import {
 	circle7Css,
 	circle8Css,
 	circle9Css,
-	circle10Css
+	circle10Css,
+	inputMailCss
 } from "../styles/cssFactory";
 
 let registerState: "idle" | "success" | "error" = "idle";
@@ -51,7 +52,8 @@ export function Register(): PongNode<any> {
 		required: true, 
 		onChange: () => {},
 		placeholder: "email",
-		class: inputCss,
+		class: inputMailCss,
+		pattern: "^[^ @]+@[^ @]+\.[^ @]+$"
 	});
 	const passwordInput = Input({
 		id: "password", 

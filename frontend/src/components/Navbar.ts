@@ -17,6 +17,19 @@ export function linkFn(linkId :string , href: string, text: string, css: string)
 
 export function Navbar(): PongNode<any> {
 	const isLogged = AuthStore.isLoggedIn;
+
+
+	const handleDisconnect = () => {
+		
+	}
+
+
+
+
+
+
+
+
 	return Div({
 		class: "top-0 left-0 w-full z-50 bg-black border-gray-200"
 	}, [
