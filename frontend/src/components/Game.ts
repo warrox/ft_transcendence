@@ -1,4 +1,3 @@
-import { log } from "console";
 import { Div, Button, P, Span, Li } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router"
@@ -7,6 +6,8 @@ var playerCount = 1;
 
 let gameStarted = false;
 
+let mapIndex = 0;
+
 export function Game(): PongNode<any> {
 	setTimeout(() => {
 		loadMap();
@@ -14,38 +15,70 @@ export function Game(): PongNode<any> {
 		playPong();
 	}, 0);
 
+	const mapStyles: { [key: string]: string} = {
+		"yellow": "yellow-400",
+		"blue": "green-500",
+		"default": "neutral-500",
+	};
+
+	// const mapStyles = new Map<string, string>([
+	// 	["yellow", "bg-yellow-400"],
+	// 	["default", "bg-zinc-900"],
+	// ]);
+
+
+	const mapKeys = Object.keys(mapStyles);
+	let PongColor = mapStyles[mapKeys[mapIndex]];
+
+	const prev_color = () => {
+		if (mapIndex != 0) {
+			mapIndex--;
+			PongColor = mapStyles[mapKeys[mapIndex]];
+			console.log(PongColor);
+			rerender();
+		}
+	};
+
+	const next_color = () => {
+		if (mapIndex != 2) {
+			mapIndex++;
+			PongColor = mapStyles[mapKeys[mapIndex]];
+			console.log(PongColor);
+			rerender();
+		}
+	}
+
 
 	if (gameStarted == false)
 	{
 			return Div({ class: "flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
-				Span({ class: "block font-orbitron md:text-5xl text-yellow-400" }, ["Pong like you’ve never played it before."]),
-				Span({ class: "block font-orbitron md:text-3xl text-yellow-400" }, ["Choose your map:"]),
-				
+				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, ["Pong like you’ve never played it before."]),
+				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, ["Choose your map:"]),
 				//PlayerSelector(),
-				Button({
-					id: "Select-map",
-					class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"
-				}, ["Select map"]),
-				Div({ id: "game-area", class: "relative w-[600px] h-[400px] bg-zinc-900 overflow-hidden" }, [
-					Div({ id: "ball", class: "absolute w-[20px] h-[20px] bg-yellow-400 rounded-full" }),
-					Div({ id: "leftpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 rounded-full left-[5px] top-[160px]" }),
-					Div({ id: "rightpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 rounded-full left-[580px] top-[160px]" })
+				Div({ class: "flex justify-between items-center" }, [
+					Button({ id: "left-arrow", class: `bg-${PongColor} hover:bg-yellow-300 text-xl text-white px-4 py-2 rounded mr-10`, onClick: prev_color }, ["<"]),
+					Div({ id: "game-area", class: "relative w-[600px] h-[400px] bg-zinc-900 overflow-hidden" }, [
+						Div({ id: "ball", class: `absolute w-[20px] h-[20px] bg-${PongColor} rounded-full` }),
+						Div({ id: "leftpad", class:`absolute w-[15px] h-[80px] bg-${PongColor} rounded-full left-[5px] top-[160px]` }),
+						Div({ id: "rightpad", class:`absolute w-[15px] h-[80px] bg-${PongColor} rounded-full left-[580px] top-[160px]` })
+					]),
+					Button({ id: "right-arrow", class: `bg-${PongColor} hover:bg-yellow-300 text-xl text-white px-4 py-2 rounded ml-10`, onClick: next_color }, [">"]),
 				]),
 				Div({ class: "flex flex-col justify-around items-center h-30"}, [
-					Span({ class: "block font-orbitron md:text-2xl text-yellow-400" }, ["Go solo or battle your friends!:" ]),
+					Span({ class: `block font-orbitron md:text-2xl text-${PongColor}` }, ["Go solo or battle your friends!:" ]),
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton",
-							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"},
+							class: `bg-${PongColor}  hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded`},
 							["Single Player"]),
 						Button({id: "mgplayerButton",
 							onClick: () => {
 								gameStarted = true;
 								rerender();
 							},
-							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"},
+							class: `bg-${PongColor} hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded`},
 							["Multiple Player"]),
 						Button({id: "tournamentButton",
-							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"},
+							class: `bg-${PongColor} hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded`},
 							["Tournament Mode"]),
 					]),
 				]),
@@ -62,8 +95,8 @@ export function Game(): PongNode<any> {
             Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
 				Div({ id: "midline", class: "absolute top-0 left-1/2 w-[4px] h-full bg-yellow-400 opacity-40 transform -translate-x-1/2" }),
                 Div({ id: "ball", class: "absolute w-[20px] h-[20px] bg-yellow-400 rounded-full" }),
-				Div({ id: "leftpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 left-[5px] top-[360px]" }),
-				Div({ id: "rightpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 left-[1580px] top-[360px]" }),
+				Div({ id: "leftpad", class:"absolute w-[15px] h-[90px] bg-yellow-400 left-[5px] top-[360px]" }),
+				Div({ id: "rightpad", class:"absolute w-[15px] h-[90px] bg-yellow-400 left-[1580px] top-[360px]" }),
 			]),
 		]);
 	}
@@ -155,15 +188,15 @@ function playPong(){
 			y = gameArea.clientHeight / 2;
 		}
 
-        if ((y <= leftpad.offsetTop + leftpad.offsetHeight && y >= leftpad.offsetTop) &&  (x <= leftpad.offsetLeft + leftpad.clientWidth && dx < 0))
+        if ((y<= leftpad.offsetTop + leftpad.offsetHeight && y + ball.clientHeight >= leftpad.offsetTop) &&  (x <= leftpad.offsetLeft + leftpad.clientWidth && dx < 0))
 		{
             dx = (dx * -1) + 2;
-			dy = ((y + (ball.clientHeight / 2)) - (leftpad.offsetTop + (leftpad.offsetHeight / 2))) * 0.3;
+			dy = ((y + (ball.clientHeight / 2)) - (leftpad.offsetTop + (leftpad.offsetHeight / 2))) * 0.25;
 		}
-        if ((y <= rightpad.offsetTop + rightpad.offsetHeight && y >= rightpad.offsetTop) && (x + ball.clientWidth >= rightpad.offsetLeft && dx > 0))
+        if ((y <= rightpad.offsetTop + rightpad.offsetHeight && y + ball.clientHeight >= rightpad.offsetTop) && (x + ball.clientWidth >= rightpad.offsetLeft && dx > 0))
         {
 			dx = (dx * -1) - 2;
-			dy = ((y + (ball.clientHeight / 2)) - (rightpad.offsetTop + (rightpad.offsetHeight / 2))) * 0.3;
+			dy = ((y + (ball.clientHeight / 2)) - (rightpad.offsetTop + (rightpad.offsetHeight / 2))) * 0.25;
 		}
 		if (dx >= 15)
 			dx = 15;
