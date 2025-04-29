@@ -1,6 +1,7 @@
 import { Div, P, Button, Input, Span, Li, UList } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
+import { navigateTo } from "../router/router";
 import {
 	backgroundCss,
 	fancyButtonCss,
@@ -79,9 +80,13 @@ export function Login(): PongNode<any> {
 				const parseBody = JSON.parse(text);
 				console.log("Response parsed from JSON :", parseBody);
 				loginStatus = parseBody.success === true ? "OK" : "KO";
+				setTimeout(() => {
+					navigateTo('/home');
+				}, 2000);
 			} catch (e) {
 				console.log("Error parsing JSON: ", e);
 				loginStatus = "KO";
+				rerender();
 			}
 		})
 		.catch(e => {
