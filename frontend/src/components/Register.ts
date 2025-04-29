@@ -1,6 +1,6 @@
-import { Div, P, Button, Input, Span } from "../lib/PongFactory";
+import { Div, P, Button, Input, Span, Li, UList } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
-import { rerender } from "../router/router";
+import { navigateTo, rerender } from "../router/router";
 import {
 	backgroundCss,
 	fancyButtonCss,
@@ -8,18 +8,31 @@ import {
 	fancyRightBorderCss,
 	disappearingTextCss,
 	appearingTextCss,
-	loginWrapperCss,
+	WrapperCss,
 	loginCardCss,
 	headerCss,
 	neonTextCss,
 	inputWrapperCss,
-	statusWrapperCss,
-	statusKoCss,
-	statusOkCss,
 	inputCss,
+	areaCss,
+	circlesCss,
+	circle1Css,
+	circle2Css,
+	circle3Css,
+	circle4Css,
+	circle5Css,
+	circle6Css,
+	circle7Css,
+	circle8Css,
+	circle9Css,
+	circle10Css,
+	inputMailCss
 } from "../styles/cssFactory";
 
+let registerState: "idle" | "success" | "error" = "idle";
+
 export function Register(): PongNode<any> {
+
 	const nameInput = Input({ 
 		id: "name", 
 		required: true, 
@@ -39,7 +52,8 @@ export function Register(): PongNode<any> {
 		required: true, 
 		onChange: () => {},
 		placeholder: "email",
-		class: inputCss,
+		class: inputMailCss,
+		pattern: "^[^ @]+@[^ @]+\.[^ @]+$"
 	});
 	const passwordInput = Input({
 		id: "password", 
@@ -55,6 +69,7 @@ export function Register(): PongNode<any> {
 		const name = (document.querySelector("#name") as HTMLInputElement)?.value;
 		const lastName = (document.querySelector("#lastname") as HTMLInputElement)?.value;
 		const mail = (document.querySelector("#mail") as HTMLInputElement)?.value;
+
 		const password = (document.querySelector("#password") as HTMLInputElement)?.value;
 		const body = {
 			name: name,
@@ -73,6 +88,7 @@ export function Register(): PongNode<any> {
 		.then(res => {
 			if (!res.ok)
 				throw new Error(`HTTP error! Status: ${res.status}`);
+			console.log(res)
 			return res.text();
 		})
 		.then(body => {
@@ -80,12 +96,18 @@ export function Register(): PongNode<any> {
 			try {
 				const parsedBody = JSON.parse(body);
 				console.log("Body parsed:", parsedBody);
+				registerState = "success";
+				rerender();
+				setTimeout(() => {
+					navigateTo('/login')
+				}, 2000);
 			} catch (e) {
 				console.error("Erreur de parsing JSON :", e);
+				registerState = "error";
+				rerender();
 			}
 		})
 		.catch(e => console.error("Erreur :", e));
-		// rerender()
 	}
 
 	(window as any).onSignIn = (response: any) => {
@@ -122,18 +144,29 @@ export function Register(): PongNode<any> {
 		}
 	}, 0);
 
-	const registerWrapperCss = "flex items-center justify-center min-h-screen"
-	const registerCardCss = "bg-bgGray border-borderGray border rounded-xl backdrop-blur-md space-y-6 p-8 rounded-2xl w-full max-w-md";
-	"rounded-xl border-white/30 bg-white/10 border backdrop-blur-md space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md";
+	console.log()
 
-	return Div({
-		class: "relative min-h-screen bg-gray-950"
-	}, [
-		Div({ class: registerWrapperCss}, 
-		[
-			Div({ class: registerCardCss }, [
+	// const registerWrapperCss = "flex items-center justify-center min-h-screen"
+	// const registerCardCss = "bg-bgGray border-borderGray border rounded-xl backdrop-blur-md space-y-6 p-8 rounded-2xl w-full max-w-md";
+	// "rounded-xl border-white/30 bg-white/10 border backdrop-blur-md space-y-6 bg-white p-8 rounded-2xl shadow-xl w-full max-w-md";
+
+	return Div({ class: areaCss }, [
+		UList({ class: circlesCss }, [
+			Li({ class: circle1Css }),
+			Li({ class: circle2Css }),
+			Li({ class: circle3Css }),
+			Li({ class: circle4Css }),
+			Li({ class: circle5Css }),
+			Li({ class: circle6Css }),
+			Li({ class: circle7Css }),
+			Li({ class: circle8Css }),
+			Li({ class: circle9Css }),
+			Li({ class: circle10Css }),
+		]),
+		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
+			Div({ class: loginCardCss }, [
 				Div({ class: headerCss }, [
-					P({ class: neonTextCss }, ["Sign In"]),
+					P({ class: neonTextCss }, ["Register Page"]),
 				]),
 				Div({ class: inputWrapperCss }, [
 					nameInput,
@@ -149,10 +182,23 @@ export function Register(): PongNode<any> {
 				}, [
 					Div({ class: fancyLeftBorderCss }),
 					P({ class: disappearingTextCss }, ["Click here"]),
-					Span({ class: appearingTextCss }, ["Register"]),
+					Span({ class: appearingTextCss }, ["Sign In"]),
 					Div({ class: fancyRightBorderCss }),
 				]),
+				registerState === "success" 
+				? Div({ class: "mt-4 p-4 bg-green-500/20 border border-green-500 rounded-lg" }, [
+					P({ class: "text-green-500 text-center" }, [
+						"Inscription réussie! Redirection en cours..."
+					])
+				  ])
+				: registerState === "error"
+				? Div({ class: "mt-4 p-4 bg-red-500/20 border border-red-500 rounded-lg" }, [
+					P({ class: "text-red-500 text-center" }, [
+						"Erreur lors de l'inscription. Veuillez réessayer."
+					])
+				  ]) :
+				  Div({}),
 			])
 		])
-	])
+	]);
 }

@@ -2,6 +2,7 @@ import { H1Node, PongNode } from "../lib/PongNode";
 import { Div, Image, Button, H1, Span, RawHTML, P } from "../lib/PongFactory";
 import { linkFn } from "./Navbar";
 import { rerender } from "../router/router";
+import { AuthStore } from "../stores/AuthStore";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -36,11 +37,11 @@ function navLanding() : PongNode<any> {
 				Button({
 					id: "loginButton",
 					class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded",
-				}, [linkFn("/login", "Login", "")]),
+				}, [linkFn("loginLink", "/login", "Login", "")]),
 				Button({
 					id: "registerButton",
 					class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"
-				}, [linkFn("/register", "Register", "")])
+				}, [linkFn("registerLink", "/register", "Register", "")])
 			])
 		]),
 
@@ -70,6 +71,7 @@ function navLanding() : PongNode<any> {
 }
 
 function main(): PongNode<any> {
+	const isLogged = AuthStore.isLoggedIn;
 	return Div({
 		class: "relative min-h-screen bg-gray-950"
 	}, [
@@ -87,8 +89,8 @@ function main(): PongNode<any> {
 					Span({ class: "block md:text-3xl text-gray-300 pt-10 mb-8"}, ["Level up your skills with game and tournament."]),
 					Button({
 						id: "playButton",
-						class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-3 px-6 border-b-4 border-yellow-700 hover:border-yellow-500 rounded text-lg"
-					}, [linkFn("/game", "➡️ Start Playing", "")]),
+						class: "font-orbitron bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-3 px-6 border-b-4 border-yellow-700 hover:border-yellow-500 rounded text-lg"
+					}, [ isLogged ? linkFn("linkGame", "/game", "Start Playing", "") : linkFn("linkLoginFromLanding", "/login", "Start Playing", "")]),
 					Span({class: "block md:text-xl text-gray-500 pt-4"}, ["Discover why 42 developers love Transcendence. 100% free."]),
 				]),
 			]),
@@ -123,6 +125,5 @@ export function Landing() : PongNode<any> {
 	return Div({}, [
 		navLanding(),
 		main(),
-		// main()
 	]);
 }
