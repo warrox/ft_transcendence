@@ -11,6 +11,7 @@ import db from "../../db";
 import { server } from "../index";
 
 import * as dotenv from 'dotenv';
+import { resolve } from "path";
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -33,99 +34,69 @@ export const login = async (
 	if (!email || !password) {
 		return reply.status(400).send({ error: "Email and password are required" });
 	}
+
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	if (!emailRegex.test(email)) {
 		return reply.status(400).send({ error: "Invalid email format" });
 	}
 
-	let is2FA: number = 0;
 	try {
-		is2FA = await new Promise<number>((resolve, reject) => {
-			db.get<{ check2FA: number }>(
-				"SELECT is_2FA as check2FA FROM users WHERE email = ?",
+		const user = await new Promise<{ id: string, email: string, password: string, is2FA: number }>((resolve, reject) => {
+			db.get<{ id: string; email: string; password: string; is_2FA: number }>("SELECT id, email, password, is_2FA FROM users WHERE email = ?",
 				[email],
 				(err, row) => {
-					if (err) {
-						console.error("DB error:", err);
-						return reject(err);
-					}
+					if (err) return reject(err);
 					if (!row) return reject(new Error("User not found"));
-					resolve(row.check2FA === 1 ? 1 : 0);
-					
+					resolve({
+						id: row.id,
+						email: row.email,
+						password: row.password,
+						is2FA: row.is_2FA,
+					});
 				}
 			);
-			console.log(is2FA);
-			
-			
 		});
-	} catch (e: any) {
-		console.warn("No 2FA found or user not found:", e.message);
-	}
 
-	try {
-		const result = await new Promise<{ code: number; message: string }>(
-			(resolve, reject) => {
-				db.get<{ password: string }>(
-					"SELECT password FROM users WHERE email = ?",
-					[email],
-					async (err, row) => {
-						if (err) return reject(err);
-						if (!row)
-							return resolve({
-								code: 401,
-								message: "Invalid email or password",
-							});
+		const isMatch = await server.bcrypt.compare(password, user.password);
+		if (!isMatch)
+			return reply.status(401).send({ error: "Invalid email or password" });
 
-						try {
-							const isMatch = await server.bcrypt.compare(
-								password,
-								row.password
-							);
-							if (isMatch) {
-								resolve({ code: 200, message: "Login successful" });
-							} else {
-								resolve({
-									code: 401,
-									message: "Invalid email or password",
-								});
-							}
-						} catch (err) {
-							console.error("Bcrypt error:", err);
-							reject(err);
-						}
-					}
-				);
-			}
+		if (user.is2FA) {
+			twoFAStore.code = Math.floor(1000 + Math.random() * 9000);
+			console.log("2FA Code:", twoFAStore.code);
+
+			await transporter.sendMail({
+				from: '"Transcendance" <Transcendance@trans.com>',
+				to: email,
+				subject: "Authentification 2FA to transcendance",
+				text: `copy/paste your unique code : ${twoFAStore.code}`,
+				html: `<b>copy/paste your unique code : </b><span>${twoFAStore.code}</span>`,
+			});
+
+			return reply.status(200).send({
+				success: true,
+				twoFA: true,
+				message: "2FA code sent to email",
+			});
+		}
+
+		const token = server.jwt.sign(
+			{ id: user.id, email: user.email },
+			{ expiresIn: 3600 }
 		);
 
-		if (result.code === 200 && is2FA) {
-			// TODO: envoyer code MAIL ICI 
-			twoFAStore.code =  Math.floor(1000 + Math.random() * 9000) ;
-			async function send_2FA() {
-				// generate a random 
-				console.log(twoFAStore.code);
-				// send mail with defined transport object
-				const info = await transporter.sendMail({
-					from: '"Transcendance" <Transcendance@trans.com>', // sender address
-					to: email, // list of receivers
-					subject: "Authentification 2FA to transcendance", // Subject line
-					text: "copy/paste your unique code : " + twoFAStore.code, // plain text body
-					html: `<b>copy/paste your unique code : </b><span>${twoFAStore.code}</span>`,
-				});
-				console.log("Message sent: %s", info.messageId);
-				// Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
-			}
-			send_2FA().catch(console.error);
-		}
+		reply.setCookie("access_token", token, {
+			path: "/",
+			httpOnly: true,
+			secure: true,
+			maxAge: 3600,
+		});
 
-		switch (result.code) {
-			case 200:
-				return reply
-					.status(200)
-					.send({ success: true, twoFA: false, message: result.message });
-			case 401:
-				return reply.status(401).send({ error: result.message });
-		}
+		return reply.status(200).send({
+			success: true,
+			twoFA: false,
+			message: "Login successful",
+		});
 	} catch (e: any) {
 		console.error("Login error:", e);
 		return reply.status(500).send({ error: "Erreur serveur" });
