@@ -97,7 +97,7 @@ export function Register(): PongNode<any> {
 				registerState = "success";
 				rerender();
 				setTimeout(() => {
-					navigateTo('/home');
+					navigateTo('/login')
 				}, 2000);
 			} catch (e) {
 				console.error("Erreur de parsing JSON :", e);

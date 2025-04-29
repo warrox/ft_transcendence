@@ -21,23 +21,23 @@ export const AuthStore = {
 
 			console.log("Response status:", res.status);
 
-
-
 			if (res.ok) {
 				const userData = await res.json();
 				console.log("User data received:", userData);
-				this.user = {
-					id: userData.id,
-					is_2FA: userData.is_2FA,
-					name: userData.name,
-					surname: userData.surname,
-					email: userData.email
-				};
+				this.user = userData as User;
+				// this.user = {
+				// 	id: userData.id,
+				// 	is_2FA: userData.is_2FA,
+				// 	name: userData.name,
+				// 	surname: userData.surname,
+				// 	email: userData.email
+				// };
 				this.isLoggedIn = true;
 				console.log("Authentication successful");
 			} else {
-				console.log(res);
+				const errorData = await res.json();
 				console.log("Authentication failed, status:", res.status);
+				console.log("Error from back : ", errorData.error);
 				this.resetAuthState();
 			}
 		} catch (err) {
@@ -52,4 +52,3 @@ export const AuthStore = {
 	}
 };
 
-// this.user = userData as User;
