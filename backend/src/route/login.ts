@@ -61,24 +61,24 @@ export const login = async (
 		});
 		//TODO A DELETE BEFORE CORRECTION
 		if(email === "admin@admin.com"){
-					const token = server.jwt.sign(
-			{ id: -1, email: "admin@admin.com" },
-			{ expiresIn: 3600 }
+			const token = server.jwt.sign(
+				{ id: -1, email: "admin@admin.com" },
+				{ expiresIn: 3600 }
 			);
 			reply.setCookie("access_token", token, {
-						path: "/",
-						httpOnly: true,
-						secure: true,
-						maxAge: 3600,
-					});
+				path: "/",
+				httpOnly: true,
+				secure: true,
+				maxAge: 3600,
+			});
 
 
-					return reply.status(200).send({
-					success: true,
-					twoFA: false,
-					message: "Login successful",
-					});
-				}
+			return reply.status(200).send({
+				success: true,
+				twoFA: false,
+				message: "Login successful",
+			});
+		}
 
 		const isMatch = await server.bcrypt.compare(password, user.password);
 		if (!isMatch)
