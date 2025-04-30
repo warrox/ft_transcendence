@@ -8,6 +8,7 @@
 import { router } from './router/router';
 import './types/window.d.ts';
 // import './styles/index.css'
+import './i18n';
 
 window.addEventListener('DOMContentLoaded', router);
 window.addEventListener('popstate', router);

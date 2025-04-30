@@ -33,6 +33,8 @@ import {
 } from "../styles/cssFactory";
 
 import "../styles/index.css";
+import { t } from "i18next";
+import i18n from "i18next";
 
 let loginStatus: null | "OK" | "KO" = null;
 
@@ -114,7 +116,7 @@ export function Login(): PongNode<any> {
 		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
 			Div({ class: loginCardCss }, [
 				Div({ class: headerCss }, [
-					P({ class: neonTextCss }, ["Login Page"]),
+					P({ class: neonTextCss }, [t("login.login_page")]),
 				]),
 				Div({ class: inputWrapperCss }, [
 					emailInput,
@@ -126,8 +128,8 @@ export function Login(): PongNode<any> {
 					class: fancyButtonCss,
 				}, [
 					Div({ class: fancyLeftBorderCss }),
-					P({ class: disappearingTextCss }, ["Click here"]),
-					Span({ class: appearingTextCss }, ["Login"]),
+					P({ class: disappearingTextCss }, [t("login.click")]),
+					Span({ class: appearingTextCss }, [t("login.login")]),
 					Div({ class: fancyRightBorderCss }),
 				]),
 				...(loginStatus !== null

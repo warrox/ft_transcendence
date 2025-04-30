@@ -1,7 +1,8 @@
-import { log } from "console";
-import { Div, Button, P, Span, Li } from "../lib/PongFactory";
+import { Div, Button, P, Span } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router"
+import { t } from "i18next";
+import i18n from "i18next";
 
 var playerCount = 1;
 
@@ -9,28 +10,28 @@ export function Game(): PongNode<any> {
 	setTimeout(() => startPongBall(), 0);
 
 	return Div({ class: "flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
-			Span({ class: "block font-orbitron md:text-5xl text-yellow-400" }, ["Pong like you’ve never played it before."]),
-			Span({ class: "block font-orbitron md:text-3xl text-yellow-400" }, ["Choose your map:"]),
+			Span({ class: "block font-orbitron md:text-5xl text-yellow-400" }, [t("game.never_play")]),
+			Span({ class: "block font-orbitron md:text-3xl text-yellow-400" }, [t("game.choose_map")]),
 			
 			//PlayerSelector(),
 			Button({
 				id: "Select-map",
 				class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"
-			}, ["Select map"]),
+			}, [t("game.select_map")]),
 			Div({ id: "game-area", class: "relative w-[600px] h-[400px] bg-zinc-900 overflow-hidden" }, [
 				Div({ id: "ball", class: "absolute w-[20px] h-[20px] bg-yellow-400 rounded-full" }),
 				Div({id: "leftpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 rounded-full left-[5px] top-[160px]"}),
 				Div({id: "rightpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 rounded-full left-[580px] top-[160px]"})
 			]),
 			Div({ class: "flex flex-col justify-around items-center h-30"}, [
-				Span({ class: "block font-orbitron md:text-2xl text-yellow-400" }, ["Go solo or battle your friends!:"]),
+				Span({ class: "block font-orbitron md:text-2xl text-yellow-400" }, [t("game.solo_friends")]),
 				Div({ class: "flex justify-between w-90"}, [
 					Button({id: "sgplayerButton",
 						class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"},
-						["Single Player"]),
+						[t("game.single_player")]),
 					Button({id: "mgplayerButton",
 						class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"},
-						["Multiple Player"]),
+						[t("game.multi_player")]),
 				]),
 			]),
 	]);

@@ -24,7 +24,10 @@ import {
 	playButtonDarkCss,
 	inputScaleCss
 } from "../styles/cssFactory";
+
 import { navigateTo, rerender } from "../router/router";
+import { t } from "i18next";
+import i18n from "i18next";
 
 let userInfo: UserInfo | null = null;
 
@@ -68,9 +71,9 @@ export function Home(): PongNode<any> {
 
 	fetchUserInfo();
 
-	const userLogin = userInfo ? userInfo.login : "Loading...";
-	const userEmail = userInfo ? userInfo.email : "Loading...";
-	const userSurname = userInfo ? userInfo.surname : "Loading...";
+	const userLogin = userInfo ? userInfo.login : t("home.loading");
+	const userEmail = userInfo ? userInfo.email : t("home.loading");
+	const userSurname = userInfo ? userInfo.surname : t("home.loading");
 	const user2FAStatus = userInfo ? userInfo.is_2FA : false;
 
 	const toggleLoginForm = () => {
@@ -104,13 +107,13 @@ export function Home(): PongNode<any> {
 			Div({ id: "first", class: cardFlipCss }, [
 				Div({ id: "second", class: cardInnerCss }, [
 					Div({ id: "third", class: cardFrontCss }, [
-						Span({ class: neonTitleCss }, ["Profil"]),
+						Span({ class: neonTitleCss }, [t("home.profile")]),
 						Image({ id: "profil_img", src: "../assets/profil.png", alt: "profil_img", class: "imageCenter" })
 					]),
 					Div({ class: `${cardBackCss} flex flex-col justify-start p-6` }, [
 						// Partie haute (titre + image)
 						Div({ class: "flex flex-col items-center mb-6" }, [ // <- Augmente l'espacement sous titre+img
-							Span({ class: "text-xl font-bold" }, ["Informations"]),
+							Span({ class: "text-xl font-bold" }, [t("home.information")]),
 							Image({ id: "infos_img", src: "../assets/infos.png", alt: "infos_img", class: "imageCenter w-20" })
 						]),
 						// Partie basse
@@ -132,7 +135,7 @@ export function Home(): PongNode<any> {
 									Image({ id: "test3", src: "../assets/2fa.png", alt: "2fa", class: "w-10 h-10 mr-2" }),
 									Span({ 
 										class: `text-md font-semibold ${user2FAStatus ? 'text-green-400' : 'text-red-400'}`
-									}, [user2FAStatus ? "Enabled" : "Disabled"]),
+									}, [user2FAStatus ? t("home.enabled") : t("home.disabled")]),
 								]),
 							]),
 							// Bouton
@@ -141,14 +144,14 @@ export function Home(): PongNode<any> {
 									id: "test",
 									class: `${playButtonDarkCss}`,
 									onClick: toggleLoginForm,
-								}, ["Change login"]),
+								}, [t("home.change_login")]),
 							]),
 							// Input
 							Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
 								Input({
 									id: "login-input",
 									class: inputScaleCss,
-									placeholder: "Enter new login",
+									placeholder: t("home.enter_login"),
 								}),
 							]),
 
@@ -165,7 +168,7 @@ export function Home(): PongNode<any> {
 										}
 										toggleLoginForm();
 									}
-								}, ["Confirm"]),
+								}, [t("home.confirm")]),
 							]),
 						]),
 					])
@@ -175,7 +178,7 @@ export function Home(): PongNode<any> {
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
-						Span({ class: neonTitleCss }, ["Game"]),
+						Span({ class: neonTitleCss }, [t("home.game")]),
 						Image({ id: "game_img", src: "../assets/pong.png", alt: "game_img", class: "imageCenter" })
 					]),
 					Div({ class: `${cardBackCss} flex flex-col items-center justify-center text-center p-6` }, [
@@ -185,13 +188,13 @@ export function Home(): PongNode<any> {
 								Your browser does not support the video tag.
 							</video>
 						`),
-						Span({}, ["Pong like you’ve never played it before..."]),
+						Span({}, [t("home.never_play")]),
 						Div({ class: "mt-10 flex justify-center" }, [
 							Button({
 								id: "play_button",
 								class: playButtonDarkCss,
 								onClick: () => navigateTo("/game"),
-							}, ["Let's play"])
+							}, [t("home.lets_play")])
 						])
 					])
 				])
@@ -200,7 +203,7 @@ export function Home(): PongNode<any> {
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
-						Span({ class: neonTitleCss }, ["Dashboard"]),
+						Span({ class: neonTitleCss }, [t("home.dashboard")]),
 						Image({ id: "dash_img", src: "../assets/dashboard.png", alt: "dash_img", class: "imageCenter" })
 					]),
 					Div({ class: cardBackCss }, [
@@ -212,7 +215,7 @@ export function Home(): PongNode<any> {
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
-						Span({ class: neonTitleCss }, ["Settings"]),
+						Span({ class: neonTitleCss }, [t("home.settings")]),
 						Image({ id: "settings_img", src: "../assets/settings.png", alt: "settings_img", class: "imageCenter" })
 					]),
 					Div({ class: cardBackCss }, [
