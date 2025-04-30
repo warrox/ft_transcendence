@@ -59,6 +59,10 @@ async function registerRoutes(server: FastifyInstance): Promise<any> {
 	server.post('/post2Fa', getRoutes.post2Fa);
 	server.post('/verify2Fa', getRoutes.verify2Fa);
 	server.get('/logout', getRoutes.logout);
+	server.post('/updatePassword', getRoutes.updatePassword);
+	server.post('/updateMail', getRoutes.updateMail);
+	server.post('/updateAvatar', getRoutes.updateAvatar);
+	server.post('/updateWinLoose', getRoutes.updateWinLoose);
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 

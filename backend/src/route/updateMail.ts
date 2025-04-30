@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import db from "../../db";
 
-interface UpdateMailBody {
+export interface UpdateMailBody {
 	userId: number;
 	newMail: string;
 }

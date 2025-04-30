@@ -2,12 +2,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import db from "../../db";
 
-interface UpdatePasswordBody {
+export interface UpdatePasswordBody {
 	userId: number;
 	newpassword: string;
 }
 
-export const updateMail = async (request: FastifyRequest<{ Body: UpdatePasswordBody }>, reply: FastifyReply) => {
+export const updatePassword = async (request: FastifyRequest<{ Body: UpdatePasswordBody }>, reply: FastifyReply) => {
 	const { userId, newpassword } = request.body;
 
 	try {

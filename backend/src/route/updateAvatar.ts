@@ -4,12 +4,12 @@ import db from "../../db";
 import fs from 'fs'
 import path from 'path';
 
-interface UpdateMailBody {
+export interface UpdateAvatarBody {
 	userId: number;
 	avatarpath: string;
 }
 
-export const updateAvatar = async (request: FastifyRequest<{ Body: UpdateMailBody }>, reply: FastifyReply) => {
+export const updateAvatar = async (request: FastifyRequest<{ Body: UpdateAvatarBody }>, reply: FastifyReply) => {
 	const { userId, avatarpath } = request.body;
 	const files = await request.file();
 	if (!files || !userId) {
