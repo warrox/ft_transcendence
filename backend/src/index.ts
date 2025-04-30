@@ -5,13 +5,14 @@ import cors from '@fastify/cors';
 import bcrypt from 'fastify-bcrypt';
 import { getRoutes } from './GetRoutes.types';
 import * as dotenv from 'dotenv';
-
+import multipart from '@fastify/multipart';
 //import type { Send } from 'nodemailer';
 //import module from '../node_modules/nodemailer';
 
 ' use strict'
 
 export const server = fastify();
+server.register(multipart);
 
 
 /*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.apps.googleusercontent.com*/

@@ -18,7 +18,8 @@ db.serialize(() => {
       name VARCHAR(16) UNIQUE NOT NULL,
       surname TEXT UNIQUE NOT NULL,
       email TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+	  avatar_path TEXT  
     )
   `);
 });
