@@ -14,6 +14,8 @@ import { updateAvatar, UpdateAvatarBody } from "./route/updateAvatar"
 import { updateMail, UpdateMailBody} from "./route/updateMail"
 import { updatePassword , UpdatePasswordBody} from "./route/updatePassword"
 import { UpdateWinLooseBody, updateWinLoose} from "./route/updateWinLoose"
+import { PostGameScoreBody , postGameScore} from "./route/postGameScore"
+
 export interface GetRoutes {
 	me (request: FastifyRequest, reply: FastifyReply): any
 	users (request: FastifyRequest, reply: FastifyReply): any
@@ -29,6 +31,8 @@ export interface GetRoutes {
 	updateMail( request: FastifyRequest<{ Body : UpdateMailBody }> , reply: FastifyReply) : any
 	updatePassword( request: FastifyRequest<{ Body : UpdatePasswordBody }> , reply: FastifyReply) : any
 	updateWinLoose( request: FastifyRequest<{ Body : UpdateWinLooseBody }> , reply: FastifyReply) : any
+	postGameScore( request: FastifyRequest<{ Body : PostGameScoreBody}> , reply: FastifyReply) : any
+
 }
 
 export const getRoutes: GetRoutes = {
@@ -45,5 +49,6 @@ export const getRoutes: GetRoutes = {
 	updateAvatar: updateAvatar,
 	updateMail: updateMail,
 	updatePassword: updatePassword,
-	updateWinLoose: updateWinLoose
+	updateWinLoose: updateWinLoose,
+	postGameScore: postGameScore
 };

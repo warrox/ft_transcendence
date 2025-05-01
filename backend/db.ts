@@ -24,6 +24,17 @@ win INTEGER DEFAULT 0,
 loose INTEGER DEFAULT 0
 )
 `);
+
+	db.run(`
+CREATE TABLE IF NOT EXISTS games (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+user_id INTEGER NOT NULL,
+result TEXT CHECK(result IN ('win', 'loose')) NOT NULL,
+guest_name TEXT,
+game_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (user_id) REFERENCES users(id)
+)
+`);
 });
 // Each user has a Match History including 1v1 games, dates, and relevant
 // details, accessible to logged-in users
