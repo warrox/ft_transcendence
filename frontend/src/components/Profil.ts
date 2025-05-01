@@ -2,6 +2,7 @@ import { Div, P, Button, Input, Span, Li, UList } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
 import { navigateTo } from "../router/router";
+import { AuthStore } from "../stores/AuthStore";
 import {
 	backgroundCss,
 	fancyButtonCss,
@@ -45,34 +46,38 @@ function resetRegisterState(delay = 3000) {
 	}, delay);
 }
 
-export function Login(): PongNode<any> {
+export function Profil(): PongNode<any> {
+	
 	const emailInput = Input({ 
-		id: "emailInput", 
+		id: "emailInputProfil", 
 		required: true, 
 		onChange: () => {},
 		class: inputScaleCss,
+		placeholder: 'changeEmail'
 	});
 	const passwordInput = Input({
-		id: "password",
+		id: "passwordInputProfil",
 		type: "password",
 		required: true,
 		onChange: () => {},
 		class: inputScaleCss,
+		placeholder: 'changePass',
 	});
+	
+	
+	const handleEditPass = () => {
+		const email = AuthStore.user?.email;
+		const newpassword = (document.querySelector("#passwordInputProfil") as HTMLInputElement)?.value;
 
-	// TESTING IMG
-	// const testImg = Image({ id: "test_button", src: logo, alt: "my_logo"});
-
-	const handleLogin = () => {
-		const email = (document.querySelector("#emailInput") as HTMLInputElement)?.value;
-		const password = (document.querySelector("#password") as HTMLInputElement)?.value;
-
-		const body = {
+		// console.log("oldmail = ", oldMail);
+		// console.log("newpass", password);
+		
+		const body = { 
 			email,
-			password,
+			newpassword 
 		};
 
-		fetch("/api/login", {
+		fetch("/api/updatePassword", {
 			method: "POST",
 			body: JSON.stringify(body),
 			credentials: "include",
@@ -89,9 +94,9 @@ export function Login(): PongNode<any> {
 				const parseBody = JSON.parse(text);
 				console.log("Response parsed from JSON :", parseBody);
 				loginStatus = parseBody.success === true ? "OK" : "KO";
-				setTimeout(() => {
-					navigateTo('/home');
-				}, 1500);
+				// setTimeout(() => {
+				// 	navigateTo('/home');
+				// }, 1500);
 			} catch (e) {
 				console.log("Error parsing JSON: ", e);
 				loginStatus = "KO";
@@ -107,23 +112,11 @@ export function Login(): PongNode<any> {
 		});
 	};
 
-	return Div({ class: areaCss }, [
-		UList({ class: circlesCss }, [
-			Li({ class: circle1Css }),
-			Li({ class: circle2Css }),
-			Li({ class: circle3Css }),
-			Li({ class: circle4Css }),
-			Li({ class: circle5Css }),
-			Li({ class: circle6Css }),
-			Li({ class: circle7Css }),
-			Li({ class: circle8Css }),
-			Li({ class: circle9Css }),
-			Li({ class: circle10Css }),
-		]),
+	return Div({}, [
 		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
 			Div({ class: loginCardCss }, [
 				Div({ class: headerCss }, [
-					P({ class: neonTextCss }, ["Login Page"]),
+					P({ class: neonTextCss }, ["Edit Page"]),
 				]),
 				Div({ class: inputWrapperCss }, [
 					emailInput,
@@ -131,12 +124,12 @@ export function Login(): PongNode<any> {
 				]),
 				Button({
 					id: "button1",
-					onClick: handleLogin,
+					onClick: handleEditPass,
 					class: fancyButtonCss,
 				}, [
 					Div({ class: fancyLeftBorderCss }),
 					P({ class: disappearingTextCss }, ["Click here"]),
-					Span({ class: appearingTextCss }, ["Login"]),
+					Span({ class: appearingTextCss }, ["Edit"]),
 					Div({ class: fancyRightBorderCss }),
 				]),
 				...(loginStatus !== null
