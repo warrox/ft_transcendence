@@ -48,14 +48,18 @@ export const neonTextCss = "font-orbitron text-2xl text-white animate-[glow_1.5s
 // HOME PAGE CSS
 export const cardsContainerCss = `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-evenly gap-12 w-full max-w-7xl px-10 z-10`;
 export const cardNeonHoverCss = ` relative rounded-2xl bg-white p-6 w-[260px] h-[460px] flex flex-col items-center justify-center text-center font-medium text-gray-800 transition duration-300 hover:scale-105 hover:shadow-[0_0_25px_#ffe600] hover:border-[2px] hover:border-yellow-400 hover:bg-white/90 z-10`;
+// Parent gère le hover
 export const cardFlipCss = `
-  w-[920px] h-[520px] perspective-[400px] will-change: transform
+  w-[920px] h-[520px] perspective-[400px] will-change-transform
+  group
 `;
 
+// Inner ne gère que la transition et la rotation SANS hover directement
 export const cardInnerCss = `
   relative w-full h-full transition-transform duration-400 transform-style-preserve-3d
-  hover:rotate-y-180
+  group-hover:rotate-y-180
 `;
+
 
 export const cardFaceBaseCss = `absolute w-full h-full backface-hidden rounded-2xl shadow-xl text-center p-6`;
 
@@ -71,8 +75,8 @@ export const cardFrontCss = `
   flex flex-col items-center justify-center
   text-center
   min-h-[200px]
-  pt-4  /* Ajouter un peu d'espace en haut */
-  pb-6  /* Ajouter un peu d'espace en bas pour "Profil" */
+  pt-4 
+  pb-6 
   text-center
 `;
 
@@ -88,7 +92,27 @@ export const imageCenter = `
 
 export const neonTitleCss = "text-center mb-6 font-orbitron text-2xl text-white animate-[glow_1.5s_alternate_infinite]";
 
+export const neonPulseBtnCss = `
+  relative px-6 py-4 text-lg font-semibold text-white bg-black border-2 border-cyan-400
+  shadow-[0_0_10px_rgba(0,255,255,0.3)] cursor-pointer overflow-visible transition-all duration-400 z-10
+  before:content-[''] before:absolute before:inset-[-4px] before:border-2 before:border-cyan-400 before:rounded-inherit before:animate-[pulseOut_2s_ease-out_infinite] before:opacity-0
+  after:content-[''] after:absolute after:inset-[-4px] after:border-2 after:border-cyan-400 after:rounded-inherit after:animate-[pulseOut_2s_ease-out_infinite] after:opacity-0 after:[animation-delay:1s]
+`;
 
-
-// register 
-export const errorTextCss = "text-red-500 text-sm mt-1";
+export const playButtonDarkCss = `
+  bg-black
+  text-yellow-400
+  font-bold
+  px-6
+  py-2
+  rounded-lg
+  border
+  border-yellow-400
+  shadow-[0_0_10px_rgba(253,224,71,0.6)]
+  hover:bg-violet-500
+  hover:text-black
+  hover:border-violet-400
+  hover:shadow-[0_0_20px_rgba(139,92,246,0.9)]
+  transition
+  duration-300
+`;

@@ -31,6 +31,13 @@ import {
 
 let registerState: "idle" | "success" | "error" = "idle";
 
+function resetRegisterState(delay = 3000) {
+	setTimeout(() => {
+		registerState = "idle";
+		rerender();
+	}, delay);
+}
+
 export function Register(): PongNode<any> {
 
 	const nameInput = Input({ 
@@ -100,14 +107,22 @@ export function Register(): PongNode<any> {
 				rerender();
 				setTimeout(() => {
 					navigateTo('/login')
-				}, 2000);
+				}, 1000);
+				resetRegisterState();
 			} catch (e) {
 				console.error("Erreur de parsing JSON :", e);
 				registerState = "error";
 				rerender();
+				resetRegisterState();
 			}
 		})
-		.catch(e => console.error("Erreur :", e));
+		.catch(e => {
+			console.error("Erreur :", e);
+			registerState = "error";
+			rerender();
+			resetRegisterState();
+		});
+		
 	}
 
 	(window as any).onSignIn = (response: any) => {
