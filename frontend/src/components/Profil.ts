@@ -1,36 +1,9 @@
-import { Div, P, Button, Input, Span, Li, UList } from "../lib/PongFactory";
+import { Div, P, Button, Input, Image } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import { navigateTo } from "../router/router";
 import { AuthStore } from "../stores/AuthStore";
 import {
-	backgroundCss,
-	fancyButtonCss,
-	fancyLeftBorderCss,
-	fancyRightBorderCss,
-	disappearingTextCss,
-	appearingTextCss,
-	WrapperCss,
-	loginCardCss,
-	headerCss,
-	neonTextCss,
-	inputWrapperCss,
-	statusWrapperCss,
-	statusKoCss,
-	statusOkCss,
 	inputScaleCss,
-	areaCss,
-	circlesCss,
-	circle1Css,
-	circle2Css,
-	circle3Css,
-	circle4Css,
-	circle5Css,
-	circle6Css,
-	circle7Css,
-	circle8Css,
-	circle9Css,
-	circle10Css
 } from "../styles/cssFactory";
 
 import "../styles/index.css";
@@ -46,38 +19,39 @@ function resetRegisterState(delay = 3000) {
 	}, delay);
 }
 
-export function Profil(): PongNode<any> {
-	
+
+export function Profil() : PongNode<any> {
+	const email = AuthStore.user?.email;
 	const emailInput = Input({ 
-		id: "emailInputProfil", 
+		id: "emailInputProfil",
+		value: email,
 		required: true, 
 		onChange: () => {},
 		class: inputScaleCss,
-		placeholder: 'changeEmail'
 	});
-	const passwordInput = Input({
-		id: "passwordInputProfil",
-		type: "password",
-		required: true,
-		onChange: () => {},
-		class: inputScaleCss,
-		placeholder: 'changePass',
-	});
+	// const passwordInput = Input({
+	// 	id: "passwordInputProfil",
+	// 	type: "password",
+	// 	required: true,
+	// 	onChange: () => {},
+	// 	class: inputScaleCss,
+	// 	placeholder: 'changePass',
+	// });
 	
-	
-	const handleEditPass = () => {
-		const email = AuthStore.user?.email;
-		const newpassword = (document.querySelector("#passwordInputProfil") as HTMLInputElement)?.value;
+	// const newpassword = (document.querySelector("#passwordInputProfil") as HTMLInputElement)?.value;
 
-		// console.log("oldmail = ", oldMail);
-		// console.log("newpass", password);
+	const handleEditPass = () => {
+
+		const newMail = (document.querySelector("#emailInputProfil") as HTMLInputElement)?.value; 
 		
 		const body = { 
 			email,
-			newpassword 
+			newMail, 
 		};
 
-		fetch("/api/updatePassword", {
+		console.log(email, newMail);
+
+		fetch("/api/updateMail", {
 			method: "POST",
 			body: JSON.stringify(body),
 			credentials: "include",
@@ -94,9 +68,7 @@ export function Profil(): PongNode<any> {
 				const parseBody = JSON.parse(text);
 				console.log("Response parsed from JSON :", parseBody);
 				loginStatus = parseBody.success === true ? "OK" : "KO";
-				// setTimeout(() => {
-				// 	navigateTo('/home');
-				// }, 1500);
+				rerender();
 			} catch (e) {
 				console.log("Error parsing JSON: ", e);
 				loginStatus = "KO";
@@ -112,32 +84,34 @@ export function Profil(): PongNode<any> {
 		});
 	};
 
-	return Div({}, [
-		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
-			Div({ class: loginCardCss }, [
-				Div({ class: headerCss }, [
-					P({ class: neonTextCss }, ["Edit Page"]),
-				]),
-				Div({ class: inputWrapperCss }, [
-					emailInput,
-					passwordInput,
-				]),
-				Button({
-					id: "button1",
-					onClick: handleEditPass,
-					class: fancyButtonCss,
-				}, [
-					Div({ class: fancyLeftBorderCss }),
-					P({ class: disappearingTextCss }, ["Click here"]),
-					Span({ class: appearingTextCss }, ["Edit"]),
-					Div({ class: fancyRightBorderCss }),
-				]),
-				...(loginStatus !== null
-					? [Div({ class: statusWrapperCss }, [
-						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`])
-					])]
-					: [])
-			])
+
+
+	return Div({ 
+		class: "min-h-screen bg-yellow-400 flex flex-col items-center pt-20"
+	}, [
+		Div({
+			class: "w-50 h-50 rounded-full overflow-hidden bg-gray-200"
+		}, [
+			Image({
+				id: "avatarImg",
+				class: "w-full h-full object-cover",
+				src: "../assets/avatar.png",
+			})
 		]),
-	]);
+		Div({ 
+			class: "mt-20 w-[400px] p-4 bg-yellow-500 rounded-xl shadow-lg space-y-4" 
+		}, [
+			Div({ class: "flex items-center justify-between" }, [
+				Image({ id: "login_img", src: "../assets/login.png", alt: "login_img", class: "imageCenter w-8" }),
+				emailInput,
+				Button({ id: "editorButton1", onClick: handleEditPass}, [
+					Image({
+						id : "editorImg",
+						class: "w-5 transition-transform duration-200 hover:scale-110",
+						src: "../assets/save.webp"
+					})
+				])
+			]),
+		])
+	])
 }
