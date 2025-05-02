@@ -118,7 +118,7 @@ export function Home(): PongNode<any> {
 						]),
 						// Partie basse
 						Div({ class: "flex flex-col flex-grow items-center" }, [
-							Div({ class: "flex flex-col items-start w-full mt-.1 mb-.1" }, [ // <- Ajoute plus de haut ET bas
+							Div({ class: "flex flex-col items-start w-full mt-10 mb-10" }, [ // <- Ajoute plus de haut ET bas
 								Div({ class: "flex items-center mb-2" }, [
 									Image({ id: "test", src: "../assets/login.png", alt: "login", class: "w-10 h-10 mr-2" }),
 									Span({ class: "text-md" }, [userLogin]),
@@ -138,22 +138,22 @@ export function Home(): PongNode<any> {
 									}, [user2FAStatus ? t("home.enabled") : t("home.disabled")]),
 								]),
 							]),
-							// Bouton
-							Div({ class: "flex justify-center w-full mt-1" }, [ // <- Rapproche le bouton
-								Button({
-									id: "test",
-									class: `${playButtonDarkCss}`,
-									onClick: toggleLoginForm,
-								}, [t("home.change_login")]),
-							]),
-							// Input
-							Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
-								Input({
-									id: "login-input",
-									class: inputScaleCss,
-									placeholder: t("home.enter_login"),
-								}),
-							]),
+							// // Bouton
+							// Div({ class: "flex justify-center w-full mt-1" }, [ // <- Rapproche le bouton
+							// 	Button({
+							// 		id: "test",
+							// 		class: `${playButtonDarkCss}`,
+							// 		onClick: toggleLoginForm,
+							// 	}, [t("home.change_login")]),
+							// ]),
+							// // Input
+							// Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
+							// 	Input({
+							// 		id: "login-input",
+							// 		class: inputScaleCss,
+							// 		placeholder: t("home.enter_login"),
+							// 	}),
+							// ]),
 
 							// Confirm button container
 							Div({ id: "confirm-button-container", class: "hidden mt-3 w-full flex justify-center" }, [
