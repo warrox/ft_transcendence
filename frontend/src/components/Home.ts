@@ -140,34 +140,34 @@ export function Home(): PongNode<any> {
 								Button({
 									id: "test",
 									class: `${playButtonDarkCss}`,
-									onClick: toggleLoginForm,
-								}, ["Change login"]),
+									onClick: () => {navigateTo('/profil')},
+								}, ["Edit profil"]),
 							]),
 							// Input
-							// Input container
-							Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
-								Input({
-									id: "login-input",
-									class: inputScaleCss,
-									placeholder: "Enter new login",
-								}),
-							]),
+							// // Input container
+							// Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
+							// 	Input({
+							// 		id: "login-input",
+							// 		class: inputScaleCss,
+							// 		placeholder: "Enter new login",
+							// 	}),
+							// ]),
 
-							// Confirm button container
-							Div({ id: "confirm-button-container", class: "hidden mt-3 w-full flex justify-center" }, [
-								Button({
-									id: "confirm-button",
-									class: `${playButtonDarkCss}`,
-									onClick: () => {
-										// Tu peux ajouter ici la logique pour envoyer le nouveau login
-										const inputElement = document.getElementById('login-input') as HTMLInputElement;
-										if (inputElement && inputElement.value.trim() !== '') {
-											console.log('New login:', inputElement.value); // ici envoyer via fetch par ex
-										}
-										toggleLoginForm();
-									}
-								}, ["Confirm"]),
-							]),
+							// // Confirm button container
+							// Div({ id: "confirm-button-container", class: "hidden mt-3 w-full flex justify-center" }, [
+							// 	Button({
+							// 		id: "confirm-button",
+							// 		class: `${playButtonDarkCss}`,
+							// 		onClick: () => {
+							// 			// Tu peux ajouter ici la logique pour envoyer le nouveau login
+							// 			const inputElement = document.getElementById('login-input') as HTMLInputElement;
+							// 			if (inputElement && inputElement.value.trim() !== '') {
+							// 				console.log('New login:', inputElement.value); // ici envoyer via fetch par ex
+							// 			}
+							// 			toggleLoginForm();
+							// 		}
+							// 	}, ["Confirm"]),
+							// ]),
 						]),
 					])
 				])

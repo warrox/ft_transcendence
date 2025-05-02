@@ -11,8 +11,6 @@ export interface UpdatePasswordBody {
 export const updatePassword = async (request: FastifyRequest<{ Body: UpdatePasswordBody }>, reply: FastifyReply) => {
 	const { email, newpassword } = request.body;
 	log(request.body);
-
-
 	try {
 
 		const hashedPass = await request.server.bcrypt.hash(newpassword);
