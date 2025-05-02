@@ -18,8 +18,12 @@ export function linkFn(linkId: string, href: string, text: string, css: string):
 }
 
 function changeLanguageTo(lang: string) {
-	i18n.changeLanguage(lang).then(() => rerender());
-}
+	i18n.changeLanguage(lang).then(() => {
+	  // Sauvegarder la langue dans localStorage
+	  localStorage.setItem('language', lang);
+	  rerender();
+	});
+  }
 
 export function Navbar(): PongNode<any> {
 	const isLogged = AuthStore.isLoggedIn;
