@@ -2,16 +2,16 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import db from "../../db";
 
 export interface UpdateMailBody {
-	userId: number;
+	email: string;
 	newMail: string;
 }
 
 export const updateMail = async (request: FastifyRequest<{ Body: UpdateMailBody }>, reply: FastifyReply) => {
-	const { userId, newMail } = request.body;
+	const { email, newMail } = request.body;
 
 	try {
 		const result = await new Promise((resolve, reject) => {
-			db.run('UPDATE users SET email = ? WHERE id = ?', [newMail, userId], function (err) {
+			db.run('UPDATE users SET email = ? WHERE email = ?', [newMail, email], function (err) {
 				if (err) return reject(err);
 				if (this.changes === 0) return reject(new Error("User not found"));
 				resolve("Email updated");
