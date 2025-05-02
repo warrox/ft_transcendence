@@ -38,7 +38,9 @@
     "never_play": "Pong like you’ve never played it before.",
     "lets_play": "Let's play",
     "dashboard": "Dashboard",
-    "settings": "Settings"
+    "settings": "Settings",
+    "settings_paragraph": "Here's an overview of all the available options to configure your profile and account.",
+    "settings_description": "In the settings, you can change your login, password, email, language preferences, and enable or disable two-factor authentication."
   },
   "login": {
     "login_page": "Login Page",

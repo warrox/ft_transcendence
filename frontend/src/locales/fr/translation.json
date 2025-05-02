@@ -38,7 +38,9 @@
 		"never_play": "Un Pong comme vous n'y avez jamais joué...",
 		"lets_play": "Jouer",
 		"dashboard": "Tableau de bord",
-		"settings": "Paramètres"
+		"settings": "Paramètres",
+		"settings_paragraph": "Voici un aperçu de toutes les options disponibles pour configurer votre profil et votre compte.",
+		"settings_description": "Dans les paramètres, vous pouvez modifier votre identifiant, mot de passe, adresse e-mail, préférences linguistiques et activer ou désactiver la vérification en deux étapes."
 	},
 	"login": {
 		"login_page": "Page de connexion",

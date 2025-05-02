@@ -138,24 +138,6 @@ export function Home(): PongNode<any> {
 									}, [user2FAStatus ? t("home.enabled") : t("home.disabled")]),
 								]),
 							]),
-							// // Bouton
-							// Div({ class: "flex justify-center w-full mt-1" }, [ // <- Rapproche le bouton
-							// 	Button({
-							// 		id: "test",
-							// 		class: `${playButtonDarkCss}`,
-							// 		onClick: toggleLoginForm,
-							// 	}, [t("home.change_login")]),
-							// ]),
-							// // Input
-							// Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
-							// 	Input({
-							// 		id: "login-input",
-							// 		class: inputScaleCss,
-							// 		placeholder: t("home.enter_login"),
-							// 	}),
-							// ]),
-
-							// Confirm button container
 							Div({ id: "confirm-button-container", class: "hidden mt-3 w-full flex justify-center" }, [
 								Button({
 									id: "confirm-button",
@@ -218,8 +200,16 @@ export function Home(): PongNode<any> {
 						Span({ class: neonTitleCss }, [t("home.settings")]),
 						Image({ id: "settings_img", src: "../assets/settings.png", alt: "settings_img", class: "imageCenter" })
 					]),
-					Div({ class: cardBackCss }, [
-						Span({}, ["Card 4 Back"])
+					Div({ class: `${cardBackCss} flex flex-col justify-center text-center p-6` }, [
+						Image({ id: "settings_img_back", src: "../assets/settings.png", alt: "settings_img_back", class: "imageCenter w-1/3 mx-auto mb-4" }),
+						Div({ class: "mb-4" }, [
+							Span({ class: "text-sm" }, [t("home.settings_description")]),
+						]),
+						Button({
+							id: "setting_button",
+							class: playButtonDarkCss,
+							onClick: () => navigateTo("/profile"),
+						}, [t("home.settings")])
 					])
 				])
 			])

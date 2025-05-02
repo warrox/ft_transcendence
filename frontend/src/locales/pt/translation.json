@@ -38,7 +38,9 @@
 		"never_play": "Pong como você nunca jogou antes.",
 		"lets_play": "Vamos jogar",
 		"dashboard": "Painel de controle",
-		"settings": "Configurações"
+		"settings": "Configurações",
+		"settings_paragraph": "Aqui está uma visão geral de todas as opções disponíveis para configurar seu perfil e conta.",
+		"settings_description": "Nas configurações, você pode alterar seu login, senha, e-mail, preferências de idioma e ativar ou desativar a autenticação de dois fatores."
 	},
 	"login": {
 		"login_page": "Página de login",
