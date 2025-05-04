@@ -1,9 +1,8 @@
 import { log } from "console";
 import { Div, Button, P, Span, Li } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
-import { rerender } from "../router/router"
+import { rerender, navigateTo } from "../router/router";
 
-var playerCount = 1;
 
 let gameStarted = false;
 
@@ -35,17 +34,19 @@ export function Game(): PongNode<any> {
 					Span({ class: "block font-orbitron md:text-2xl text-yellow-400" }, ["Go solo or battle your friends!:" ]),
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton",
-							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"},
+							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded transition duration-300"},
 							["Single Player"]),
 						Button({id: "mgplayerButton",
 							onClick: () => {
 								gameStarted = true;
 								rerender();
 							},
-							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"},
+							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded transition duration-300"},
 							["Multiple Player"]),
 						Button({id: "tournamentButton",
-							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded"},
+							onClick: () => {
+								navigateTo('/tournament');},
+							class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded transition duration-300"},
 							["Tournament Mode"]),
 					]),
 				]),
@@ -223,43 +224,3 @@ function loadMap(){
 }
 
 
-export function PlayerSelector(): PongNode<any> {
-
-	const decrement = () => {
-		if (playerCount > 1) {
-			playerCount--;
-			console.log(playerCount);
-			rerender();
-		}
-	};
-
-	const increment = () => {
-		if (playerCount < 50000) {
-			playerCount++;
-			console.log(playerCount);
-			rerender();
-		}
-	};
-
-	return Div({ class: "flex flex-col items-center gap-2 p-4" }, [
-		P({ class: "text-lg font-semibold" }, ["Number of players:"]),
-		
-		Div({ class: "flex items-center gap-4" }, [
-			Button({
-				id: "left-arrow",
-				class: "bg-gray-200 hover:bg-gray-300 text-xl px-4 py-2 rounded",
-				onClick: decrement
-			}, ["<"]),
-			
-			P({
-				class: "text-xl font-bold w-8 text-center"
-			}, [`${playerCount}`]),
-
-			Button({
-				id: "right-arrow",
-				class: "bg-gray-200 hover:bg-gray-300 text-xl px-4 py-2 rounded",
-				onClick: increment
-			}, [">"]),
-		])
-	]);
-}
