@@ -21,7 +21,8 @@ email TEXT UNIQUE NOT NULL,
 password TEXT NOT NULL,
 avatar_path TEXT,  
 win INTEGER DEFAULT 0,
-loose INTEGER DEFAULT 0
+loose INTEGER DEFAULT 0,
+lang TEXT DEFAULT 'fr' 
 )
 `);
 

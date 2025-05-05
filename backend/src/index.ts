@@ -64,6 +64,7 @@ async function registerRoutes(server: FastifyInstance): Promise<any> {
 	server.post('/updateAvatar', getRoutes.updateAvatar);
 	server.post('/updateWinLoose', getRoutes.updateWinLoose);
 	server.post('/postGameScore', getRoutes.postGameScore);
+	server.post('/postLang', getRoutes.postLang);	
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 
