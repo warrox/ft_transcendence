@@ -6,16 +6,24 @@ import bcrypt from 'fastify-bcrypt';
 import { getRoutes } from './GetRoutes.types';
 import * as dotenv from 'dotenv';
 import multipart from '@fastify/multipart';
+import fastifyWebsocket from '@fastify/websocket';
+
 //import type { Send } from 'nodemailer';
 //import module from '../node_modules/nodemailer';
 
 ' use strict'
 
+
 export const server = fastify();
 server.register(multipart);
-
-
-/*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.apps.googleusercontent.com*/
+server.register(fastifyWebsocket);
+server.get('/ws', { websocket : true},(connection, req ) => {
+	connection.socket.on('message' , (message : any) => {
+		console.log('Message recu :', message.toString());
+		connection.socket.send('Hello world from server');
+	} )
+} )
+/*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.aipps.googleusercontent.com*/
 dotenv.config();
 const JWS =  process.env.JWTSECRETKEY;
 
