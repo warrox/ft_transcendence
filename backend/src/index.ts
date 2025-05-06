@@ -11,18 +11,12 @@ import fastifyWebsocket from '@fastify/websocket';
 //import type { Send } from 'nodemailer';
 //import module from '../node_modules/nodemailer';
 
-' use strict'
+'use strict'
 
 
 export const server = fastify();
+
 server.register(multipart);
-server.register(fastifyWebsocket);
-server.get('/ws', { websocket : true},(connection, req ) => {
-	connection.socket.on('message' , (message : any) => {
-		console.log('Message recu :', message.toString());
-		connection.socket.send('Hello world from server');
-	} )
-} )
 /*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.aipps.googleusercontent.com*/
 dotenv.config();
 const JWS =  process.env.JWTSECRETKEY;
@@ -55,8 +49,25 @@ export interface GoogleTokenRequest {
 	token: string;
 }
 
-async function registerRoutes(server: FastifyInstance): Promise<any> {
 
+async function startupRoutine(server: FastifyInstance): Promise<any> {
+	await server.register(fastifyWebsocket);
+
+	server.get('/ws', { websocket: true }, (socket, _req) => {
+		// Client connect
+		console.log('Client connected');
+		console.log(socket);
+		// Client message
+		socket.on('message', (message: any) => {
+			console.log(`Client message: ${message}`);
+			socket.send(`Recu: ${message}`);
+		});
+		// Client disconnect
+		socket.on('close', () => {
+			console.log('Client disconnected');
+		});
+	});
+		
 	server.get('/me', getRoutes.me);
 	server.get('/users', getRoutes.users);
 	server.get('/checkJWT', getRoutes.checkJWT);
@@ -76,19 +87,18 @@ async function registerRoutes(server: FastifyInstance): Promise<any> {
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 
+
+	server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
+		if (err) {
+			console.error(err);
+			process.exit(1);
+		}
+		console.log(`Serveur démarré sur ${address}`);
+	});
 }
 
-registerRoutes(server);
+startupRoutine(server);
 
-
-// Démarrer le serveur
-server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-  console.log(`Serveur démarré sur ${address}`);
-});
 
 // Graceful shutdown
 ['SIGINT', 'SIGTERM'].forEach((signal) => {
