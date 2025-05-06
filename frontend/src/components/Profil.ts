@@ -12,6 +12,9 @@ let loginStatus: null | "OK" | "KO" = null;
 
 let registerState: "idle" | "success" | "error" = "idle";
 
+// import ok from '../../../backend/public/uploads/avatar-user-test@test.com-1746538235245-test.jpeg'
+
+
 function resetRegisterState(delay = 3000) {
 	setTimeout(() => {
 		registerState = "idle";
@@ -19,99 +22,276 @@ function resetRegisterState(delay = 3000) {
 	}, delay);
 }
 
+let avatarPath: string = "../assets/avatar.png";
+// let avatarPath = 'http://127.0.0.1/uploads/avatar-user-test@test.com-1746538352822-testpng.jpeg';
+// let avatarPath = '../assets/testpng.jpeg'
+
 
 export function Profil() : PongNode<any> {
 	const email = AuthStore.user?.email;
-	const emailInput = Input({ 
-		id: "emailInputProfil",
-		value: email,
-		required: true, 
-		onChange: () => {},
-		class: inputScaleCss,
+	// const password = AuthStore.user?.password;
+
+	const fileInput = Input({
+		id: "fileInput",
+		type: "file",
+		class: "hidden",
+		onChange: () => {
+			const input = document.getElementById("fileInput") as HTMLInputElement;
+			const file = input?.files?.[0];
+			if (file) {
+				handleEditAvatar(file);
+			}
+		}
 	});
+	
+	// const emailInput = Input({ 
+	// 	id: "emailInputProfil",
+	// 	value: email,
+	// 	required: true, 
+	// 	onChange: () => {},
+	// 	class: inputScaleCss,
+	// });
 	// const passwordInput = Input({
 	// 	id: "passwordInputProfil",
 	// 	type: "password",
 	// 	required: true,
 	// 	onChange: () => {},
 	// 	class: inputScaleCss,
-	// 	placeholder: 'changePass',
 	// });
+
+
+
+	function handleEditAvatar(file: File) {
+		const formData = new FormData();
+		formData.append("avatar", file);
+		formData.append("email", email!);
 	
-	// const newpassword = (document.querySelector("#passwordInputProfil") as HTMLInputElement)?.value;
-
-	const handleEditPass = () => {
-
-		const newMail = (document.querySelector("#emailInputProfil") as HTMLInputElement)?.value; 
-		
-		const body = { 
-			email,
-			newMail, 
-		};
-
-		console.log(email, newMail);
-
-		fetch("/api/updateMail", {
+		fetch("/api/updateAvatar", {
 			method: "POST",
-			body: JSON.stringify(body),
+			body: formData,
 			credentials: "include",
-			headers: {
-				"Content-Type": "application/json",
-			},
 		})
-		.then(async res => {
-			if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-			const text = await res.text();
-			console.log("Réponse brute du serveur :", text);
-
-			try {
-				const parseBody = JSON.parse(text);
-				console.log("Response parsed from JSON :", parseBody);
-				loginStatus = parseBody.success === true ? "OK" : "KO";
-				rerender();
-			} catch (e) {
-				console.log("Error parsing JSON: ", e);
-				loginStatus = "KO";
-				rerender();
+		.then(async (res) => {
+			if (res.ok) {
+				console.log("Upload success")
+			} else {
+				console.error("Upload failed");
 			}
 		})
-		.catch(e => {
-			console.log("Error while requesting:" , e);
+		.catch((e) => {
+			console.error("Fetch failed:", e);
+		})
+		.finally(() => {
+			rerender();
+		});
+	
+		fetch("/api/getAvatar", {
+			method: "GET",
+			credentials: "include",
+		})
+		.then(async (res) => {
+			if (res.ok) {
+				console.log("Ok");
+			} else {
+				console.error("not ok");
+				loginStatus = "KO";
+			}
+		})
+		.catch((e) => {
+			console.error("Fetch failed:", e);
 			loginStatus = "KO";
 		})
 		.finally(() => {
 			rerender();
 		});
-	};
+	}
+	
+	
 
 
 
-	return Div({ 
+
+	// const handleEditMail = () => {
+
+	// 	const newMail = (document.querySelector("#emailInputProfil") as HTMLInputElement)?.value; 
+		
+	// 	const body = { 
+	// 		email,
+	// 		newMail, 
+	// 	};
+
+	// 	console.log(email, newMail);
+
+	// 	fetch("/api/updateMail", {
+	// 		method: "POST",
+	// 		body: JSON.stringify(body),
+	// 		credentials: "include",
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 		},
+	// 	})
+	// 	.then(async res => {
+	// 		if (res.ok) {
+	// 			const text = await res.text();
+		
+	// 			try {
+	// 				const json = JSON.parse(text);
+	// 				AuthStore.user!.email = body.newMail;
+	// 				loginStatus = "OK";
+	// 			} catch (_) {
+	// 				AuthStore.user!.email = body.newMail;
+	// 				loginStatus = "OK";
+	// 			}
+	// 		} else {
+	// 			loginStatus = "KO";
+	// 		}
+	// 	})
+	// 	.catch(e => {
+	// 		console.error("Fetch failed:", e);
+	// 		loginStatus = "KO";
+	// 	})
+	// 	.finally(() => {
+	// 		rerender();
+	// 	});
+		
+	// };
+
+	// const handleEditPass = () => {
+ 
+	// 	const newpassword = (document.querySelector("#passwordInputProfil") as HTMLInputElement)?.value;
+
+	// 	const body = { 
+	// 		email,
+	// 		newpassword, 
+	// 	};
+
+	// 	console.log(email, newpassword);
+
+	// 	fetch("/api/updatePassword", {
+	// 		method: "POST",
+	// 		body: JSON.stringify(body),
+	// 		credentials: "include",
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 		},
+	// 	})
+	// 	.then(async res => {
+	// 		if (res.ok) {
+	// 			const text = await res.text();
+		
+	// 			try {
+	// 				const json = JSON.parse(text);
+	// 				AuthStore.user!.email = body.newpassword;
+	// 				loginStatus = "OK";
+	// 			} catch (_) {
+	// 				AuthStore.user!.email = body.newpassword;
+	// 				loginStatus = "OK";
+	// 			}
+	// 		} else {
+	// 			loginStatus = "KO";
+	// 		}
+	// 	})
+	// 	.catch(e => {
+	// 		console.error("Fetch failed:", e);
+	// 		loginStatus = "KO";
+	// 	})
+	// 	.finally(() => {
+	// 		rerender();
+	// 	});
+	// };
+
+
+	return Div({
 		class: "min-h-screen bg-yellow-400 flex flex-col items-center pt-20"
 	}, [
 		Div({
-			class: "w-50 h-50 rounded-full overflow-hidden bg-gray-200"
+			class: "relative w-48 h-48 rounded-full overflow-hidden group cursor-pointer"
 		}, [
 			Image({
 				id: "avatarImg",
-				class: "w-full h-full object-cover",
-				src: "../assets/avatar.png",
+				class: `
+					w-full h-full object-cover transition duration-300
+					group-hover:brightness-75
+				`,
+				src: avatarPath,
+			}),
+			Div({
+				class: `
+					absolute top-0 left-0 w-full h-full flex items-center justify-center
+					opacity-0 group-hover:opacity-100 transition duration-300
+					pointer-events-none
+				`
+			}, [
+				Image({
+					id: "testimg",
+					src: "../assets/pen.svg",
+					alt: "Edit",
+					class: "w-10 h-10"
+				})
+			]),
+			Button({
+				id: "testbuton",
+				class: "absolute inset-0",
+				onClick: () => {
+					const input = document.getElementById("fileInput") as HTMLInputElement;
+					input?.click();
+				}
 			})
 		]),
-		Div({ 
-			class: "mt-20 w-[400px] p-4 bg-yellow-500 rounded-xl shadow-lg space-y-4" 
-		}, [
-			Div({ class: "flex items-center justify-between" }, [
-				Image({ id: "login_img", src: "../assets/login.png", alt: "login_img", class: "imageCenter w-8" }),
-				emailInput,
-				Button({ id: "editorButton1", onClick: handleEditPass}, [
-					Image({
-						id : "editorImg",
-						class: "w-5 transition-transform duration-200 hover:scale-110",
-						src: "../assets/save.webp"
-					})
-				])
-			]),
-		])
-	])
+		fileInput
+	]);
+	
+
+
+	// return Div({ 
+	// 	class: "min-h-screen bg-yellow-400 flex flex-col items-center pt-20"
+	// }, [
+	// 	Div({
+	// 		class: "w-50 h-50 rounded-full overflow-hidden bg-gray-200"
+	// 	}, [
+	// 		Image({
+	// 			id: "avatarImg",
+	// 			class: "w-full h-full object-cover",
+	// 			src: "../assets/avatar.png",
+	// 		}),
+	// 		Button({
+	// 			id: "changeAvatar",
+	// 			class: "",
+	// 			onClick: () => {
+	// 				console.log("ok");
+	// 				const input = document.getElementById("fileInput") as HTMLInputElement;
+	// 				input?.click(); // Déclenche le file input masqué
+	// 			}
+	// 		}, [
+	// 			P({ class: "text-sm font-semibold" }, ["Modifier"])
+	// 		]),
+	// 		fileInput
+	// 	]),
+	// 	Div({ 
+	// 		class: "mt-20 w-[400px] p-4 bg-yellow-500 rounded-xl shadow-lg space-y-4" 
+	// 	}, [
+	// 		Div({ class: "flex items-center justify-between" }, [
+	// 			Image({ id: "login_img", src: "../assets/login.png", alt: "login_img", class: "imageCenter w-8" }),
+	// 			emailInput,
+	// 			Button({ id: "editorButton1", onClick: handleEditMail}, [
+	// 				Image({
+	// 					id : "editorImg",
+	// 					class: "w-5 transition-transform duration-200 hover:scale-110",
+	// 					src: "../assets/save.webp"
+	// 				})
+	// 			])
+	// 		])
+	// 		// Div({ class: "flex items-center justify-between" }, [
+	// 		// 	Image({ id: "login_img", src: "../assets/lock.svg", alt: "login_img", class: "imageCenter w-8" }),
+	// 		// 	passwordInput,
+	// 		// 	Button({ id: "editorButton1", onClick: handleEditPass}, [
+	// 		// 		Image({
+	// 		// 			id : "editorImg",
+	// 		// 			class: "w-5 transition-transform duration-200 hover:scale-110",
+	// 		// 			src: "../assets/save.webp"
+	// 		// 		})
+	// 		// 	])
+	// 		// ]),
+	// 	])
+	// ])
 }

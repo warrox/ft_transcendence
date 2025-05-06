@@ -33,7 +33,6 @@ server.register(cors, {
   credentials: true,
 });
 
-
 export interface User {
   id?: number;
   name: string;
@@ -64,6 +63,8 @@ async function registerRoutes(server: FastifyInstance): Promise<any> {
 	server.post('/updateAvatar', getRoutes.updateAvatar);
 	server.post('/updateWinLoose', getRoutes.updateWinLoose);
 	server.post('/postGameScore', getRoutes.postGameScore);
+	server.get('/getAvatar', getRoutes.getAvatar);
+
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 
