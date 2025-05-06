@@ -80,7 +80,7 @@ document.addEventListener("keyup", (event) => {
 	keysPressed[event.key] = false;
 });
 
-function movePad(){
+export function movePad(){
 
 	const leftpad = document.getElementById("leftpad") as HTMLDivElement;
 	const rightpad = document.getElementById("rightpad") as HTMLDivElement;
@@ -115,9 +115,8 @@ function movePad(){
 	requestAnimationFrame(movePad);
 }
 
-requestAnimationFrame(movePad);
 
-function playPong(){
+export function playPong(){
 	const ball = document.getElementById("ball") as HTMLDivElement;
     const gameArea = document.getElementById("game-area") as HTMLDivElement;
 	const leftpad = document.getElementById("leftpad") as HTMLDivElement;
@@ -224,3 +223,4 @@ function loadMap(){
 }
 
 
+// /me
