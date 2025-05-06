@@ -116,3 +116,9 @@ export const playButtonDarkCss = `
   transition
   duration-300
 `;
+
+// const forceTailwindToIncludeThese = [
+// 	"bg-yellow-400", "bg-emerald-500", "bg-neutral-400", "bg-cyan-500", "bg-rose-600", "bg-fuchsia-400", "bg-indigo-900",
+// 	"text-yellow-400", "text-emerald-500", "text-neutral-400", "text-cyan-500", "text-rose-600", "text-fuchsia-400", "text-indigo-900",
+// 	"hover:bg-yellow-500", "hover:bg-emerald-600", "hover:bg-neutral-500", "hover:bg-cyan-600", "hover:bg-rose-700", "hover:bg-fuchsia-500", "hover:bg-indigo-950",
+// ];
