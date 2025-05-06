@@ -7,6 +7,7 @@ import { Div } from '../lib/PongFactory';
 import { Login } from '../components/Login';
 import { Game } from '../components/Game';
 import { Landing } from '../components/Landing';
+import { Profil } from '../components/Profil'
 import { AuthStore } from '../stores/AuthStore';
 
 
@@ -21,7 +22,8 @@ const routes: Route[] = [
 	{ path: '/home', component: Home },
 	{ path: '/register', component: Register},
 	{ path: '/login', component: Login},
-	{ path: '/game', component: Game}
+	{ path: '/game', component: Game},
+	{ path: '/profil', component: Profil},
 ]
 
 // await AuthStore.fetchMe();
@@ -81,12 +83,12 @@ export function setCurrentPage(page: () => PongNode<any>) {
 
 export function navigateTo(path: string) {
 
-	console.log("path = ", path);
-	if (path === '/game' && !AuthStore.isLoggedIn) {
-		history.pushState(({}), "", '/login');
-		router();
-		return;
-	}
+	// console.log("path = ", path);
+	// if (path === '/game' && !AuthStore.isLoggedIn) {
+	// 	history.pushState(({}), "", '/login');
+	// 	router();
+	// 	return;
+	// }
 
 	history.pushState({}, "", path);
 	router();

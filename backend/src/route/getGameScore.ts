@@ -26,25 +26,14 @@ export const me = async (request: FastifyRequest, reply: FastifyReply) => {
 		const userId = claims!.id;
 
 		const row = await dbGet(
-			'SELECT id, is_2FA, name, surname, email, avatar_path, win , loose FROM users WHERE id = ?',
+			'SELECT id, user_id , result , guest_name , game_date FROM game WHERE id = ?',
 			[userId]
 		);
-		const gameInfo = await dbGet(
-			'SELECT id, result, guest_name, game_date FROM games WHERE id = ?',
-			[userId]
-		);
-
 
 		if (!row) {
 			return reply.status(404).send({ error: 'Utilisateur non trouvé' });
 		}
-		if(gameInfo){
-			const result = {
-				row ,
-				gameInfo
-			};
-			return reply.status(200).send(result);
-		}
+
 		return reply.status(200).send(row);
 
 	} catch (err) {

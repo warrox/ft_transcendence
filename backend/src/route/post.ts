@@ -22,7 +22,7 @@ export const register = async (request: FastifyRequest<{ Body: User }>, reply: F
 		});
 
 		if (userExists) {
-			return reply.status(409).send({ error: "Cet email est déjà utilisé" });
+			return reply.status(409).send({ error: "Cet email est déjà utilise" });
 		}
 
 		const hashedPass = await request.server.bcrypt.hash(password);

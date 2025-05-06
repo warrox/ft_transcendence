@@ -22,7 +22,6 @@ import {
 	cardBackCss,
 	neonTitleCss,
 	playButtonDarkCss,
-	inputScaleCss
 } from "../styles/cssFactory";
 
 import { navigateTo, rerender } from "../router/router";
