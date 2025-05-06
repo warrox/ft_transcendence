@@ -31,6 +31,13 @@ import {
 
 let registerState: "idle" | "success" | "error" = "idle";
 
+function resetRegisterState(delay: number) { 
+	setTimeout(() => {
+		registerState = "idle";
+		rerender();
+	}, delay);
+}
+
 export function Register(): PongNode<any> {
 
 	const nameInput = Input({ 
@@ -53,7 +60,7 @@ export function Register(): PongNode<any> {
 		onChange: () => {},
 		placeholder: "email",
 		class: inputMailCss,
-		pattern: "^[^ @]+@[^ @]+\.[^ @]+$"
+		pattern: "[^\\s@]+@[^\\s@]+\\.[^\\s@]+",
 	});
 	const passwordInput = Input({
 		id: "password", 
@@ -100,18 +107,22 @@ export function Register(): PongNode<any> {
 				rerender();
 				setTimeout(() => {
 					navigateTo('/login')
-				}, 1000);
+				}, 1500);
+				resetRegisterState(1500);
 			} catch (e) {
 				console.error("Erreur de parsing JSON :", e);
 				registerState = "error";
 				rerender();
+				resetRegisterState(3000);
 			}
 		})
 		.catch(e => {
 			console.error("Erreur :", e);
 			registerState = "error";
 			rerender();
+			resetRegisterState(3000);
 		});
+		
 	}
 
 	(window as any).onSignIn = (response: any) => {

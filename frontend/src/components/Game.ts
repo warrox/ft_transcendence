@@ -1,6 +1,8 @@
 import { Div, Button, P, Span, Li } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
-import { rerender } from "../router/router";
+
+import { rerender, navigateTo } from "../router/router";
+
 import { sleep } from 'sleep-ts';
 
 let gameStarted = 0;
@@ -89,14 +91,18 @@ export function Game(): PongNode<any> {
 							rerender();
 						},
 							class: `bg-${PongColor}  hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
+
 							["Single Player"]),
 						Button({id: "mgplayerButton", onClick: () => {
 								gameStarted = 1;
 								rerender();
 							},
+
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							["Multiple Player"]),
 						Button({id: "tournamentButton",
+							onClick: () => {
+								navigateTo('/tournament');},
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							["Tournament Mode"]),
 					]),
@@ -152,6 +158,7 @@ document.addEventListener("keyup", (event) => {
 	keysPressed[event.key] = false;
 });
 
+
 const padSpeeed = 10;
 
 function movePad(){
@@ -196,6 +203,7 @@ function playPong(){
 		if (gameStarted == 2)
 			AI_mov();
 	}
+  
 	const ball = document.getElementById("ball") as HTMLDivElement;
     const gameArea = document.getElementById("game-area") as HTMLDivElement;
 	const leftpad = document.getElementById("leftpad") as HTMLDivElement;
@@ -315,6 +323,7 @@ function loadMap(){
 }
 
 
+
 async function AI_mov(){
 	const ball = document.getElementById("ball") as HTMLDivElement;
 	const gameArea = document.getElementById("game-area") as HTMLDivElement;
@@ -356,4 +365,5 @@ async function AI_mov(){
 		await sleep(1000);
 	}
 }
+
 

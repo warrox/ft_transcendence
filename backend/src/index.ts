@@ -5,13 +5,14 @@ import cors from '@fastify/cors';
 import bcrypt from 'fastify-bcrypt';
 import { getRoutes } from './GetRoutes.types';
 import * as dotenv from 'dotenv';
-
+import multipart from '@fastify/multipart';
 //import type { Send } from 'nodemailer';
 //import module from '../node_modules/nodemailer';
 
 ' use strict'
 
 export const server = fastify();
+server.register(multipart);
 
 
 /*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.apps.googleusercontent.com*/
@@ -21,7 +22,7 @@ const JWS =  process.env.JWTSECRETKEY;
 server.register(bcrypt, { saltWorkFactor: 12 });
 server.register(fjwt, { secret: JWS!});
 server.register(fCookie, {
-  secret: 'some-secret-key',
+  secret: process.env.SECRETCOOKIE,
   hook: 'preHandler',
 });
 
@@ -58,6 +59,11 @@ async function registerRoutes(server: FastifyInstance): Promise<any> {
 	server.post('/post2Fa', getRoutes.post2Fa);
 	server.post('/verify2Fa', getRoutes.verify2Fa);
 	server.get('/logout', getRoutes.logout);
+	server.post('/updatePassword', getRoutes.updatePassword);
+	server.post('/updateMail', getRoutes.updateMail);
+	server.post('/updateAvatar', getRoutes.updateAvatar);
+	server.post('/updateWinLoose', getRoutes.updateWinLoose);
+	server.post('/postGameScore', getRoutes.postGameScore);
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 

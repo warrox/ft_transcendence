@@ -36,6 +36,15 @@ import "../styles/index.css";
 
 let loginStatus: null | "OK" | "KO" = null;
 
+let registerState: "idle" | "success" | "error" = "idle";
+
+function resetRegisterState(delay = 3000) {
+	setTimeout(() => {
+		registerState = "idle";
+		// rerender();
+	}, delay);
+}
+
 export function Login(): PongNode<any> {
 	const emailInput = Input({ 
 		id: "emailInput", 
@@ -137,31 +146,5 @@ export function Login(): PongNode<any> {
 					: [])
 			])
 		]),
-		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
-			Div({ class: loginCardCss }, [
-				Div({ class: headerCss }, [
-					P({ class: neonTextCss }, ["Login Page"]),
-				]),
-				Div({ class: inputWrapperCss }, [
-					emailInput,
-					passwordInput,
-				]),
-				Button({
-					id: "button1",
-					onClick: handleLogin,
-					class: fancyButtonCss,
-				}, [
-					Div({ class: fancyLeftBorderCss }),
-					P({ class: disappearingTextCss }, ["Click here"]),
-					Span({ class: appearingTextCss }, ["Login"]),
-					Div({ class: fancyRightBorderCss }),
-				]),
-				...(loginStatus !== null
-					? [Div({ class: statusWrapperCss }, [
-						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`])
-					])]
-					: [])
-			])
-		])
 	]);
 }
