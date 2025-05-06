@@ -16,9 +16,17 @@ let ErrNbPlayers = false;
 
 let playerNames: string[] = [];
 
-let tournamentround: number = 1;
 
 let roundWinners: string[] = [];
+
+let is_8_players = false;
+
+let ingame = true;
+
+let player1: string;
+let player2: string;
+
+let is_finale = false;
 
 let CurrentMatchIndex: number = 0;
 
@@ -131,22 +139,67 @@ export function Tournament(): PongNode<any>{
 		}
 		else
 		{
-			setTimeout(() => {
-				movePad();
-				playPong();}, 0);
-			return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
-				Div({ class: "text-yellow-400 font-orbitron text-4xl mb-4" }, [
-					Span({ id: "score-left", class: "mx-8" }, ["0"]),
-					Span({}, [" : "]),
-					Span({ id: "score-right", class: "mx-8" }, ["0"]),
-				]),
-				Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
-					Div({ id: "midline", class: "absolute top-0 left-1/2 w-[4px] h-full bg-yellow-400 opacity-40 transform -translate-x-1/2" }),
-					Div({ id: "ball", class: "absolute w-[20px] h-[20px] bg-yellow-400 rounded-full" }),
-					Div({ id: "leftpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 left-[5px] top-[360px]" }),
-					Div({ id: "rightpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 left-[1580px] top-[360px]" }),
-				]),
-			]);
+			if (playerNames.length == 8) is_8_players = true;
+			if ((CurrentMatchIndex < 3 && !is_8_players) || (CurrentMatchIndex < 5 && is_8_players))
+			{
+				player1 = playerNames[(CurrentMatchIndex - 1) * 2];
+				player2 = playerNames[((CurrentMatchIndex - 1) * 2) + 1];
+			}
+			else if (CurrentMatchIndex < 5 && !is_8_players)
+			{
+				is_finale = true;
+				player1 = roundWinners[0];
+				player2 = roundWinners[1];
+			}
+			else if (CurrentMatchIndex < 7)
+			{
+				player1 = roundWinners[(CurrentMatchIndex - 5) * 2];
+				player2 = roundWinners[((CurrentMatchIndex - 5) * 2) + 1];
+			}
+			if (ingame)
+			{
+				setTimeout(() => {
+					movePad();
+					playPong();}, 0);
+				return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
+					Div({ class: "text-yellow-400 font-orbitron text-4xl mb-4" }, [
+						Span({id: "player 1", class: "mx -8"}, [`${player1}`]),
+						Span({ id: "score-left", class: "mx-8" }, ["0"]),
+						Span({}, ["  : "]),
+						Span({ id: "score-right", class: "mx-8" }, ["0"]),
+						Span({class: "mx -8"}, [`${player2}`]),
+					]),
+					Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
+						Div({ id: "midline", class: "absolute top-0 left-1/2 w-[4px] h-full bg-yellow-400 opacity-40 transform -translate-x-1/2" }),
+						Div({ id: "ball", class: "absolute w-[20px] h-[20px] bg-yellow-400 rounded-full" }),
+						Div({ id: "leftpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 left-[5px] top-[360px]" }),
+						Div({ id: "rightpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 left-[1580px] top-[360px]" }),
+					]),
+				]);
+			}
+			else
+			{
+				return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
+					Div({ class: "text-yellow-400 font-orbitron text-4xl mb-4" }, [
+						Span({id: "player 1", class: "mx -8"}, [`${player1}`]),
+						Span({ id: "score-left", class: "mx-8" }, ["0"]),
+						Span({}, ["  : "]),
+						Span({ id: "score-right", class: "mx-8" }, ["0"]),
+						Span({class: "mx -8"}, [`${player2}`]),
+					]),
+					Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
+						Span({class: `absolute left-[550px] top-[250px] block font-orbitron md:text-7xl text-yellow-400 `}, [`WINNER: ${roundWinners[CurrentMatchIndex]}`]),
+						Button({ id: "Next game", onClick: () => {
+							ingame = true;
+							CurrentMatchIndex++;
+							rerender();
+						},
+						class: `absolute left-[730px] top-[450px] bg-$yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded`}, [`Next game: ${player1} vs ${player2}`]),
+						Div({ id: "leftpad", class:`absolute w-[15px] h-[90px] bg-$yellow-400 left-[5px] top-[360px]` }),
+						Div({ id: "rightpad", class:`absolute w-[15px] h-[90px] bg-$yellow-400 left-[1580px] top-[360px]` }),
+					]),
+				]);
+			}
 		}
 	}
 }
@@ -256,7 +309,16 @@ export function playPong(){
 	const leftscorepan = document.getElementById("score-left");
 	const rightscorepan = document.getElementById("score-right");
 
+
 	function moveBall(){
+		if (leftscorepan && rightscorepan && (leftscorepan.textContent == "5" || rightscorepan.textContent == "5"))
+		{
+			if (leftscorepan.textContent == "5") roundWinners[CurrentMatchIndex] = playerNames[CurrentMatchIndex - 1];
+			else roundWinners[CurrentMatchIndex] = playerNames[CurrentMatchIndex];
+			ingame = false;
+			rerender();
+			return ;
+		}
 		if (x <= 0 || x + ball.clientWidth >= gameArea.clientWidth)
 		{
 			
