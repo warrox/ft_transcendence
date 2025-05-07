@@ -49,11 +49,27 @@ export interface GoogleTokenRequest {
 	token: string;
 }
 
+type JWTClaims = {
+	id: string,
+	email:string,
+}
 
+
+export const onlineUsers = new Map<number, WebSocket>();
 async function startupRoutine(server: FastifyInstance): Promise<any> {
 	await server.register(fastifyWebsocket);
 
 	server.get('/ws', { websocket: true }, (socket, _req) => {
+		const token = socket.cookies["access_token"];
+		if(!token) return;
+
+		const claims = _req.server.jwt.decode<JWTClaims>(token);
+		const userId = +claims!.id;
+
+		onlineUsers.set(userId, socket.socket);
+		socket.on('close', () => {
+			onlineUsers.delete(userId);
+		});
 		// Client connect
 		console.log('Client connected');
 		console.log(socket);
@@ -84,6 +100,7 @@ async function startupRoutine(server: FastifyInstance): Promise<any> {
 	server.post('/updateWinLoose', getRoutes.updateWinLoose);
 	server.post('/postGameScore', getRoutes.postGameScore);
 	server.post('/postLang', getRoutes.postLang);	
+	server.get('/getFriends', getRoutes.getFriends);	
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 

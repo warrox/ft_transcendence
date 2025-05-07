@@ -16,6 +16,8 @@ import { updatePassword , UpdatePasswordBody} from "./route/updatePassword"
 import { UpdateWinLooseBody, updateWinLoose} from "./route/updateWinLoose"
 import { PostGameScoreBody , postGameScore} from "./route/postGameScore"
 import {  langBody , postLang} from "./route/postLang"
+import {  getFriends} from "./route/getFriends"
+
 export interface GetRoutes {
 	me (request: FastifyRequest, reply: FastifyReply): any
 	users (request: FastifyRequest, reply: FastifyReply): any
@@ -33,6 +35,7 @@ export interface GetRoutes {
 	updateWinLoose( request: FastifyRequest<{ Body : UpdateWinLooseBody }> , reply: FastifyReply) : any
 	postGameScore( request: FastifyRequest<{ Body : PostGameScoreBody}> , reply: FastifyReply) : any
 	postLang( request: FastifyRequest<{ Body : langBody}> , reply: FastifyReply) : any
+	getFriends( request: FastifyRequest , reply: FastifyReply) : any
 
 }
 
@@ -52,5 +55,6 @@ export const getRoutes: GetRoutes = {
 	updatePassword: updatePassword,
 	updateWinLoose: updateWinLoose,
 	postGameScore: postGameScore,
-	postLang: postLang
+	postLang: postLang,
+	getFriends : getFriends
 };
