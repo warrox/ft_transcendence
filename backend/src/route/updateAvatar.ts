@@ -59,13 +59,14 @@ export const updateAvatar = async (request: FastifyRequest, reply: FastifyReply)
 	const stream = fs.createWriteStream(uploadPath);
 	await uploadedFile.file.pipe(stream);
 
-	const relativePath = `public/uploads/${filename}`;
+	const relativePath = `http://localhost:3000/uploads/${filename}`;
 
 	try {
 		await new Promise((resolve, reject) => {
 			db.run('UPDATE users SET avatar_path = ? WHERE email = ?', [relativePath, email], function (err) {
 				if (err) return reject(err);
 				if (this.changes === 0) return reject(new Error("User not found"));
+				
 				resolve("Avatar updated");
 			});
 		});

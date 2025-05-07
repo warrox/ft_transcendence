@@ -26,7 +26,7 @@ export const me = async (request: FastifyRequest, reply: FastifyReply) => {
 		const userId = claims!.id;
 
 		const row = await dbGet(
-			'SELECT id, is_2FA, name, surname, email FROM users WHERE id = ?',
+			'SELECT id, is_2FA, name, surname, email, avatar_path FROM users WHERE id = ?',
 			[userId]
 		);
 

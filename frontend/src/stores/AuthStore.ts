@@ -5,6 +5,7 @@ type User = {
 	surname: string;
 	email: string;
 	password: string;
+	avatar_path: string;
 };
 
 export const AuthStore = {

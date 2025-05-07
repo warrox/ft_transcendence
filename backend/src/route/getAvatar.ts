@@ -25,7 +25,9 @@ export const getAvatar = async (request: FastifyRequest, reply: FastifyReply) =>
 				if (err) return reject(err);
 				if (!row) return reject(new Error("Utilisateur non trouvé"));
 				console.log(row);
-				const full_path = path.join(__dirname, row.avatar_path);
+				const full_path = row.avatar_path;
+				console.log(full_path);
+				
 				if (!fs.existsSync(full_path)) {
 					return reply.code(404).send('Image not found')
 				}

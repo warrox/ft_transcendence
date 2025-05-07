@@ -8,6 +8,8 @@ import * as dotenv from 'dotenv';
 import multipart from '@fastify/multipart';
 //import type { Send } from 'nodemailer';
 //import module from '../node_modules/nodemailer';
+import path from 'path';
+import fastifyStatic from '@fastify/static';
 
 ' use strict'
 
@@ -32,6 +34,12 @@ server.register(cors, {
   allowedHeaders: ['*'],
   credentials: true,
 });
+
+server.register(fastifyStatic, {
+	root: path.join(__dirname, '..', 'public', 'uploads'),
+	prefix: '/uploads/', // correspond à l'URL publique
+});
+
 
 export interface User {
   id?: number;
