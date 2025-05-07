@@ -334,6 +334,8 @@ export interface InputProps {
 	placeholder?: string,
 	onChange?: () => void,
 	pattern?: string,
+	value?: string,
+	accept?: string,
 }
 
 export class InputNode extends PongNode<InputProps> {
@@ -371,6 +373,8 @@ export class InputNode extends PongNode<InputProps> {
 			maxlength,
 			placeholder,
 			pattern,
+			value,
+			accept,
 		} = this.props || {};
 
 		return `<input
@@ -382,6 +386,8 @@ export class InputNode extends PongNode<InputProps> {
 			${maxlength ? `maxlength="${maxlength}"` : ""}
 			${placeholder ? `placeholder="${placeholder}"` : ""}
 			${pattern ? `pattern="${pattern}"` : ""}
+			${value ? `value="${value}"` : ""}
+			${accept ? `accept="${accept}"` : ""}
 		/>`;
 	}
 }

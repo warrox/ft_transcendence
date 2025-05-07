@@ -10,6 +10,8 @@ import fastifyWebsocket from '@fastify/websocket';
 
 //import type { Send } from 'nodemailer';
 //import module from '../node_modules/nodemailer';
+import path from 'path';
+import fastifyStatic from '@fastify/static';
 
 'use strict'
 
@@ -33,6 +35,11 @@ server.register(cors, {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['*'],
   credentials: true,
+});
+
+server.register(fastifyStatic, {
+	root: path.join(__dirname, '..', 'public', 'uploads'),
+	prefix: '/uploads/', // correspond à l'URL publique
 });
 
 
@@ -101,6 +108,8 @@ async function startupRoutine(server: FastifyInstance): Promise<any> {
 	server.post('/postGameScore', getRoutes.postGameScore);
 	server.post('/postLang', getRoutes.postLang);	
 	server.get('/getFriends', getRoutes.getFriends);	
+	server.get('/getAvatar', getRoutes.getAvatar);
+
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 

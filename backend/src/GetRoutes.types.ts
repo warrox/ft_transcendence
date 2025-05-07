@@ -17,6 +17,8 @@ import { UpdateWinLooseBody, updateWinLoose} from "./route/updateWinLoose"
 import { PostGameScoreBody , postGameScore} from "./route/postGameScore"
 import {  langBody , postLang} from "./route/postLang"
 import {  getFriends} from "./route/getFriends"
+import { getAvatar} from "./route/getAvatar"
+
 
 export interface GetRoutes {
 	me (request: FastifyRequest, reply: FastifyReply): any
@@ -36,6 +38,8 @@ export interface GetRoutes {
 	postGameScore( request: FastifyRequest<{ Body : PostGameScoreBody}> , reply: FastifyReply) : any
 	postLang( request: FastifyRequest<{ Body : langBody}> , reply: FastifyReply) : any
 	getFriends( request: FastifyRequest , reply: FastifyReply) : any
+	getAvatar( request: FastifyRequest , reply: FastifyReply) : any
+
 
 }
 
@@ -56,5 +60,6 @@ export const getRoutes: GetRoutes = {
 	updateWinLoose: updateWinLoose,
 	postGameScore: postGameScore,
 	postLang: postLang,
-	getFriends : getFriends
+	getFriends : getFriends,
+	getAvatar: getAvatar
 };

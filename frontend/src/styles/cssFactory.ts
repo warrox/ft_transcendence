@@ -3,6 +3,8 @@ export const inputCss: string = "@apply w-[250px] text-base border shadow-[1px_1
 
 export const inputMailCss: string = "@apply w-[250px] text-base border shadow-[1px_1px_3px_rgba(0,0,0,0.1)] p-2.5 rounded-[5px] border-solid border-[#ccc] placeholder-gray-300 text-white valid:bg-green-yellow invalid:bg-red-300";
 
+export const inputMailProfilCss: string = "@apply w-[250px] text-base border shadow-[1px_1px_3px_rgba(0,0,0,0.1)] p-2.5 rounded-[5px] border-solid border-[#ccc] placeholder-gray-300 valid:bg-green-yellow invalid:bg-red-300";
+
 // NAVBAR CSS
 export const linkCss: string = "font-orbitron text-white transition duration-300 ease-in-out self-center text-2xl font-semibold whitespace-nowrap dark:text-white hover:text-yellow-500 relative inline-block after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-yellow-500 after:bottom-0 after:left-0 after:transform after:scale-x-0 after:origin-right after:transition-all after:duration-400 hover:after:scale-x-100";
 

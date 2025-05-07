@@ -1,59 +1,53 @@
-import { Div, P, Button, Input, Span, Li, UList } from "../lib/PongFactory";
+import { Div, P, Button, Input, Image } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import { navigateTo } from "../router/router";
 import { AuthStore } from "../stores/AuthStore";
 import {
-	backgroundCss,
-	fancyButtonCss,
-	fancyLeftBorderCss,
-	fancyRightBorderCss,
-	disappearingTextCss,
-	appearingTextCss,
-	WrapperCss,
-	loginCardCss,
-	headerCss,
-	neonTextCss,
-	inputWrapperCss,
-	statusWrapperCss,
-	statusKoCss,
-	statusOkCss,
 	inputScaleCss,
-	areaCss,
-	circlesCss,
-	circle1Css,
-	circle2Css,
-	circle3Css,
-	circle4Css,
-	circle5Css,
-	circle6Css,
-	circle7Css,
-	circle8Css,
-	circle9Css,
-	circle10Css
+	inputMailProfilCss
 } from "../styles/cssFactory";
-
 import "../styles/index.css";
+let Status: null | "OK" | "KO" = null;
 
-let loginStatus: null | "OK" | "KO" = null;
 
-let registerState: "idle" | "success" | "error" = "idle";
+// let avatarPath: string = "../assets/avatar.png";
+// let avatarPath = 'http://127.0.0.1/uploads/avatar-user-test@test.com-1746538352822-testpng.jpeg';
+// let avatarPath = '../assets/testpng.jpeg'
 
-function resetRegisterState(delay = 3000) {
-	setTimeout(() => {
-		registerState = "idle";
-		// rerender();
-	}, delay);
+// let avatarPath = AuthStore.user?.avatar_path
+// 	? "http://localhost:3000" + AuthStore.user.avatar_path
+// 	: "../assets/avatar.png";
+
+function getAvatarPath() {
+	return AuthStore.user?.avatar_path
+		? AuthStore.user.avatar_path // déjà complet avec http://...
+		: "../assets/avatar.png";
 }
 
-export function Profil(): PongNode<any> {
-	
+
+export function Profil() : PongNode<any> {
+	const email = AuthStore.user?.email;
+	// const password = AuthStore.user?.password;
+
+	const fileInput = Input({
+		id: "fileInput",
+		type: "file",
+		class: "hidden",
+		onChange: () => {
+			const input = document.getElementById("fileInput") as HTMLInputElement;
+			const file = input?.files?.[0];
+			if (file) {
+				handleEditAvatar(file);
+			}
+		}
+	});
 	const emailInput = Input({ 
-		id: "emailInputProfil", 
+		id: "emailInputProfil",
+		value: email,
 		required: true, 
 		onChange: () => {},
-		class: inputScaleCss,
-		placeholder: 'changeEmail'
+		class: inputMailProfilCss,
+		pattern: "[^\\s@]+@[^\\s@]+\\.[^\\s@]+",
 	});
 	const passwordInput = Input({
 		id: "passwordInputProfil",
@@ -61,21 +55,95 @@ export function Profil(): PongNode<any> {
 		required: true,
 		onChange: () => {},
 		class: inputScaleCss,
-		placeholder: 'changePass',
+		placeholder: "***************"
 	});
-	
-	
-	const handleEditPass = () => {
-		const email = AuthStore.user?.email;
-		const newpassword = (document.querySelector("#passwordInputProfil") as HTMLInputElement)?.value;
 
-		// console.log("oldmail = ", oldMail);
-		// console.log("newpass", password);
+
+	function handleEditAvatar(file: File) {
+		console.log("ok");
+		const formData = new FormData();
+		formData.append("avatar", file);
+		formData.append("email", email!);
+	
+		fetch("/api/updateAvatar", {
+			method: "POST",
+			body: formData,
+			credentials: "include",
+		})
+		.then(async (res) => {
+			if (res.ok) {
+				const { avatarPath: avatarPathFromBackend } = await res.json();
+				AuthStore.user!.avatar_path = avatarPathFromBackend;
+				console.log("Upload success")
+			} else {
+				console.error("Upload failed");
+			}
+		})
+		.catch((e) => {
+			console.error("Fetch failed:", e);
+		})
+		.finally(() => {
+			rerender();
+		});
+	
+	}
+	
+	
+	const handleEditMail = () => {
+
+		const newMail = (document.querySelector("#emailInputProfil") as HTMLInputElement)?.value; 
 		
 		const body = { 
 			email,
-			newpassword 
+			newMail, 
 		};
+
+		console.log(email, newMail);
+
+		fetch("/api/updateMail", {
+			method: "POST",
+			body: JSON.stringify(body),
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+		.then(async res => {
+			if (res.ok) {
+				// const text = await res.text();
+		
+				try {
+					// const json = JSON.parse(text);
+					AuthStore.user!.email = body.newMail;
+					Status = "OK";
+				} catch (_) {
+					AuthStore.user!.email = body.newMail;
+					Status = "OK";
+				}
+			} else {
+				Status = "KO";
+			}
+		})
+		.catch(e => {
+			console.error("Fetch failed:", e);
+			Status = "KO";
+		})
+		.finally(() => {
+			rerender();
+		});
+		
+	};
+
+	const handleEditPass = () => {
+ 
+		const newpassword = (document.querySelector("#passwordInputProfil") as HTMLInputElement)?.value;
+
+		const body = { 
+			email,
+			newpassword, 
+		};
+
+		console.log(email, newpassword);
 
 		fetch("/api/updatePassword", {
 			method: "POST",
@@ -86,58 +154,94 @@ export function Profil(): PongNode<any> {
 			},
 		})
 		.then(async res => {
-			if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-			const text = await res.text();
-			console.log("Réponse brute du serveur :", text);
-
-			try {
-				const parseBody = JSON.parse(text);
-				console.log("Response parsed from JSON :", parseBody);
-				loginStatus = parseBody.success === true ? "OK" : "KO";
-				// setTimeout(() => {
-				// 	navigateTo('/home');
-				// }, 1500);
-			} catch (e) {
-				console.log("Error parsing JSON: ", e);
-				loginStatus = "KO";
-				rerender();
+			if (res.ok) {
+				// const text = await res.text();
+		
+				try {
+					// const json = JSON.parse(text);
+					AuthStore.user!.email = body.newpassword;
+					Status = "OK";
+				} catch (_) {
+					AuthStore.user!.email = body.newpassword;
+					Status = "OK";
+				}
+			} else {
+				Status = "KO";
 			}
 		})
 		.catch(e => {
-			console.log("Error while requesting:" , e);
-			loginStatus = "KO";
+			console.error("Fetch failed:", e);
+			Status = "KO";
 		})
 		.finally(() => {
 			rerender();
 		});
 	};
 
-	return Div({}, [
-		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
-			Div({ class: loginCardCss }, [
-				Div({ class: headerCss }, [
-					P({ class: neonTextCss }, ["Edit Page"]),
-				]),
-				Div({ class: inputWrapperCss }, [
-					emailInput,
-					passwordInput,
-				]),
-				Button({
-					id: "button1",
-					onClick: handleEditPass,
-					class: fancyButtonCss,
-				}, [
-					Div({ class: fancyLeftBorderCss }),
-					P({ class: disappearingTextCss }, ["Click here"]),
-					Span({ class: appearingTextCss }, ["Edit"]),
-					Div({ class: fancyRightBorderCss }),
-				]),
-				...(loginStatus !== null
-					? [Div({ class: statusWrapperCss }, [
-						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`])
-					])]
-					: [])
-			])
+
+	return Div({
+		class: "min-h-screen bg-yellow-400 flex flex-col items-center pt-20"
+	}, [
+		Div({
+			class: "relative w-48 h-48 rounded-full overflow-hidden group cursor-pointer"
+		}, [
+			Image({
+				id: "avatarImg",
+				class: `
+					w-full h-full object-cover transition duration-300
+					group-hover:brightness-75
+				`,
+				src: getAvatarPath(),
+			}),
+			Div({
+				class: `
+					absolute top-0 left-0 w-full h-full flex items-center justify-center
+					opacity-0 group-hover:opacity-100 transition duration-300
+					pointer-events-none
+				`
+			}, [
+				Image({
+					id: "testimg",
+					src: "../assets/pen.svg",
+					alt: "Edit",
+					class: "w-10 h-10"
+				})
+			]),
+			Button({
+				id: "testbuton",
+				class: "absolute inset-0",
+				onClick: () => {
+					const input = document.getElementById("fileInput") as HTMLInputElement;
+					input?.click();
+				}
+			})
 		]),
+		fileInput,
+		Div({ 
+				class: "mt-20 w-[400px] p-4 bg-yellow-500 rounded-xl shadow-lg space-y-4" 
+			}, [
+				Div({ class: "flex items-center justify-between" }, [
+					Image({ id: "login_img", src: "../assets/login.png", alt: "login_img", class: "imageCenter w-8" }),
+					emailInput,
+					Button({ id: "editorButton1",  onClick: handleEditMail}, [
+						Image({
+							id : "editorImg",
+							class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto",
+							src: "../assets/save.webp"
+						})
+					])
+				]),
+				Div({ class: "flex items-center justify-between" }, [
+					Image({ id: "login_img", src: "../assets/lock.svg", alt: "login_img", class: "imageCenter w-8" }),
+					passwordInput,
+					Button({ id: "editorButton1", onClick: handleEditPass}, [
+						Image({
+							id : "editorImg",
+							class: "w-5 transition-transform duration-200 hover:scale-110",
+							src: "../assets/save.webp"
+						})
+					])
+				]),
+			])
 	]);
 }
