@@ -21,7 +21,7 @@ let roundWinners: string[] = [];
 
 let is_8_players = false;
 
-let ingame = true;
+let ingame:boolean = true;
 
 let player1: string;
 let player2: string;
@@ -145,17 +145,25 @@ export function Tournament(): PongNode<any>{
 				player1 = playerNames[(CurrentMatchIndex - 1) * 2];
 				player2 = playerNames[((CurrentMatchIndex - 1) * 2) + 1];
 			}
-			else if (CurrentMatchIndex < 5 && !is_8_players)
+			else if (CurrentMatchIndex == 3 && !is_8_players)
 			{
+				player1 = roundWinners[1];
+				player2 = roundWinners[2];
+			}
+			else if (CurrentMatchIndex == 4 && !is_8_players)
 				is_finale = true;
-				player1 = roundWinners[0];
-				player2 = roundWinners[1];
-			}
-			else if (CurrentMatchIndex < 7)
+			else if (CurrentMatchIndex < 7 && is_8_players)
 			{
-				player1 = roundWinners[(CurrentMatchIndex - 5) * 2];
-				player2 = roundWinners[((CurrentMatchIndex - 5) * 2) + 1];
+				player1 = roundWinners[(CurrentMatchIndex - 4) * 2 - 1];
+				player2 = roundWinners[((CurrentMatchIndex - 4) * 2)];
 			}
+			else if (CurrentMatchIndex == 7)
+			{
+				player1 = roundWinners[5];
+				player2 = roundWinners[6];
+			}
+			else if (CurrentMatchIndex == 8)
+				is_finale = true;
 			if (ingame)
 			{
 				setTimeout(() => {
@@ -188,15 +196,30 @@ export function Tournament(): PongNode<any>{
 						Span({class: "mx -8"}, [`${player2}`]),
 					]),
 					Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
-						Span({class: `absolute left-[550px] top-[250px] block font-orbitron md:text-7xl text-yellow-400 `}, [`WINNER: ${roundWinners[CurrentMatchIndex]}`]),
-						Button({ id: "Next game", onClick: () => {
-							ingame = true;
-							CurrentMatchIndex++;
-							rerender();
-						},
-						class: `absolute left-[730px] top-[450px] bg-$yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded`}, [`Next game: ${player1} vs ${player2}`]),
-						Div({ id: "leftpad", class:`absolute w-[15px] h-[90px] bg-$yellow-400 left-[5px] top-[360px]` }),
-						Div({ id: "rightpad", class:`absolute w-[15px] h-[90px] bg-$yellow-400 left-[1580px] top-[360px]` }),
+						Span({
+							class: "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 block font-orbitron md:text-7xl text-yellow-400 text-center"
+						}, [is_finale ? `🏆 Tournament Winner: ${roundWinners[CurrentMatchIndex - 1]}` : `Winner: ${roundWinners[CurrentMatchIndex - 1]}`]),
+					
+						is_finale
+							? Button({
+								id: "back-to-menu",
+								onClick: () => { is_finale = false;
+									Registerplayers = false;
+									showMatchOrder = false;
+									CurrentMatchIndex = 0;
+									navigateTo('/game'); },
+								class: "absolute top-[550px] left-1/2 transform -translate-x-1/2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded"
+							}, ["← Back to Game Menu"])
+							: Button({
+								id: "next-game-btn",
+								onClick: () => {
+									ingame = true;
+									rerender();
+								},
+								class: "absolute top-[550px] left-1/2 transform -translate-x-1/2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded"
+							}, [`Next game: ${player1} vs ${player2}`]),
+						Div({ id: "leftpad2", class:`absolute w-[15px] h-[90px] bg-$yellow-400 left-[5px] top-[360px]` }),
+						Div({ id: "rightpad2", class:`absolute w-[15px] h-[90px] bg-$yellow-400 left-[1580px] top-[360px]` }),
 					]),
 				]);
 			}
@@ -313,9 +336,10 @@ export function playPong(){
 	function moveBall(){
 		if (leftscorepan && rightscorepan && (leftscorepan.textContent == "5" || rightscorepan.textContent == "5"))
 		{
-			if (leftscorepan.textContent == "5") roundWinners[CurrentMatchIndex] = playerNames[CurrentMatchIndex - 1];
-			else roundWinners[CurrentMatchIndex] = playerNames[CurrentMatchIndex];
+			if (leftscorepan.textContent == "5") roundWinners[CurrentMatchIndex] = player1;
+			else roundWinners[CurrentMatchIndex] = player2;
 			ingame = false;
+			CurrentMatchIndex++;
 			rerender();
 			return ;
 		}
