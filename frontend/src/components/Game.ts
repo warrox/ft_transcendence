@@ -1,11 +1,16 @@
 import { Div, Button, P, Span, Li } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
-
+import { MeData } from "./Home";
 import { rerender, navigateTo } from "../router/router";
 
 import { sleep } from 'sleep-ts';
+import { userInfo } from "os";
 
 let gameStarted = 0;
+
+let player1:string | null = null;
+
+let player2: string;
 
 let mapIndex = 0;
 
@@ -20,12 +25,31 @@ const ballState = {
 	dy: 0,
 };
 
+
 export function Game(): PongNode<any> {
 	setTimeout(() => {
 		loadMap();
 		movePad();
 		playPong();
 	}, 0);
+
+	const fetchUsername = () => {
+		if (player1 != null) return;
+
+		fetch("/api/me", {
+			credentials: "include",
+		})
+			.then((res) => {
+				if (!res.ok) throw new Error("/api/me: Failed");
+				return res.json();
+			})
+			.then((data: MeData) => {
+				player1 = data.name;
+			})
+			.catch((e) => console.error(e));
+	};
+	
+		fetchUsername();
 
 	const mapStyles: { [key: string]: string} = {
 		"Default": "yellow-400",
@@ -225,7 +249,7 @@ function playPong(){
 	function moveBall(){
 		if (leftscorepan && rightscorepan && (leftscorepan.textContent == "5" || rightscorepan.textContent == "5"))
 		{
-			if (leftscorepan.textContent == "5") winner = "User";
+			if (leftscorepan.textContent == "5" && player1) winner = player1;
 			else
 			{
 				if (gameStarted != 2)

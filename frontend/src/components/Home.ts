@@ -35,7 +35,7 @@ interface UserInfo {
 	is_2FA: boolean;
 }
 
-interface MeData {
+export interface MeData {
 	id: number,
 	is_2FA: boolean, 
 	name: string,
