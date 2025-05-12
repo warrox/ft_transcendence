@@ -15,6 +15,11 @@ import { updateMail, UpdateMailBody} from "./route/updateMail"
 import { updatePassword , UpdatePasswordBody} from "./route/updatePassword"
 import { UpdateWinLooseBody, updateWinLoose} from "./route/updateWinLoose"
 import { PostGameScoreBody , postGameScore} from "./route/postGameScore"
+import {  langBody , postLang} from "./route/postLang"
+import {  getFriends} from "./route/getFriends"
+import { getAvatar} from "./route/getAvatar"
+import { twoFaBody } from "./route/post2Fa";
+
 
 export interface GetRoutes {
 	me (request: FastifyRequest, reply: FastifyReply): any
@@ -24,7 +29,7 @@ export interface GetRoutes {
 	login( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 	gsignin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
 	glogin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
-	post2Fa( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
+	post2Fa( request: FastifyRequest<{ Body : twoFaBody }> , reply: FastifyReply) : any
 	verify2Fa( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 	logout( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 	updateAvatar( request: FastifyRequest<{ Body : UpdateAvatarBody }> , reply: FastifyReply) : any
@@ -32,6 +37,10 @@ export interface GetRoutes {
 	updatePassword( request: FastifyRequest<{ Body : UpdatePasswordBody }> , reply: FastifyReply) : any
 	updateWinLoose( request: FastifyRequest<{ Body : UpdateWinLooseBody }> , reply: FastifyReply) : any
 	postGameScore( request: FastifyRequest<{ Body : PostGameScoreBody}> , reply: FastifyReply) : any
+	postLang( request: FastifyRequest<{ Body : langBody}> , reply: FastifyReply) : any
+	getFriends( request: FastifyRequest , reply: FastifyReply) : any
+	getAvatar( request: FastifyRequest , reply: FastifyReply) : any
+
 
 }
 
@@ -50,5 +59,8 @@ export const getRoutes: GetRoutes = {
 	updateMail: updateMail,
 	updatePassword: updatePassword,
 	updateWinLoose: updateWinLoose,
-	postGameScore: postGameScore
+	postGameScore: postGameScore,
+	postLang: postLang,
+	getFriends : getFriends,
+	getAvatar: getAvatar
 };
