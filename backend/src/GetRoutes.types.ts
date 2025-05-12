@@ -18,6 +18,7 @@ import { PostGameScoreBody , postGameScore} from "./route/postGameScore"
 import {  langBody , postLang} from "./route/postLang"
 import {  getFriends} from "./route/getFriends"
 import { getAvatar} from "./route/getAvatar"
+import { twoFaBody } from "./route/post2Fa";
 
 
 export interface GetRoutes {
@@ -28,7 +29,7 @@ export interface GetRoutes {
 	login( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 	gsignin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
 	glogin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
-	post2Fa( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
+	post2Fa( request: FastifyRequest<{ Body : twoFaBody }> , reply: FastifyReply) : any
 	verify2Fa( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 	logout( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 	updateAvatar( request: FastifyRequest<{ Body : UpdateAvatarBody }> , reply: FastifyReply) : any
