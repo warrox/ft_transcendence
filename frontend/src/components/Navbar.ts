@@ -45,9 +45,10 @@ export function Navbar(): PongNode<any> {
 				try {
 					const parsedBody = JSON.parse(body);
 					console.log("Déconnexion réussie :", parsedBody);
+					AuthStore.isLoggedIn = false;
 					setTimeout(() => {
 						navigateTo('/home');
-					}, 2000);
+					}, 1500);
 					rerender();
 				} catch (e) {
 					console.error("Erreur de parsing JSON :", e);

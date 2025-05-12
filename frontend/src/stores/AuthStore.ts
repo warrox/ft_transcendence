@@ -1,6 +1,6 @@
 type User = {
 	id: string;
-	is_2FA: boolean;
+	is_2FA: number;
 	name: string;
 	surname: string;
 	email: string;

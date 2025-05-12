@@ -120,6 +120,7 @@ export async function router() {
 		history.replaceState({}, "", path);
 	}
 
+
 	if (path === '/game' && !AuthStore.isLoggedIn) {
 		path = '/landing';
 		history.replaceState({}, "", path);

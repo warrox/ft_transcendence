@@ -24,16 +24,18 @@ function getAvatarPath() {
 		: "../assets/avatar.png";
 }
 
-let is2FAEnabled = false;
+// let is2FAEnabled = false;
 
-function toggle2FA() {
-	is2FAEnabled = !is2FAEnabled;
-	rerender();
-}
+// function toggle2FA() {
+// 	is2FAEnabled = !is2FAEnabled;
+// 	rerender();
+// }
 
 
 
 export function Profil() : PongNode<any> {
+	console.log("islogged", AuthStore.isLoggedIn);
+	
 	const email = AuthStore.user?.email;
 
 	const fileInput = Input({
@@ -188,36 +190,31 @@ export function Profil() : PongNode<any> {
 		});
 	};
 
-	const handle2FA = () => {
-		is2FAEnabled = !is2FAEnabled;
-		const is_2Fa = is2FAEnabled ? 1 : 0; 
+const handle2FA = () => {
+	const is_2Fa = AuthStore.user!.is_2FA ? 0 : 1;
+	const body = { is_2Fa };
 
-		const body = {
-			is_2Fa,
-		}
+	console.log("is2fa", is_2Fa);
 
-		fetch("/api/post2Fa", {
-			method: "POST",
-			body: JSON.stringify(body),
-			credentials: "include",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-		.then(async res => {
-			console.log(res);
-			if (res.ok)
-				console.log("Yes");
-				
-		})
-		.catch(e => {
-			console.error("Fetch failed:", e);
-			Status = "KO";
-		})
-		.finally(() => {
-			rerender();
-		});
-	}
+	fetch("/api/post2Fa", {
+		method: "POST",
+		body: JSON.stringify(body),
+		credentials: "include",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	})
+	.then(async res => {
+		if (res.ok)
+			AuthStore.user!.is_2FA = is_2Fa;
+	})
+	.catch(e => {
+		console.error("Fetch failed:", e);
+	})
+	.finally(() => {
+		rerender();
+	});
+}
 
 
 	return Div({
@@ -294,14 +291,14 @@ export function Profil() : PongNode<any> {
 					Div({
 						class: `
 							absolute inset-0 rounded-full transition-colors duration-300 
-							${is2FAEnabled ? "bg-green-500" : "bg-gray-300"}
+							${AuthStore.user?.is_2FA ? "bg-green-500" : "bg-gray-300"}
 						`
 					}),
 					Div({
 						class: `
 							absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md 
 							transition-transform duration-300
-							${is2FAEnabled ? "translate-x-6" : "translate-x-0"}
+							${AuthStore.user?.is_2FA ? "translate-x-6" : "translate-x-0"}
 						`
 					})
 				]),
