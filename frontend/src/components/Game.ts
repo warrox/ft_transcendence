@@ -1,23 +1,26 @@
-import { Div, Button, P, Span, Li } from "../lib/PongFactory";
+import { Div, Button, Input, Span, Li } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { MeData } from "./Home";
 import { rerender, navigateTo } from "../router/router";
+import { inputScaleCss } from "../styles/cssFactory";
 
 import { sleep } from 'sleep-ts';
-import { userInfo } from "os";
-import { Tournament } from "./Tournament";
 
 let gameStarted = 0;
 
 let player1:string | null = null;
 
-let player2: string;
+let player2: string = "";
 
 let mapIndex = 0;
 
 let winner = "";
+let nameError = false;
+let errLength = false;
 
 let isplayPong = false;
+
+let registerplayer = false;
 
 const ballState = {
 	x: 0,
@@ -25,6 +28,9 @@ const ballState = {
 	dx: 4,
 	dy: 0,
 };
+
+let leftScore = 0;
+let rightScore = 0;
 
 
 export function Game(): PongNode<any> {
@@ -50,7 +56,7 @@ export function Game(): PongNode<any> {
 			.catch((e) => console.error(e));
 	};
 	
-		fetchUsername();
+	fetchUsername();
 
 	const mapStyles: { [key: string]: string} = {
 		"Default": "yellow-400",
@@ -95,7 +101,7 @@ export function Game(): PongNode<any> {
 
 	if (gameStarted == 0)
 	{
-			return Div({ class: "flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
+			return Div({ class: "relative flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
 				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, ["Pong like you’ve never played it before."]),
 				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, ["Choose your map:"]),
 				Div({ class: "flex items-center"} , [Span({ class: `block font-orbitron md:text-2xl text-${PongColor}`}, [`${mapKeys[mapIndex]}`])]),
@@ -113,13 +119,14 @@ export function Game(): PongNode<any> {
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton", onClick: () => {
 							gameStarted = 2;
+							player2 = "Bot";
 							rerender();
 						},
 							class: `bg-${PongColor}  hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 
 							["Single Player"]),
 						Button({id: "mgplayerButton", onClick: () => {
-								gameStarted = 1;
+								registerplayer = true;
 								rerender();
 							},
 
@@ -127,20 +134,60 @@ export function Game(): PongNode<any> {
 							["Multiple Player"]),
 						Button({id: "tournamentButton",
 							onClick: () => {
-								Tournament(mapKeys[mapIndex]); navigateTo('/tournament');},
+								localStorage.setItem("Color", mapKeys[mapIndex]); navigateTo('/tournament');},
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							["Tournament Mode"]),
 					]),
 				]),
+				...(registerplayer
+				? [
+				Div({ class: "absolute inset-0 z-50 flex flex-col items-center justify-center bg-opacity-60" },[
+					Input({
+						id: "secondPlayerInput",
+						required: true,
+						placeholder: "Enter second player name",
+						onChange: () => {
+							const input = document.getElementById("secondPlayerInput") as HTMLInputElement;
+							player2 = input?.value || "";
+						},
+						class: "transform transition duration-200 ease-in-out hover:scale-105 w-[250px] text-white border shadow-[1px_1px_3px_rgba(0,0,0,0.1)] p-2.5 rounded-[5px] border-solid border-[#ccc] relative z-[10]",
+					}),
+					Button({ id: "staaart-game",
+						onClick: () => {
+							if (player2.trim() === "") {
+								nameError = true;
+								rerender();
+								return;
+							}
+							else if (player2.length > 10)
+							{
+								nameError = false;
+								errLength = true;
+								rerender();
+								return;
+							}
+							// Lancer le jeu ou logique suivante ici :
+							console.log("Second player is:", player2);
+							gameStarted = 1;
+							rerender();
+						},
+						class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`
+					}, ["Start Game"]),
+					...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Player 2 must have a name."])] : []),
+					...(errLength ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Name should not exceed 10 characters."])] : []),
+				]),
+				] : [])
 		]);
 	}
 	else if (gameStarted == 1 || gameStarted == 2)
 	{
 		return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
 			Div({ class: `text-${PongColor} font-orbitron text-4xl mb-4` }, [
+				Span({id: "player 1", class: "mx -8"}, [`${player1}`]),
 				Span({ id: "score-left", class: "mx-8" }, ["0"]),
 				Span({}, [" : "]),
 				Span({ id: "score-right", class: "mx-8" }, ["0"]),
+				Span({id: "player 1", class: "mx -8"}, [`${player2}`]),
 			]),
             Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
 				Div({ id: "midline", class: `absolute top-0 left-1/2 w-[4px] h-full bg-${PongColor} opacity-40 transform -translate-x-1/2` }),
@@ -154,12 +201,13 @@ export function Game(): PongNode<any> {
 	{
 		return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
 			Div({ class: `text-${PongColor} font-orbitron text-4xl mb-4` }, [
-				Span({ id: "score-left", class: "mx-8" }, ["0"]),
+				Span({id: "player 1", class: "mx -8"}, [`${player1}`]),
+				Span({ id: "score-left", class: "mx-8" }, [`${String(leftScore)}`]),
 				Span({}, [" : "]),
-				Span({ id: "score-right", class: "mx-8" }, ["0"]),
+				Span({ id: "score-right", class: "mx-8" }, [`${String(rightScore)}`]),
+				Span({id: "player 1", class: "mx -8"}, [`${player2}`]),
 			]),
 			Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
-				//Div({ id: "midline", class: `absolute top-0 left-1/2 w-[4px] h-full bg-${PongColor} opacity-40 transform -translate-x-1/2` }),
 				Span({class: `absolute left-[550px] top-[250px] block font-orbitron md:text-7xl text-${PongColor} `}, [`WINNER: ${winner}`]),
 				Button({ id: "back-to-menu", onClick: () => {
 					gameStarted = 0;
@@ -241,8 +289,6 @@ function playPong(){
 	ballState.y = gameArea.clientHeight / 2;
 	ballState.dx = 4;
 	ballState.dy = Math.floor(Math.random() * 11) - 5;
-	let leftScore = 0;
-	let rightScore = 0;
 	const leftscorepan = document.getElementById("score-left");
 	const rightscorepan = document.getElementById("score-right");
 	
@@ -254,7 +300,7 @@ function playPong(){
 			else
 			{
 				if (gameStarted != 2)
-					winner = "Guest";
+					winner = player2;
 				else winner = "IA";
 			}
 			gameStarted = 3;

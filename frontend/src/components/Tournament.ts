@@ -1,14 +1,15 @@
-import { log } from "console";
 import { Div, Button, P, Span, Input } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender, navigateTo } from "../router/router";
-import { inputScaleCss } from "../styles/cssFactory"; 
+import { inputScaleCss } from "../styles/cssFactory";
+import { MeData } from "./Home";
 
 var playerCount = 4;
 
 let Registerplayers = false;
 
 let nameError = false;
+let errLength = false;
 
 let showMatchOrder = false;
 
@@ -25,6 +26,7 @@ let ingame:boolean = true;
 
 let player1: string;
 let player2: string;
+let user: string;
 
 let is_finale = false;
 
@@ -75,21 +77,38 @@ let hoverColor:string | null = null;
 let backButtonColor:string | null = null;
 let backButtonHoverColor:string | null = null;
 
-export function Tournament(color:string): PongNode<any>{
+export function Tournament(): PongNode<any>{
 
-	console.log("MAP KEY: ", color);
+	let color:string | null = null;
+	color = localStorage.getItem("Color");
 
-
-
-	if (color && !PongColor && !hoverColor){
+	if (!color)
+		color = "Default";
+	if (color){
 		PongColor = mapStyles[color];
 		hoverColor = hoverStyles[color];
 		backButtonColor = backButtonStyles[color];
 		backButtonHoverColor = backButtonHoverStyles[color];
 	}
 
-	// else if (!color && !PongColor)
-	// 	PongColor = mapStyles["Default"];
+	const fetchUsername = () => {
+			if (user) return;
+	
+			fetch("/api/me", {
+				credentials: "include",
+			})
+				.then((res) => {
+					if (!res.ok) throw new Error("/api/me: Failed");
+					return res.json();
+				})
+				.then((data: MeData) => {
+					user = data.name;
+				})
+				.catch((e) => console.error(e));
+		};
+
+	fetchUsername();
+	playerNames[0] = user;
 
 	if (!Registerplayers)
 	{
@@ -121,22 +140,27 @@ export function Tournament(color:string): PongNode<any>{
 	{
 
 		const playerInputs = playerNames.map((name, index) => {
-			return Div({ class: "flex flex-col" }, [
-				Input({ 
-					id: `player-${index}`, 
-					required: true, 
-					placeholder: `Player ${index + 1}`, 
-					value: playerNames[index],
-					onChange: () => {
-						const input = document.getElementById(`player-${index}`) as HTMLInputElement;
-						if (input) {
-							playerNames[index] = input.value;
-							console.log("Name:", playerNames[index]);
-						}
-					},
-					class: inputScaleCss
-				})
-			]);
+			if (index == 0)
+				return Div({ class: "flex flex-col" }, [
+			Span({id: "player 1", class: inputScaleCss}, [`${playerNames[0]}`]),]);
+			else
+			{
+				return Div({ class: "flex flex-col" }, [
+					Input({ 
+						id: `player-${index}`, 
+						required: true, 
+						placeholder: `Player ${index + 1}`, 
+						value: playerNames[index],
+						onChange: () => {
+							const input = document.getElementById(`player-${index}`) as HTMLInputElement;
+							if (input) {
+								playerNames[index] = input.value;
+							}
+						},
+						class: inputScaleCss
+					})
+				]);
+			}
 		});
 
 		if (!showMatchOrder)
@@ -147,6 +171,7 @@ export function Tournament(color:string): PongNode<any>{
 
 				...playerInputs,
 				...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["All players must have a name."])] : []),
+				...(errLength ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Names should not exceed 10 characters."])] : []),
 
 				Button({ id: "starttournament", 
 				class: `mt-6 bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded shadow-lg transition duration-300`,
@@ -156,7 +181,15 @@ export function Tournament(color:string): PongNode<any>{
 						rerender();
 						return;
 					}
+					else if (playerNames.some(name => name.length > 10))
+					{
+						nameError = false;
+						errLength = true;
+						rerender();
+						return;
+					}
 					nameError = false;
+					errLength = false;
 					showMatchOrder = true;
 					rerender();
 					}
@@ -296,14 +329,14 @@ export function PlayerSelector(): PongNode<any> {
 
 	const decrement = () => {
 		if (playerCount > 4) {
-			playerCount--;
+			playerCount -= 4;
 			rerender();
 		}
 	};
 
 	const increment = () => {
 		if (playerCount < 8) {
-			playerCount++;
+			playerCount += 4;
 			rerender();
 		}
 	};
