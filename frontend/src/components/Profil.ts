@@ -20,14 +20,21 @@ let Status: null | "OK" | "KO" = null;
 
 function getAvatarPath() {
 	return AuthStore.user?.avatar_path
-		? AuthStore.user.avatar_path // déjà complet avec http://...
+		? AuthStore.user.avatar_path
 		: "../assets/avatar.png";
 }
+
+let is2FAEnabled = false;
+
+function toggle2FA() {
+	is2FAEnabled = !is2FAEnabled;
+	rerender();
+}
+
 
 
 export function Profil() : PongNode<any> {
 	const email = AuthStore.user?.email;
-	// const password = AuthStore.user?.password;
 
 	const fileInput = Input({
 		id: "fileInput",
@@ -110,10 +117,11 @@ export function Profil() : PongNode<any> {
 		})
 		.then(async res => {
 			if (res.ok) {
-				// const text = await res.text();
+				const text = await res.text();
 		
 				try {
-					// const json = JSON.parse(text);
+					const json = JSON.parse(text);
+					console.log(json);
 					AuthStore.user!.email = body.newMail;
 					Status = "OK";
 				} catch (_) {
@@ -121,6 +129,8 @@ export function Profil() : PongNode<any> {
 					Status = "OK";
 				}
 			} else {
+				console.log("here");
+				
 				Status = "KO";
 			}
 		})
@@ -159,10 +169,10 @@ export function Profil() : PongNode<any> {
 		
 				try {
 					// const json = JSON.parse(text);
-					AuthStore.user!.email = body.newpassword;
+					// AuthStore.user!.email = body.newpassword;
 					Status = "OK";
 				} catch (_) {
-					AuthStore.user!.email = body.newpassword;
+					// AuthStore.user!.email = body.newpassword;
 					Status = "OK";
 				}
 			} else {
@@ -177,6 +187,37 @@ export function Profil() : PongNode<any> {
 			rerender();
 		});
 	};
+
+	const handle2FA = () => {
+		is2FAEnabled = !is2FAEnabled;
+		const is_2Fa = is2FAEnabled ? 1 : 0; 
+
+		const body = {
+			is_2Fa,
+		}
+
+		fetch("/api/post2Fa", {
+			method: "POST",
+			body: JSON.stringify(body),
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+		.then(async res => {
+			console.log(res);
+			if (res.ok)
+				console.log("Yes");
+				
+		})
+		.catch(e => {
+			console.error("Fetch failed:", e);
+			Status = "KO";
+		})
+		.finally(() => {
+			rerender();
+		});
+	}
 
 
 	return Div({
@@ -218,30 +259,55 @@ export function Profil() : PongNode<any> {
 		]),
 		fileInput,
 		Div({ 
-				class: "mt-20 w-[400px] p-4 bg-yellow-500 rounded-xl shadow-lg space-y-4" 
-			}, [
-				Div({ class: "flex items-center justify-between" }, [
-					Image({ id: "login_img", src: "../assets/login.png", alt: "login_img", class: "imageCenter w-8" }),
-					emailInput,
-					Button({ id: "editorButton1",  onClick: handleEditMail}, [
-						Image({
-							id : "editorImg",
-							class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto",
-							src: "../assets/save.webp"
-						})
-					])
+			class: "mt-20 w-[400px] p-4 bg-yellow-500 rounded-xl shadow-lg space-y-4" 
+		}, [
+			Div({ class: "flex items-center justify-between" }, [
+				Image({ id: "login_img", src: "../assets/login.png", alt: "login_img", class: "imageCenter w-8" }),
+				emailInput,
+				Button({ id: "editorButton1",  onClick: handleEditMail}, [
+					Image({
+						id : "editorImg",
+						class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto",
+						src: "../assets/save.webp"
+					})
+				])
+			]),
+			Div({ class: "flex items-center justify-between" }, [
+				Image({ id: "pass_img", src: "../assets/lock.svg", alt: "pass_img", class: "imageCenter w-8" }),
+				passwordInput,
+				Button({ id: "editorButton2", onClick: handleEditPass}, [
+					Image({
+						id : "editorImg2",
+						class: "w-5 transition-transform duration-200 hover:scale-110",
+						src: "../assets/save.webp"
+					})
+				])
+			]),
+			Div({ class: "flex items-center justify-between" }, [
+				Image({ id:"2fa_img", src: "../assets/2fa.png", alt: "2FA", class: "w-8" }),
+
+				Button({
+					id: "test",
+					class: "relative w-12 h-6",
+					onClick: handle2FA,
+				}, [
+					Div({
+						class: `
+							absolute inset-0 rounded-full transition-colors duration-300 
+							${is2FAEnabled ? "bg-green-500" : "bg-gray-300"}
+						`
+					}),
+					Div({
+						class: `
+							absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md 
+							transition-transform duration-300
+							${is2FAEnabled ? "translate-x-6" : "translate-x-0"}
+						`
+					})
 				]),
-				Div({ class: "flex items-center justify-between" }, [
-					Image({ id: "login_img", src: "../assets/lock.svg", alt: "login_img", class: "imageCenter w-8" }),
-					passwordInput,
-					Button({ id: "editorButton1", onClick: handleEditPass}, [
-						Image({
-							id : "editorImg",
-							class: "w-5 transition-transform duration-200 hover:scale-110",
-							src: "../assets/save.webp"
-						})
-					])
-				]),
+				Div({}),
 			])
+		]),
+		
 	]);
 }
