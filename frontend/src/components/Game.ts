@@ -5,6 +5,7 @@ import { rerender, navigateTo } from "../router/router";
 
 import { sleep } from 'sleep-ts';
 import { userInfo } from "os";
+import { Tournament } from "./Tournament";
 
 let gameStarted = 0;
 
@@ -126,7 +127,7 @@ export function Game(): PongNode<any> {
 							["Multiple Player"]),
 						Button({id: "tournamentButton",
 							onClick: () => {
-								navigateTo('/tournament');},
+								Tournament(mapKeys[mapIndex]); navigateTo('/tournament');},
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							["Tournament Mode"]),
 					]),

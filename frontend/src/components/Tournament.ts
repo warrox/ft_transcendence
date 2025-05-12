@@ -30,13 +30,72 @@ let is_finale = false;
 
 let CurrentMatchIndex: number = 0;
 
-export function Tournament(): PongNode<any>{
+const mapStyles: { [key: string]: string} = {
+		"Default": "yellow-400",
+		"Classic": "neutral-400",
+		"Emerald": "emerald-500",
+		"Cyan": "cyan-500",
+		"Rose": "rose-600",
+		"Fushia": "fuchsia-400",
+		"Indigo": "indigo-900",
+	};
+
+	const hoverStyles: { [key: string]: string} = {
+		"Default": "yellow-500",
+		"Classic": "neutral-500",
+		"Emerald": "emerald-600",
+		"Cyan": "cyan-600",
+		"Rose": "rose-700",
+		"Fushia": "fuchsia-500",
+		"Indigo": "indigo-950",
+	};
+
+const backButtonStyles: { [key: string]: string} = {
+		"Default": "text-yellow-300",
+		"Classic": "text-neutral-300",
+		"Emerald": "text-emerald-400",
+		"Cyan": "text-cyan-400",
+		"Rose": "text-rose-500",
+		"Fushia": "text-fuchsia-300",
+		"Indigo": "text-indigo-800",
+	};
+
+const backButtonHoverStyles: { [key: string]: string} = {
+		"Default": "hover:text-yellow-100",
+		"Classic": "hover:text-neutral-100",
+		"Emerald": "hover:text-emerald-200",
+		"Cyan": "hover:text-cyan-200",
+		"Rose": "hover:text-rose-300",
+		"Fushia": "hover:text-fuchsia-100",
+		"Indigo": "hover:text-indigo-600",
+	};
+
+let PongColor:string | null = null;
+let hoverColor:string | null = null;
+let backButtonColor:string | null = null;
+let backButtonHoverColor:string | null = null;
+
+export function Tournament(color:string): PongNode<any>{
+
+	console.log("MAP KEY: ", color);
+
+
+
+	if (color && !PongColor && !hoverColor){
+		PongColor = mapStyles[color];
+		hoverColor = hoverStyles[color];
+		backButtonColor = backButtonStyles[color];
+		backButtonHoverColor = backButtonHoverStyles[color];
+	}
+
+	// else if (!color && !PongColor)
+	// 	PongColor = mapStyles["Default"];
 
 	if (!Registerplayers)
 	{
 		return Div({ class: "flex flex-col justify-center items-center min-h-screen bg-black text-white p-8" }, [
 
-			Span({ class: "text-4xl font-orbitron mb-6 text-yellow-400" }, ["Tournament Mode"]),
+			Span({ class: `text-4xl font-orbitron mb-6 text-${PongColor}` }, ["Tournament Mode"]),
 			Span({ class: "text-2xl font-orbitron mb-4" }, ["Select Number of Players:"]),
 			PlayerSelector(),
 
@@ -48,13 +107,13 @@ export function Tournament(): PongNode<any>{
 					if (playerCount == 4 || playerCount == 8){
 						Registerplayers = true; playerNames = Array(playerCount).fill(""); rerender(); }
 					else ErrNbPlayers = true; rerender();},
-					class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded shadow-lg transition duration-300"
+					class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded shadow-lg transition duration-300`
 				}, ["Register players"]),
 				...(ErrNbPlayers ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Tournament requires 4 or 8 players."])] : []),
 			]),
 			Button({ id: "back-to-menu-game",
 				onClick: () => { navigateTo('/game'); },
-				class: "mt-10 text-yellow-300 underline hover:text-yellow-100"
+				class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`
 			}, ["← Back to Menu"])
 		]);
 	}
@@ -83,14 +142,14 @@ export function Tournament(): PongNode<any>{
 		if (!showMatchOrder)
 		{
 			return Div({ class: "flex flex-col justify-center items-center min-h-screen bg-black text-white p-8 "}, [
-				Span({ class: "text-4xl font-orbitron mb-6 text-yellow-400" }, ["Tournament Mode"]),
+				Span({ class: `text-4xl font-orbitron mb-6 text-${PongColor}` }, ["Tournament Mode"]),
 				Span({ class: "text-2xl font-orbitron mb-4" }, [`Usernames: `]),
 
 				...playerInputs,
 				...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["All players must have a name."])] : []),
 
 				Button({ id: "starttournament", 
-				class: "mt-6 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded shadow-lg transition duration-300",
+				class: `mt-6 bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded shadow-lg transition duration-300`,
 				onClick: () => {
 					if (playerNames.some(name => name.trim() === "")) {
 						nameError = true;
@@ -104,7 +163,7 @@ export function Tournament(): PongNode<any>{
 				}, ["Show Match Order"]),
 				Button({ id: "back-to-nbplayer-game",
 					onClick: () => { Registerplayers = false; rerender();},
-					class: "mt-10 text-yellow-300 underline hover:text-yellow-100"
+					class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`
 				}, ["← Change Number of Players"])
 			]);
 		}
@@ -113,13 +172,13 @@ export function Tournament(): PongNode<any>{
 			return Div({ class: "flex flex-col justify-center items-center min-h-screen bg-black text-white p-8" }, [
 
 				Div({ class: "flex flex-col items-center bg-black mx-4" }, [
-				  Span({ class: "text-xl font-bold mb-4 text-yellow-400" }, ["Quarterfinals"]),
+				  Span({ class: `text-xl font-bold mb-4 text-${PongColor}` }, ["Quarterfinals"]),
 				  ...playerNames.reduce((acc, name, i) => {
 					  if (i % 2 === 0) {
 						acc.push(
 						  Div({ class: "mb-6" }, [
-							Div({ class: "border border-yellow-500 p-2 w-32 text-center mb-1 rounded bg-black text-white" }, [`${playerNames[i]}`]),
-							Div({ class: "border border-yellow-500 p-2 w-32 text-center rounded bg-black text-white" }, [`${playerNames[i + 1]}`]),
+							Div({ class: `border border-${PongColor} p-2 w-32 text-center mb-1 rounded bg-black text-white` }, [`${playerNames[i]}`]),
+							Div({ class: `border border-${PongColor} p-2 w-32 text-center rounded bg-black text-white` }, [`${playerNames[i + 1]}`]),
 						  ])
 						);
 					  }
@@ -129,11 +188,11 @@ export function Tournament(): PongNode<any>{
 				Button({
 					id: "Start-tournament",
 					onClick: () => {CurrentMatchIndex = 1; rerender();},
-					class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded shadow-lg transition duration-300"
+					class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded shadow-lg transition duration-300`
 				}, [`First Match: ${playerNames[0]} vs ${playerNames[1]}`]),
 				Button({ id: "back-to-register-players",
 					onClick: () => { showMatchOrder = false; rerender();},
-					class: "mt-10 text-yellow-300 underline hover:text-yellow-100"
+					class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`
 				}, ["← Edit Player Names"])
 			]);
 		}
@@ -170,25 +229,25 @@ export function Tournament(): PongNode<any>{
 					movePad();
 					playPong();}, 0);
 				return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
-					Div({ class: "text-yellow-400 font-orbitron text-4xl mb-4" }, [
+					Div({ class: `text-${PongColor} font-orbitron text-4xl mb-4` }, [
 						Span({id: "player 1", class: "mx -8"}, [`${player1}`]),
 						Span({ id: "score-left", class: "mx-8" }, ["0"]),
 						Span({}, ["  : "]),
 						Span({ id: "score-right", class: "mx-8" }, ["0"]),
 						Span({class: "mx -8"}, [`${player2}`]),
 					]),
-					Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
-						Div({ id: "midline", class: "absolute top-0 left-1/2 w-[4px] h-full bg-yellow-400 opacity-40 transform -translate-x-1/2" }),
-						Div({ id: "ball", class: "absolute w-[20px] h-[20px] bg-yellow-400 rounded-full" }),
-						Div({ id: "leftpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 left-[5px] top-[360px]" }),
-						Div({ id: "rightpad", class:"absolute w-[15px] h-[80px] bg-yellow-400 left-[1580px] top-[360px]" }),
+					Div({ id: "game-area", class: `relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden` }, [
+						Div({ id: `midline`, class: `absolute top-0 left-1/2 w-[4px] h-full bg-${PongColor} opacity-40 transform -translate-x-1/2` }),
+						Div({ id: `ball`, class: `absolute w-[20px] h-[20px] bg-${PongColor} rounded-full` }),
+						Div({ id: `leftpad`, class:`absolute w-[15px] h-[80px] bg-${PongColor} left-[5px] top-[360px]` }),
+						Div({ id: `rightpad`, class:`absolute w-[15px] h-[80px] bg-${PongColor} left-[1580px] top-[360px]` }),
 					]),
 				]);
 			}
 			else
 			{
 				return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
-					Div({ class: "text-yellow-400 font-orbitron text-4xl mb-4" }, [
+					Div({ class: `text-${PongColor} font-orbitron text-4xl mb-4` }, [
 						Span({id: "player 1", class: "mx -8"}, [`${player1}`]),
 						Span({ id: "score-left", class: "mx-8" }, ["0"]),
 						Span({}, ["  : "]),
@@ -197,7 +256,7 @@ export function Tournament(): PongNode<any>{
 					]),
 					Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
 						Span({
-							class: "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 block font-orbitron md:text-7xl text-yellow-400 text-center"
+							class: `absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 block font-orbitron md:text-7xl text-${PongColor} text-center`
 						}, [is_finale ? `🏆 Tournament Winner: ${roundWinners[CurrentMatchIndex - 1]}` : `Winner: ${roundWinners[CurrentMatchIndex - 1]}`]),
 					
 						is_finale
@@ -206,9 +265,12 @@ export function Tournament(): PongNode<any>{
 								onClick: () => { is_finale = false;
 									Registerplayers = false;
 									showMatchOrder = false;
-									CurrentMatchIndex = 0;
+									CurrentMatchIndex = 0
+									roundWinners = [];
+									playerNames = [];
+									ingame = true;
 									navigateTo('/game'); },
-								class: "absolute top-[550px] left-1/2 transform -translate-x-1/2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded"
+								class: `absolute top-[550px] left-1/2 transform -translate-x-1/2 bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`
 							}, ["← Back to Game Menu"])
 							: Button({
 								id: "next-game-btn",
@@ -216,10 +278,10 @@ export function Tournament(): PongNode<any>{
 									ingame = true;
 									rerender();
 								},
-								class: "absolute top-[550px] left-1/2 transform -translate-x-1/2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded"
+								class: `absolute top-[550px] left-1/2 transform -translate-x-1/2 bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`
 							}, [`Next game: ${player1} vs ${player2}`]),
-						Div({ id: "leftpad2", class:`absolute w-[15px] h-[90px] bg-$yellow-400 left-[5px] top-[360px]` }),
-						Div({ id: "rightpad2", class:`absolute w-[15px] h-[90px] bg-$yellow-400 left-[1580px] top-[360px]` }),
+						Div({ id: "leftpad2", class:`absolute w-[15px] h-[90px] bg-${PongColor} left-[5px] top-[360px]` }),
+						Div({ id: "rightpad2", class:`absolute w-[15px] h-[90px] bg-${PongColor} left-[1580px] top-[360px]` }),
 					]),
 				]);
 			}
@@ -252,7 +314,7 @@ export function PlayerSelector(): PongNode<any> {
 		Div({ class: "flex items-center gap-4" }, [
 			Button({
 				id: "left-arrow",
-				class: "bg-yellow-400 hover:bg-yellow-300 text-xl px-4 py-2 rounded",
+				class: `bg-${PongColor} hover:bg-${hoverColor} text-xl px-4 py-2 rounded`,
 				onClick: decrement
 			}, ["<"]),
 			
@@ -262,7 +324,7 @@ export function PlayerSelector(): PongNode<any> {
 
 			Button({
 				id: "right-arrow",
-				class: "bg-yellow-400 hover:bg-yellow-300 text-xl px-4 py-2 rounded",
+				class: `bg-${PongColor} hover:bg-${hoverColor} text-xl px-4 py-2 rounded`,
 				onClick: increment
 			}, [">"]),
 		])
