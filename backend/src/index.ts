@@ -10,19 +10,15 @@ import fastifyWebsocket from '@fastify/websocket';
 
 //import type { Send } from 'nodemailer';
 //import module from '../node_modules/nodemailer';
+import path from 'path';
+import fastifyStatic from '@fastify/static';
 
-' use strict'
+'use strict'
 
 
 export const server = fastify();
+
 server.register(multipart);
-server.register(fastifyWebsocket);
-server.get('/ws', { websocket : true},(connection, req ) => {
-	connection.socket.on('message' , (message : any) => {
-		console.log('Message recu :', message.toString());
-		connection.socket.send('Hello world from server');
-	} )
-} )
 /*695141578047-7bspgbrs2s2vobdb4lr5u74mcblk41e1.aipps.googleusercontent.com*/
 dotenv.config();
 const JWS =  process.env.JWTSECRETKEY;
@@ -41,6 +37,11 @@ server.register(cors, {
   credentials: true,
 });
 
+server.register(fastifyStatic, {
+	root: path.join(__dirname, '..', 'public', 'uploads'),
+	prefix: '/uploads/', // correspond à l'URL publique
+});
+
 
 export interface User {
   id?: number;
@@ -55,8 +56,41 @@ export interface GoogleTokenRequest {
 	token: string;
 }
 
-async function registerRoutes(server: FastifyInstance): Promise<any> {
+type JWTClaims = {
+	id: string,
+	email:string,
+}
 
+
+export const onlineUsers = new Map<number, WebSocket>();
+async function startupRoutine(server: FastifyInstance): Promise<any> {
+	await server.register(fastifyWebsocket);
+
+	server.get('/ws', { websocket: true }, (socket, _req) => {
+		const token = socket.cookies["access_token"];
+		if(!token) return;
+
+		const claims = _req.server.jwt.decode<JWTClaims>(token);
+		const userId = +claims!.id;
+
+		onlineUsers.set(userId, socket.socket);
+		socket.on('close', () => {
+			onlineUsers.delete(userId);
+		});
+		// Client connect
+		console.log('Client connected');
+		console.log(socket);
+		// Client message
+		socket.on('message', (message: any) => {
+			console.log(`Client message: ${message}`);
+			socket.send(`Recu: ${message}`);
+		});
+		// Client disconnect
+		socket.on('close', () => {
+			console.log('Client disconnected');
+		});
+	});
+		
 	server.get('/me', getRoutes.me);
 	server.get('/users', getRoutes.users);
 	server.get('/checkJWT', getRoutes.checkJWT);
@@ -73,22 +107,24 @@ async function registerRoutes(server: FastifyInstance): Promise<any> {
 	server.post('/updateWinLoose', getRoutes.updateWinLoose);
 	server.post('/postGameScore', getRoutes.postGameScore);
 	server.post('/postLang', getRoutes.postLang);	
+	server.get('/getFriends', getRoutes.getFriends);	
+	server.get('/getAvatar', getRoutes.getAvatar);
+
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 
+
+	server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
+		if (err) {
+			console.error(err);
+			process.exit(1);
+		}
+		console.log(`Serveur démarré sur ${address}`);
+	});
 }
 
-registerRoutes(server);
+startupRoutine(server);
 
-
-// Démarrer le serveur
-server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-  console.log(`Serveur démarré sur ${address}`);
-});
 
 // Graceful shutdown
 ['SIGINT', 'SIGTERM'].forEach((signal) => {

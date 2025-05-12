@@ -6,9 +6,11 @@ type JWTClaims = {
 	id: string,
 	email: string,
 };
+export type twoFaBody = {
+	is_2Fa: number;
+}
 
-
-export const post2Fa = async (request: FastifyRequest, reply: FastifyReply) => {
+export const post2Fa = async (request: FastifyRequest<{Body : twoFaBody}>, reply: FastifyReply) => {
 	try {
 		const token = request.cookies["access_token"];
 		if (!token) {
@@ -17,10 +19,10 @@ export const post2Fa = async (request: FastifyRequest, reply: FastifyReply) => {
 
 		const claims = request.server.jwt.decode<JWTClaims>(token);
 		const userId = claims!.id;
+		const {is_2Fa} = request.body;
 		db.run(
-				"UPDATE users SET is_2FA = 1 WHERE id = ?",
-				[userId],
-				(err) => {
+				"UPDATE users SET is_2FA = ? WHERE id = ?",[is_2Fa],[userId],
+				(err : any) => {
 					if (err) return;
 					return({ code: 200, message: "2FA active avec succes" });
 				}

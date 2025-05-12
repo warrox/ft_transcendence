@@ -6,6 +6,7 @@ import { Register } from '../components/Register';
 import { Div } from '../lib/PongFactory';
 import { Login } from '../components/Login';
 import { Game } from '../components/Game';
+import { Tournament } from '../components/Tournament';
 import { Landing } from '../components/Landing';
 import { Profil } from '../components/Profil'
 import { AuthStore } from '../stores/AuthStore';
@@ -24,6 +25,7 @@ const routes: Route[] = [
 	{ path: '/login', component: Login},
 	{ path: '/game', component: Game},
 	{ path: '/profil', component: Profil},
+	{ path: '/tournament', component: Tournament},
 ]
 
 // await AuthStore.fetchMe();

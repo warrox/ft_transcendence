@@ -3,6 +3,8 @@ export const inputCss: string = "@apply w-[250px] text-base border shadow-[1px_1
 
 export const inputMailCss: string = "@apply w-[250px] text-base border shadow-[1px_1px_3px_rgba(0,0,0,0.1)] p-2.5 rounded-[5px] border-solid border-[#ccc] placeholder-gray-300 text-white valid:bg-green-yellow invalid:bg-red-300";
 
+export const inputMailProfilCss: string = "@apply w-[250px] text-base border shadow-[1px_1px_3px_rgba(0,0,0,0.1)] p-2.5 rounded-[5px] border-solid border-[#ccc] placeholder-gray-300 valid:bg-green-yellow invalid:bg-red-300";
+
 // NAVBAR CSS
 export const linkCss: string = "font-orbitron text-white transition duration-300 ease-in-out self-center text-2xl font-semibold whitespace-nowrap dark:text-white hover:text-yellow-500 relative inline-block after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-yellow-500 after:bottom-0 after:left-0 after:transform after:scale-x-0 after:origin-right after:transition-all after:duration-400 hover:after:scale-x-100";
 
@@ -116,3 +118,10 @@ export const playButtonDarkCss = `
   transition
   duration-300
 `;
+
+// const forceTailwindToIncludeThese = [
+// 	"bg-yellow-400", "bg-emerald-500", "bg-neutral-400", "bg-cyan-500", "bg-rose-600", "bg-fuchsia-400", "bg-indigo-900",
+// 	"text-yellow-400", "text-emerald-500", "text-neutral-400", "text-cyan-500", "text-rose-600", "text-fuchsia-400", "text-indigo-900",
+// 	"hover:bg-yellow-500", "hover:bg-emerald-600", "hover:bg-neutral-500", "hover:bg-cyan-600", "hover:bg-rose-700", "hover:bg-fuchsia-500", "hover:bg-indigo-950",
+//  "border-yellow-500", "border-emerald-500", "border-neutral-400", "border-cyan-500", "border-rose-600", "border-fuchsia-400", "border-indigo-900",
+// ];
