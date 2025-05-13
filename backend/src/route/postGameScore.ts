@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import db from "../../db";
+const contract = require("../../blockchain/contractConfig")
 
 export interface PostGameScoreBody {
 	userId: number;
@@ -22,9 +23,12 @@ export const postGameScore = async (
 			db.run(query, [userId, score, guestName || null], function (err) {
 				if (err) return reject(err);
 				resolve({ message: "Game score inserted", gameId: this.lastID });
+
 			});
 		});
-
+		
+		const tx = await contract.putScore(new Date().toISOString(), score === "win", guestName || "");
+		await tx.wait();
 		reply.code(200).send(result);
 	} catch (err: any) {
 		reply.code(400).send({ error: err.message });
