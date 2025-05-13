@@ -19,24 +19,14 @@ let Status: null | "OK" | "KO" = null;
 // 	: "../assets/avatar.png";
 
 function getAvatarPath() {
-	return AuthStore.user?.avatar_path
-		? AuthStore.user.avatar_path
+	return AuthStore.instance.user?.avatar_path
+		? AuthStore.instance.user.avatar_path
 		: "../assets/avatar.png";
 }
 
-// let is2FAEnabled = false;
-
-// function toggle2FA() {
-// 	is2FAEnabled = !is2FAEnabled;
-// 	rerender();
-// }
-
-
 
 export function Profil() : PongNode<any> {
-	console.log("islogged", AuthStore.isLoggedIn);
-	
-	const email = AuthStore.user?.email;
+	const email = AuthStore.instance.user?.email;
 
 	const fileInput = Input({
 		id: "fileInput",
@@ -82,7 +72,7 @@ export function Profil() : PongNode<any> {
 		.then(async (res) => {
 			if (res.ok) {
 				const { avatarPath: avatarPathFromBackend } = await res.json();
-				AuthStore.user!.avatar_path = avatarPathFromBackend;
+				AuthStore.instance.user!.avatar_path = avatarPathFromBackend;
 				console.log("Upload success")
 			} else {
 				console.error("Upload failed");
@@ -124,10 +114,9 @@ export function Profil() : PongNode<any> {
 				try {
 					const json = JSON.parse(text);
 					console.log(json);
-					AuthStore.user!.email = body.newMail;
-					Status = "OK";
+					AuthStore.instance.user!.email = body.newMail;
 				} catch (_) {
-					AuthStore.user!.email = body.newMail;
+					AuthStore.instance.user!.email = body.newMail;
 					Status = "OK";
 				}
 			} else {
@@ -165,22 +154,6 @@ export function Profil() : PongNode<any> {
 				"Content-Type": "application/json",
 			},
 		})
-		.then(async res => {
-			if (res.ok) {
-				// const text = await res.text();
-		
-				try {
-					// const json = JSON.parse(text);
-					// AuthStore.user!.email = body.newpassword;
-					Status = "OK";
-				} catch (_) {
-					// AuthStore.user!.email = body.newpassword;
-					Status = "OK";
-				}
-			} else {
-				Status = "KO";
-			}
-		})
 		.catch(e => {
 			console.error("Fetch failed:", e);
 			Status = "KO";
@@ -190,31 +163,36 @@ export function Profil() : PongNode<any> {
 		});
 	};
 
-const handle2FA = () => {
-	const is_2Fa = AuthStore.user!.is_2FA ? 0 : 1;
-	const body = { is_2Fa };
 
-	console.log("is2fa", is_2Fa);
+	const handle2FA = async () => {
+		const currentState = AuthStore.instance.user!.is_2FA;
+		const newState = currentState ? 0 : 1;
 
-	fetch("/api/post2Fa", {
-		method: "POST",
-		body: JSON.stringify(body),
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json",
-		},
-	})
-	.then(async res => {
-		if (res.ok)
-			AuthStore.user!.is_2FA = is_2Fa;
-	})
-	.catch(e => {
-		console.error("Fetch failed:", e);
-	})
-	.finally(() => {
+		console.log("newState : ", newState);
+
+		try {
+			const updateRes = await fetch("/api/post2Fa", {
+				method: "POST",
+				body: JSON.stringify({ is_2Fa: newState }),
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (!updateRes.ok) {
+				throw new Error("Failed to update 2FA");
+			}
+
+			await AuthStore.instance.refresh();
+			console.log("is_2FA after refresh:", AuthStore.instance.user?.is_2FA);
+
+		} catch (e) {
+			console.error("2FA update failed:", e);
+		}
 		rerender();
-	});
-}
+	};
+
 
 
 	return Div({
@@ -291,14 +269,14 @@ const handle2FA = () => {
 					Div({
 						class: `
 							absolute inset-0 rounded-full transition-colors duration-300 
-							${AuthStore.user?.is_2FA ? "bg-green-500" : "bg-gray-300"}
+							${AuthStore.instance.user?.is_2FA ? "bg-green-500" : "bg-gray-300"}
 						`
 					}),
 					Div({
 						class: `
 							absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md 
 							transition-transform duration-300
-							${AuthStore.user?.is_2FA ? "translate-x-6" : "translate-x-0"}
+							${AuthStore.instance.user?.is_2FA ? "translate-x-6" : "translate-x-0"}
 						`
 					})
 				]),

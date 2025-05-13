@@ -30,7 +30,8 @@ import {
 	circle7Css,
 	circle8Css,
 	circle9Css,
-	circle10Css
+	circle10Css,
+	inputCss
 } from "../styles/cssFactory";
 
 import "../styles/index.css";
@@ -57,14 +58,14 @@ export function Login(): PongNode<any> {
 		id: "emailInput", 
 		required: true, 
 		onChange: () => {},
-		class: inputScaleCss,
+		class: inputCss,
 	});
 	const passwordInput = Input({
 		id: "password",
 		type: "password",
 		required: true,
 		onChange: () => {},
-		class: inputScaleCss,
+		class: inputCss,
 	});
 
 	// TESTING IMG
@@ -74,7 +75,7 @@ export function Login(): PongNode<any> {
 		const email = (document.querySelector("#emailInput") as HTMLInputElement)?.value;
 		const password = (document.querySelector("#password") as HTMLInputElement)?.value;
 
-		console.log("is2fa", AuthStore.user?.is_2FA)
+		console.log("is2fa", AuthStore.instance.user?.is_2FA)
 
 		const body = {
 			email,
@@ -98,14 +99,14 @@ export function Login(): PongNode<any> {
 				const parseBody = JSON.parse(text);
 				console.log("Response parsed from JSON :", parseBody);
 
-				if (parseBody.success === true && AuthStore.user?.is_2FA === 1) {
+				if (parseBody.success === true && AuthStore.instance.user?.is_2FA === 1) {
 					requires2FA = true;
 					rerender();
 					return; // on attend le 2FA avant de continuer
 				}
 
 				loginStatus = parseBody.success === true ? "OK" : "KO";
-				AuthStore.isLoggedIn = true;
+				AuthStore.instance.isLoggedIn = true;
 				setTimeout(() => {
 					navigateTo('/home');
 				}, 1500);
@@ -135,7 +136,7 @@ export function Login(): PongNode<any> {
 			const json = await res.json();
 			if (json.success) {
 				loginStatus = "OK";
-				AuthStore.isLoggedIn = true;
+				AuthStore.instance.isLoggedIn = true;
 				setTimeout(() => {
 					navigateTo("/home");
 				}, 1500);

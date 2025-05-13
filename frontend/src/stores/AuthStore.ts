@@ -1,56 +1,70 @@
-type User = {
-	id: string;
-	is_2FA: number;
-	name: string;
-	surname: string;
-	email: string;
-	password: string;
-	avatar_path: string;
+// src/stores/AuthStore.ts
+export type User = {
+  id: string;
+  is_2FA: number;
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+  avatar_path: string;
 };
 
-export const AuthStore = {
-	isLoggedIn: false,
-	user: null as null | User,
-	
-	async fetchMe(): Promise<void> {
+type Subscriber = () => void;
+
+export class AuthStore {
+	private static _instance: AuthStore;
+	private subscribers: Subscriber[] = [];
+
+	public user: User | null = null;
+	public isLoggedIn = false;
+
+	private constructor() {}
+
+	public static get instance(): AuthStore {
+		if (!AuthStore._instance) {
+			AuthStore._instance = new AuthStore();
+		}
+		return AuthStore._instance;
+	}
+
+	public subscribe(fn: Subscriber) {
+		this.subscribers.push(fn);
+	}
+
+	private notify() {
+		for (const fn of this.subscribers) {
+			fn();
+		}
+	}
+
+	public async fetchMe(): Promise<void> {
 		try {
 			const res = await fetch("/api/me", {
 				credentials: "include",
-				headers: {
-					'Content-Type': 'application/json',
-				},
+				headers: { "Content-Type": "application/json" },
 			});
-
-			console.log("Response status:", res.status);
-
-			if (res.ok) {
-				const userData = await res.json();
-				console.log("User data received:", userData);
-				this.user = userData as User;
-				// this.user = {
-				// 	id: userData.id,
-				// 	is_2FA: userData.is_2FA,
-				// 	name: userData.name,
-				// 	surname: userData.surname,
-				// 	email: userData.email
-				// };
-				this.isLoggedIn = true;
-				console.log("Authentication successful");
-			} else {
-				const errorData = await res.json();
-				console.log("Authentication failed, status:", res.status);
-				console.log("Error from back : ", errorData.error);
+			if (!res.ok) {
 				this.resetAuthState();
+				return;
 			}
+			const data = (await res.json()) as User;
+			this.user = data;
+			this.isLoggedIn = true;
 		} catch (err) {
-			console.error("Error fetching user data:", err);
+			console.error("AuthStore.fetchMe error:", err);
 			this.resetAuthState();
+		} finally {
+			this.notify();
 		}
-	},
+	}
 
-	resetAuthState(): void {
+	public async refresh(): Promise<void> {
+		await this.fetchMe();
+	}
+
+	public resetAuthState() {
 		this.user = null;
 		this.isLoggedIn = false;
+		this.notify();
 	}
-};
-
+}

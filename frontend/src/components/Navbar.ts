@@ -26,7 +26,7 @@ function changeLanguageTo(lang: string) {
   }
 
 export function Navbar(): PongNode<any> {
-	const isLogged = AuthStore.isLoggedIn;
+	const isLogged = AuthStore.instance.isLoggedIn;
 
 	const handleDisconnect = () => {
 		fetch("/api/logout", {
@@ -45,7 +45,7 @@ export function Navbar(): PongNode<any> {
 				try {
 					const parsedBody = JSON.parse(body);
 					console.log("Déconnexion réussie :", parsedBody);
-					AuthStore.isLoggedIn = false;
+					AuthStore.instance.isLoggedIn = false;
 					setTimeout(() => {
 						navigateTo('/home');
 					}, 1500);

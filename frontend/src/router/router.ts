@@ -105,30 +105,35 @@ export async function router() {
 	const app = document.getElementById('app');
 	if (!app) return;
 	
-	if (!AuthStore.user)
-		await AuthStore.fetchMe();
+	if (!AuthStore.instance.user)
+		await AuthStore.instance.fetchMe();
 	
 	let path = window.location.pathname || '/';
 	
 	if (path === '/') {
-		path = AuthStore.isLoggedIn ? '/home' : '/landing';
+		path = AuthStore.instance.isLoggedIn ? '/home' : '/landing';
 		history.replaceState({}, "", path);
 	}
 
-	if (path === '/home' && !AuthStore.isLoggedIn) {
+	if (path === '/home' && !AuthStore.instance.isLoggedIn) {
 		path = '/landing';
 		history.replaceState({}, "", path);
 	}
 
 
-	if (path === '/game' && !AuthStore.isLoggedIn) {
+	if (path === '/game' && !AuthStore.instance.isLoggedIn) {
 		path = '/landing';
 		history.replaceState({}, "", path);
 	}
 
-	if ((path === '/register' || path === '/login') && AuthStore.isLoggedIn) {
+	if ((path === '/register' || path === '/login') && AuthStore.instance.isLoggedIn) {
 		path = '/home';
 		history.replaceState({}, "" , path)
+	}
+
+	if (path === '/profil' && !AuthStore.instance.isLoggedIn) {
+		path = '/landing';
+		history.replaceState({}, "", path);
 	}
 
 	const route = routes.find(r => r.path == path);

@@ -74,7 +74,7 @@ export function Home(): PongNode<any> {
 	const userLogin = userInfo ? userInfo.login : t("home.loading");
 	const userEmail = userInfo ? userInfo.email : t("home.loading");
 	const userSurname = userInfo ? userInfo.surname : t("home.loading");
-	const user2FAStatus = AuthStore.user?.is_2FA;
+	const user2FAStatus = AuthStore.instance.user?.is_2FA;
 
 	const toggleLoginForm = () => {
 		const loginInputContainer = document.getElementById('login-input-container');
