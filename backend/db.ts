@@ -32,9 +32,10 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS games (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user_id INTEGER NOT NULL,
-	result TEXT CHECK(result IN ('win', 'loose')) NOT NULL,	
+	result TEXT CHECK(result IN ('win', 'lose')) NOT NULL,	
 	guest_name TEXT,
 	game_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	score TEXT NOT NULL ,
 	FOREIGN KEY (user_id) REFERENCES users(id)
 )`);
 
