@@ -187,8 +187,17 @@ export function Home(): PongNode<any> {
 						Span({ class: neonTitleCss }, [t("home.dashboard")]),
 						Image({ id: "dash_img", src: "../assets/dashboard.png", alt: "dash_img", class: "imageCenter" })
 					]),
-					Div({ class: cardBackCss }, [
-						Span({}, ["Card 3 Back"])
+					Div({ class: `${cardBackCss} flex flex-col justify-center text-center p-6` }, [
+						// Span({}, ["Card 3 Back"]),
+						Image({ id: "dashboard_img_back", src: "../assets/dashboard.png", alt: "dashboard_img_back", class: "imageCenter w-1/3 mx-auto mb-4" }),
+						Div({ class: "mb-4" }, [
+							Span({ class: "text-sm" }, [t("home.dashboard_description")]),
+						]),
+						Button({
+							id: "dashboard_button",
+							class: playButtonDarkCss,
+							onClick: () => navigateTo("/dashboard"),
+						}, [t("home.dashboard")])
 					])
 				])
 			]),
