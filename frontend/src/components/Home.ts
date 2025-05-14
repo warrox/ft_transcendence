@@ -1,5 +1,5 @@
 import { PongNode } from "../lib/PongNode";
-import { Div, UList, Li, Span, Image, Button, RawHTML, Input } from "../lib/PongFactory";
+import { Div, UList, Li, Span, Image, Button, RawHTML } from "../lib/PongFactory";
 import {
 	areaCss,
 	circlesCss,

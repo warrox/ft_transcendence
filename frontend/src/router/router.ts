@@ -10,6 +10,7 @@ import { Tournament } from '../components/Tournament';
 import { Landing } from '../components/Landing';
 import { Profil } from '../components/Profil'
 import { AuthStore } from '../stores/AuthStore';
+import { Dashboard } from '../components/Dashboard'
 
 
 type Route = {
@@ -26,6 +27,7 @@ const routes: Route[] = [
 	{ path: '/game', component: Game},
 	{ path: '/profil', component: Profil},
 	{ path: '/tournament', component: Tournament},
+	{ path: '/dashboard', component: Dashboard},
 ]
 
 // await AuthStore.fetchMe();
