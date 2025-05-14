@@ -15,7 +15,7 @@ const dbGet = (sql: string, params: any[]) => {
 	});
 };
 
-export const me = async (request: FastifyRequest, reply: FastifyReply) => {
+export const getGameScore = async (request: FastifyRequest, reply: FastifyReply) => {
 	try {
 		const token = request.cookies["access_token"];
 		if (!token) {
@@ -26,7 +26,7 @@ export const me = async (request: FastifyRequest, reply: FastifyReply) => {
 		const userId = claims!.id;
 
 		const row = await dbGet(
-			'SELECT id, user_id , result , guest_name , game_date FROM game WHERE id = ?',
+			'SELECT id, user_id , result , guest_name , game_date FROM games WHERE user_id = ? ORDER BY game_date',
 			[userId]
 		);
 
