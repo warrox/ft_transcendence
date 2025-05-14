@@ -9,12 +9,17 @@ import { sleep } from 'sleep-ts';
 let gameStarted = 0;
 
 let player1:string | null = null;
+let userId: number = -1;
 
 let player2: string = "";
 
 let mapIndex = 0;
 
 let winner = "";
+let result: "win" | "lose";
+let score: string;
+let guestName:string;
+
 let nameError = false;
 let errLength = false;
 
@@ -41,23 +46,30 @@ export function Game(): PongNode<any> {
 	}, 0);
 
 	const fetchUsername = () => {
-		if (player1 != null) return;
-
+		if (player1 != null && userId != -1) return;
+		console.log("Je recup un username");
 		fetch("/api/me", {
 			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+			},
 		})
 			.then((res) => {
 				if (!res.ok) throw new Error("/api/me: Failed");
 				return res.json();
 			})
 			.then((data: MeData) => {
-				player1 = data.name;
+				console.log("DATA name: ", data.name);
+				if (player1 == null) player1 = data.name;
+				if (userId == -1) userId = data.id;
 			})
 			.catch((e) => console.error(e));
 	};
 	
 	fetchUsername();
-
+	console.log("Player1: ", player1);
+	console.log("PlayerId: ", userId);
+	
 	const mapStyles: { [key: string]: string} = {
 		"Default": "yellow-400",
 		"Classic": "neutral-400",
@@ -101,6 +113,8 @@ export function Game(): PongNode<any> {
 
 	if (gameStarted == 0)
 	{
+		leftScore = 0;
+		rightScore = 0;
 			return Div({ class: "relative flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
 				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, ["Pong like you’ve never played it before."]),
 				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, ["Choose your map:"]),
@@ -240,7 +254,7 @@ function movePad(){
 	const rightpad = document.getElementById("rightpad") as HTMLDivElement;
 	const gameArea = document.getElementById("game-area") as HTMLDivElement;
 
-	if (!leftpad || !rightpad || !gameStarted)
+	if (!leftpad || !rightpad || !gameStarted || gameStarted == 3)
 		return ;
 
 
@@ -294,16 +308,52 @@ function playPong(){
 	
 
 	function moveBall(){
+		if (gameStarted == 3)
+			return;
 		if (leftscorepan && rightscorepan && (leftscorepan.textContent == "5" || rightscorepan.textContent == "5"))
 		{
-			if (leftscorepan.textContent == "5" && player1) winner = player1;
+			if (leftscorepan.textContent == "5" && player1){
+				winner = player1;
+				result = "win";
+			}
 			else
 			{
 				if (gameStarted != 2)
 					winner = player2;
 				else winner = "IA";
+				result = "lose";
 			}
+			score = leftScore.toString() + " " + rightScore.toString();
+			console.log("Match score sent: ", score);
+			guestName = player2;
+			const body = {
+				userId,
+				result,
+				score,
+				guestName,
+			};
+			fetch("/api/postGameScore", {
+				method: "POST",
+				body: JSON.stringify(body),
+				credentials: "include",
+				headers: {
+				"Content-Type": "application/json",
+				},
+			})
+			.then(async res => {
+				if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+				const text = await res.text();
+				console.log("Réponse brute du serveur :", text);
+	
+				try {
+					const parseBody = JSON.parse(text);
+					console.log("Response parsed from JSON :", parseBody);
+				} catch (e) {
+					console.log("Error parsing JSON: ", e);
+				}
+			})
 			gameStarted = 3;
+			registerplayer = false;
 			rerender();
 			return ;
 		}
