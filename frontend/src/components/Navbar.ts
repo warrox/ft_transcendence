@@ -1,6 +1,6 @@
 import { PongNode } from "../lib/PongNode";
 import { Button, Div, Link } from "../lib/PongFactory";
-import { linkCss } from "../styles/cssFactory";
+import { linkCss, playButtonLangDarkCss, playButtonDarkCss } from "../styles/cssFactory";
 import { AuthStore } from "../stores/AuthStore";
 import { navigateTo, rerender } from "../router/router";
 import { t } from "i18next";
@@ -63,18 +63,18 @@ export function Navbar(): PongNode<any> {
 		Button({
 			id: "lang-fr",
 			onClick: () => changeLanguageTo("fr"),
-			class: "bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded"
-		}, ["FR"]),
+			class: playButtonLangDarkCss
+		}, ["🇫🇷"]),
 		Button({
 			id: "lang-en",
 			onClick: () => changeLanguageTo("en"),
-			class: "bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded"
-		}, ["EN"]),
+			class: playButtonLangDarkCss
+		}, ["🇺🇸"]),
 		Button({
 			id: "lang-pt",
 			onClick: () => changeLanguageTo("pt"),
-			class: "bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded"
-		}, ["PT"]),
+			class: playButtonLangDarkCss
+		}, ["🇵🇹"]),
 	]);
 
 	return Div({
@@ -93,7 +93,7 @@ export function Navbar(): PongNode<any> {
 				Button({
 					id: "logoutButton",
 					onClick: handleDisconnect,
-					class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded",
+					class: playButtonDarkCss,
 				}, [t("navbar.disconnect")]),
 			]),
 			languageButtons
