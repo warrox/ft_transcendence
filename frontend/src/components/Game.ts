@@ -133,7 +133,7 @@ export function Game(): PongNode<any> {
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton", onClick: () => {
 							gameStarted = 2;
-							player2 = "Bot";
+							player2 = "AI";
 							rerender();
 						},
 							class: `bg-${PongColor}  hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
@@ -320,7 +320,7 @@ function playPong(){
 			{
 				if (gameStarted != 2)
 					winner = player2;
-				else winner = "IA";
+				else winner = "AI";
 				result = "lose";
 			}
 			score = leftScore.toString() + " " + rightScore.toString();
