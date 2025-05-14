@@ -23,7 +23,9 @@
     "select_map": "Select map",
     "solo_friends": "Go solo or battle your friends !",
     "single_player": "Single Player",
-    "multi_player": "Multiple Player"
+    "multi_player": "Multiple Player",
+		"tournament": "Tournament",
+    "back_menu": "Back to menu"
   },
   "home": {
     "loading": "Loading",

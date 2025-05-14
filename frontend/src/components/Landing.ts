@@ -1,8 +1,9 @@
 import { PongNode } from "../lib/PongNode";
 import { Div, Image, Button, H1, Span, RawHTML, P } from "../lib/PongFactory";
-import { navigateTo} from "../router/router";
+import { navigateTo } from "../router/router";
 import { rerender } from "../router/router"
 import { AuthStore } from "../stores/AuthStore";
+import { playButtonLangDarkCss } from "../styles/cssFactory";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { t } from "i18next";
@@ -29,18 +30,18 @@ function navLanding(): PongNode<any> {
 				Button({
 					id: "lang-fr",
 					onClick: () => changeLanguageTo("fr"),
-					class: "bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded"
-				}, ["Français"]),
+					class: playButtonLangDarkCss
+				}, ["🇫🇷"]),
 				Button({
 					id: "lang-en",
 					onClick: () => changeLanguageTo("en"),
-					class: "bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded"
-				}, ["English"]),
+					class: playButtonLangDarkCss
+				}, ["🇺🇸"]),
 				Button({
 					id: "lang-pt",
 					onClick: () => changeLanguageTo("pt"),
-					class: "bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded"
-				}, ["Português"]),
+					class: playButtonLangDarkCss
+				}, ["🇵🇹"]),
 				
 				Button({
 					id: "loginButton",

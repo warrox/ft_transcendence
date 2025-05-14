@@ -7,6 +7,9 @@ import { sleep } from 'sleep-ts';
 import { userInfo } from "os";
 import { Tournament } from "./Tournament";
 
+import { t } from "i18next";
+import i18n from "i18next";
+
 let gameStarted = 0;
 
 let player1:string | null = null;
@@ -96,8 +99,8 @@ export function Game(): PongNode<any> {
 	if (gameStarted == 0)
 	{
 			return Div({ class: "flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
-				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, ["Pong like you’ve never played it before."]),
-				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, ["Choose your map:"]),
+				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, [t("game.never_play")]),
+				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, [t("game.choose_map")]),
 				Div({ class: "flex items-center"} , [Span({ class: `block font-orbitron md:text-2xl text-${PongColor}`}, [`${mapKeys[mapIndex]}`])]),
 				Div({ class: "flex justify-between items-center" }, [
 					Button({ id: "left-arrow", class: `bg-${PongColor} hover:bg-${hoverColor} text-xl text-white px-4 py-2 rounded mr-10`, onClick: prev_color }, ["<"]),
@@ -109,7 +112,7 @@ export function Game(): PongNode<any> {
 					Button({ id: "right-arrow", class: `bg-${PongColor} hover:bg-${hoverColor} text-xl text-white px-4 py-2 rounded ml-10`, onClick: next_color }, [">"]),
 				]),
 				Div({ class: "flex flex-col justify-around items-center h-30"}, [
-					Span({ class: `block font-orbitron md:text-2xl text-${PongColor}` }, ["Go solo or battle your friends!:" ]),
+					Span({ class: `block font-orbitron md:text-2xl text-${PongColor}` }, [t("game.solo_friends")]),
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton", onClick: () => {
 							gameStarted = 2;
@@ -117,19 +120,19 @@ export function Game(): PongNode<any> {
 						},
 							class: `bg-${PongColor}  hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 
-							["Single Player"]),
+							[t("game.single_player")]),
 						Button({id: "mgplayerButton", onClick: () => {
 								gameStarted = 1;
 								rerender();
 							},
 
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
-							["Multiple Player"]),
+							[t("game.multi_player")]),
 						Button({id: "tournamentButton",
 							onClick: () => {
 								Tournament(mapKeys[mapIndex]); navigateTo('/tournament');},
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
-							["Tournament Mode"]),
+							[t("game.tournament")]),
 					]),
 				]),
 		]);
@@ -165,7 +168,7 @@ export function Game(): PongNode<any> {
 					gameStarted = 0;
 					rerender();
 				},
-				class: `absolute left-[730px] top-[450px] bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`}, ["Back to menu"]),
+				class: `absolute left-[730px] top-[450px] bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`}, [t("game.back_menu")]),
 				Div({ id: "leftpad", class:`absolute w-[15px] h-[90px] bg-${PongColor} left-[5px] top-[360px]` }),
 				Div({ id: "rightpad", class:`absolute w-[15px] h-[90px] bg-${PongColor} left-[1580px] top-[360px]` }),
 			]),

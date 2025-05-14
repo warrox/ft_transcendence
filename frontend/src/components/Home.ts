@@ -216,7 +216,7 @@ export function Home(): PongNode<any> {
 						Button({
 							id: "setting_button",
 							class: playButtonDarkCss,
-							onClick: () => navigateTo("/profile"),
+							onClick: () => navigateTo("/profil"),
 						}, [t("home.settings")])
 					])
 				])

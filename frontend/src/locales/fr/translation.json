@@ -23,7 +23,9 @@
 		"select_map": "Selectionnez une carte",
 		"solo_friends": "Jouez en solo ou affrontez vos amis !",
 		"single_player": "Joueur seul",
-		"multi_player": "Multijoueur"
+		"multi_player": "Multijoueur",
+		"tournament": "Tournois",
+		"back_menu": "Retour au menu"
 	},
 	"home": {
 		"loading": "Chargement",
