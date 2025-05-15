@@ -8,7 +8,10 @@ export interface UpdateMailBody {
 
 export const updateMail = async (request: FastifyRequest<{ Body: UpdateMailBody }>, reply: FastifyReply) => {
 	const { email, newMail } = request.body;
-
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	  if (!emailRegex.test(email)) {
+		return reply.status(400).send({ error: "Invalid email format" });
+	  }
 	try {
 		const result = await new Promise((resolve, reject) => {
 			db.run('UPDATE users SET email = ? WHERE email = ?', [newMail, email], function (err) {

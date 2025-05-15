@@ -41,7 +41,6 @@ export const getFriends = async (request: FastifyRequest, reply: FastifyReply) =
       );
     });
 
-    // Enrichir avec statut online
     const enriched = friends.map(friend => ({
       ...friend,
       online: onlineUsers.has(friend.id),
