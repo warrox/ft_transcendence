@@ -11,7 +11,7 @@ export const verify2Fa = async(request: FastifyRequest <{ Body: User}>, reply: F
 	console.log("twofa from back: ", twoFAStore.code.toString());
 	if(code2FA === twoFAStore.code.toString())
 	{
-		const token = server.jwt.sign({ id: id, email }, { expiresIn: 3600 });
+		const token = server.jwt.sign({ id: id, email :email}, { expiresIn: 3600 });
 		reply.setCookie("access_token", token, {
 			path: "/",
 			httpOnly: true,
