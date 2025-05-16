@@ -1,4 +1,4 @@
-import { Div, Button, Input, Span, Li } from "../lib/PongFactory";
+import { Div, Button, Input, Span } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { MeData } from "./Home";
 import { rerender, navigateTo } from "../router/router";
@@ -36,6 +36,8 @@ const ballState = {
 
 let leftScore = 0;
 let rightScore = 0;
+let leftResult = 0;
+let rightResult = 0;
 
 
 export function Game(): PongNode<any> {
@@ -216,9 +218,9 @@ export function Game(): PongNode<any> {
 		return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
 			Div({ class: `text-${PongColor} font-orbitron text-4xl mb-4` }, [
 				Span({id: "player 1", class: "mx -8"}, [`${player1}`]),
-				Span({ id: "score-left", class: "mx-8" }, [`${String(leftScore)}`]),
+				Span({ id: "score-left", class: "mx-8" }, [`${String(leftResult)}`]),
 				Span({}, [" : "]),
-				Span({ id: "score-right", class: "mx-8" }, [`${String(rightScore)}`]),
+				Span({ id: "score-right", class: "mx-8" }, [`${String(rightResult)}`]),
 				Span({id: "player 1", class: "mx -8"}, [`${player2}`]),
 			]),
 			Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
@@ -324,6 +326,8 @@ function playPong(){
 				result = "lose";
 			}
 			score = leftScore.toString() + " " + rightScore.toString();
+			leftResult = leftScore;
+			rightResult = rightScore;
 			console.log("Match score sent: ", score);
 			guestName = player2;
 			const body = {
@@ -332,6 +336,7 @@ function playPong(){
 				score,
 				guestName,
 			};
+			console.log(body);
 			fetch("/api/postGameScore", {
 				method: "POST",
 				body: JSON.stringify(body),
@@ -353,6 +358,8 @@ function playPong(){
 				console.error("Erreur dans fetch:", err);
 			  });
 			gameStarted = 3;
+			leftScore = 0;
+			rightScore = 0;
 			registerplayer = false;
 			rerender();
 			return ;
@@ -377,7 +384,21 @@ function playPong(){
 			ballState.y = gameArea.clientHeight / 2;
 		}
 
-        if ((ballState.y<= leftpad.offsetTop + leftpad.offsetHeight && ballState.y + ball.clientHeight >= leftpad.offsetTop) &&  (ballState.x <= leftpad.offsetLeft + leftpad.clientWidth && ballState.dx < 0))
+		const ballTop = ballState.y;
+		const ballBottom = ballState.y + ball.clientHeight;
+		const ballLeft = ballState.x;
+		const ballRight = ballState.x + ball.clientWidth;
+
+		const padTop = leftpad.offsetTop;
+		const padBottom = leftpad.offsetTop + leftpad.offsetHeight;
+		const padLeft = leftpad.offsetLeft;
+		const padRight = leftpad.offsetLeft + leftpad.clientWidth;
+
+		const verticalCollision = ballBottom >= padTop && ballTop <= padBottom;
+		const horizontalCollision = ballLeft <= padRight && ballRight >= padLeft;
+
+		if (verticalCollision && horizontalCollision && ballState.dx < 0)
+        // if ((ballState.y <= leftpad.offsetTop + leftpad.offsetHeight && ballState.y + ball.clientHeight >= leftpad.offsetTop) &&  (ballState.x <= leftpad.offsetLeft + leftpad.clientWidth && ballState.dx < 0))
 		{
             ballState.dx = (ballState.dx * -1) + 2;
 			ballState.dy = ((ballState.y + (ball.clientHeight / 2)) - (leftpad.offsetTop + (leftpad.offsetHeight / 2))) * 0.25;
@@ -463,7 +484,9 @@ async function AI_mov(){
 		if (dx > 0)
 		{
 			const timeToReach = (gameArea.clientWidth - x) / dx;
-			let target = y + (dy * timeToReach )+ Math.floor((Math.random() * rightpad.clientHeight)) - rightpad.clientHeight;	
+			// let target = y + (dy * timeToReach )+ Math.floor((Math.random() * rightpad.clientHeight)) - rightpad.clientHeight;	
+			let randomness = (Math.random() - 0.5) * rightpad.clientHeight * 0.3;
+			let target = y + dy * timeToReach + randomness;
 
 			while (target < 0 || target > gameArea.clientHeight) {
 				if (target < 0) target = -target;
