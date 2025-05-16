@@ -26,7 +26,7 @@ function changeLanguageTo(lang: string) {
   }
 
 export function Navbar(): PongNode<any> {
-	const isLogged = AuthStore.isLoggedIn;
+	const isLogged = AuthStore.instance.isLoggedIn;
 
 	const handleDisconnect = () => {
 		fetch("/api/logout", {
@@ -45,9 +45,10 @@ export function Navbar(): PongNode<any> {
 				try {
 					const parsedBody = JSON.parse(body);
 					console.log("Déconnexion réussie :", parsedBody);
+					AuthStore.instance.isLoggedIn = false;
 					setTimeout(() => {
 						navigateTo('/home');
-					}, 2000);
+					}, 1500);
 					rerender();
 				} catch (e) {
 					console.error("Erreur de parsing JSON :", e);

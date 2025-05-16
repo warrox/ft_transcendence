@@ -63,7 +63,7 @@ function navLanding(): PongNode<any> {
 }
 
 function main(): PongNode<any> {
-	const isLogged = AuthStore.isLoggedIn;
+	const isLogged = AuthStore.instance.isLoggedIn;
 
 	return Div({
 		class: "relative min-h-screen bg-gray-950"

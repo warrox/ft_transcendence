@@ -27,6 +27,7 @@ import {
 import { navigateTo, rerender } from "../router/router";
 import { t } from "i18next";
 import i18n from "i18next";
+import { AuthStore } from "../stores/AuthStore";
 
 let userInfo: UserInfo | null = null;
 
@@ -73,7 +74,7 @@ export function Home(): PongNode<any> {
 	const userLogin = userInfo ? userInfo.login : t("home.loading");
 	const userEmail = userInfo ? userInfo.email : t("home.loading");
 	const userSurname = userInfo ? userInfo.surname : t("home.loading");
-	const user2FAStatus = userInfo ? userInfo.is_2FA : false;
+	const user2FAStatus = AuthStore.instance.user?.is_2FA;
 
 	const toggleLoginForm = () => {
 		const loginInputContainer = document.getElementById('login-input-container');

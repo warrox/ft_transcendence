@@ -136,7 +136,7 @@ export function Game(): PongNode<any> {
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton", onClick: () => {
 							gameStarted = 2;
-							player2 = "Bot";
+							player2 = "AI";
 							rerender();
 						},
 							class: `bg-${PongColor}  hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
@@ -323,7 +323,7 @@ function playPong(){
 			{
 				if (gameStarted != 2)
 					winner = player2;
-				else winner = "IA";
+				else winner = "AI";
 				result = "lose";
 			}
 			score = leftScore.toString() + " " + rightScore.toString();
@@ -343,18 +343,18 @@ function playPong(){
 				"Content-Type": "application/json",
 				},
 			})
-			.then(async res => {
-				if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-				const text = await res.text();
-				console.log("Réponse brute du serveur :", text);
-	
-				try {
-					const parseBody = JSON.parse(text);
-					console.log("Response parsed from JSON :", parseBody);
-				} catch (e) {
-					console.log("Error parsing JSON: ", e);
+			.then(async (res) => {
+				const data = await res.text(); // ou res.json() si c'est du JSON
+				if (!res.ok) {
+				  console.error("Erreur HTTP :", res.status, data); // 👈 affiche l’erreur
+				  throw new Error(`HTTP error! Status: ${res.status}`);
+				} else {
+				  console.log("Succès:", data);
 				}
-			})
+			  })
+			  .catch((err) => {
+				console.error("Erreur dans fetch:", err);
+			  });
 			gameStarted = 3;
 			registerplayer = false;
 			rerender();
