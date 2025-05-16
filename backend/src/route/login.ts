@@ -2,6 +2,9 @@ export const twoFAStore : { code : number} = {
 	code:0
 };
 
+// export const twoFAStore: Record<string, number> = {};
+
+
 // *******************8 if is 2fa ok -> send mail to user and boolean to front to wait. **************************
 
 
@@ -86,6 +89,7 @@ export const login = async (
 
 		if (user.is2FA) {
 			twoFAStore.code = Math.floor(1000 + Math.random() * 9000);
+				// twoFAStore[email] = Math.floor(1000 + Math.random() * 9000);
 			console.log("2FA Code:", twoFAStore.code);
 
 			await transporter.sendMail({

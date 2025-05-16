@@ -96,6 +96,18 @@ export function navigateTo(path: string) {
 	router();
 }
 
+// export function navigateTo(path: string) {
+// 	const route = routes.find(r => r.path === path);
+// 	if (!route) {
+// 		history.pushState({}, '', '/404');
+// 		setCurrentPage(() => NotFound());
+// 	} else {
+// 		history.pushState({}, '', path);
+// 		setCurrentPage(route.component);
+// 	}
+// }
+
+
 // function protectPath(path: any, pathString: string, isLoggedIn: boolean) {
 // 	if (path === pathString && isLoggedIn)
 // }
@@ -109,6 +121,9 @@ export async function router() {
 		await AuthStore.instance.fetchMe();
 	
 	let path = window.location.pathname || '/';
+
+	console.log("isLoggedin ?", AuthStore.instance.isLoggedIn);
+	
 	
 	if (path === '/') {
 		path = AuthStore.instance.isLoggedIn ? '/home' : '/landing';

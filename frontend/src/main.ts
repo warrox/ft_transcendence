@@ -5,7 +5,10 @@ import { AuthStore } from './stores/AuthStore.ts';
 
 window.addEventListener("DOMContentLoaded", async () => {
 	AuthStore.instance.subscribe(rerender);
-	await AuthStore.instance.fetchMe();
+
+	const token = localStorage.getItem("access_token");
+	if (token)
+		await AuthStore.instance.fetchMe();
 	router();
 });
 

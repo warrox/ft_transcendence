@@ -82,7 +82,6 @@ export function Login(): PongNode<any> {
 		fetch("/api/login", {
 			method: "POST",
 			body: JSON.stringify(body),
-			credentials: "include",
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -95,10 +94,8 @@ export function Login(): PongNode<any> {
 			try {
 				const parseBody = JSON.parse(text);
 				console.log("Response parsed from JSON :", parseBody);
-				console.log("user = ", AuthStore.instance.user);
-				console.log("is2fa = ", AuthStore.instance.user?.is_2FA);
 
-				if (parseBody.success === true && AuthStore.instance.user?.is_2FA === 1) {
+				if (parseBody.success === true && parseBody.twoFA == true) {
 					requires2FA = true;
 					rerender();
 					return;
@@ -115,17 +112,31 @@ export function Login(): PongNode<any> {
 				rerender();
 			}
 		})
-
 		.finally(() => {
 			rerender();
 		});
 	};
 
+	const twofaInput = Input({
+		id: "twoFaInput",
+		type: "text",
+		placeholder: "4-digit code",
+		maxlength: 4,
+		value: twoFactorCode,
+		class: "border border-gray-300 rounded px-3 py-2 w-full text-center text-lg mb-4",
+	});
+
 	const handle2FAValidation = () => {
-		fetch("/api/2fa", {
+		const email = AuthStore.instance.user?.email;
+		const id = AuthStore.instance.user?.id;
+		const twoFactorCode = (document.querySelector("#twoFaInput") as HTMLInputElement)?.value;
+
+		console.log("2factorcode: ", twoFactorCode);
+
+		fetch("/api/verify2Fa", {
 			method: "POST",
-			body: JSON.stringify({ code: twoFactorCode }),
-			credentials: "include",
+			body: JSON.stringify({ code2FA: twoFactorCode, email, id }),
+			// credentials: "include",
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -133,9 +144,14 @@ export function Login(): PongNode<any> {
 		.then(async res => {
 			if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
 			const json = await res.json();
+			console.log("json", json);
+			
 			if (json.success) {
+				console.log("hereeee");
+				
 				loginStatus = "OK";
 				AuthStore.instance.isLoggedIn = true;
+				AuthStore.instance.refresh()
 				setTimeout(() => {
 					navigateTo("/home");
 				}, 1500);
@@ -170,22 +186,12 @@ export function Login(): PongNode<any> {
 		? Div({ class: "fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50" }, [
 			Div({ class: "bg-white rounded-xl p-6 shadow-lg w-80 text-center" }, [
 				P({ class: "text-xl font-semibold mb-4 text-gray-800" }, ["Enter 2FA Code"]),
-				Input({
-					id: "test",
-					type: "text",
-					placeholder: "4-digit code",
-					maxlength: 4,
-					value: twoFactorCode,
-					class: "border border-gray-300 rounded px-3 py-2 w-full text-center text-lg mb-4",
-					onChange: () => {
-						const input = document.querySelector("#twoFactorInput") as HTMLInputElement;
-						if (!input) return;
-						twoFactorCode = input.value;
-						if (twoFactorCode.length === 4) {
-							handle2FAValidation();
-						}
-					}
-				}),
+				twofaInput,
+				Button({
+					id: "twofa_button",
+					class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full",
+					onClick: handle2FAValidation,
+				}, ["Done"]),
 			])
 		])
 		: Div({}),
