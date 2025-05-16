@@ -13,6 +13,7 @@ export function linkFn(linkId: string, href: string, text: string, css: string):
 		class: css,
 		onClick: () => {
 			navigateTo(href);
+			if (href === "/home") window.location.reload();
 		}
 	}, [text]);
 }

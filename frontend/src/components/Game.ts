@@ -228,6 +228,8 @@ export function Game(): PongNode<any> {
 				Span({class: `absolute left-[550px] top-[250px] block font-orbitron md:text-7xl text-${PongColor} `}, [`WINNER: ${winner}`]),
 				Button({ id: "back-to-menu", onClick: () => {
 					gameStarted = 0;
+					leftScore = 0;
+					rightScore = 0;
 					rerender();
 				},
 				class: `absolute left-[730px] top-[450px] bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`}, [t("game.back_menu")]),
