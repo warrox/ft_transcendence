@@ -1,0 +1,64 @@
+{
+	"navbar": {
+		"home": "Início",
+		"register": "Registrar",
+		"login": "Entrar",
+		"game": "Jogo",
+		"disconnect": "Desconectar"
+	},
+	"landing": {
+		"register": "Registrar",
+		"login": "Entrar",
+		"play_pong": "Jogue Pong.",
+		"have_fun": "Divirta-se. Melhore suas habilidades no tênis de mesa.",
+		"lvl_up": "Aprimore suas habilidades com jogos e torneios.",
+		"start_playing": "Começar a jogar",
+		"why_42": "Descubra por que os desenvolvedores da 42 adoram o Transcendence. 100% gratuito.",
+		"multi_map": "Jogue em vários mapas",
+		"show_off": "Mostre suas habilidades no Pong em um torneio ou desafie a IA sozinho."
+	},
+	"game": {
+		"never_play": "Pong como você nunca jogou antes.",
+		"choose_map": "Escolha o seu mapa:",
+		"select_map": "Selecionar mapa",
+		"solo_friends": "Jogue sozinho ou desafie seus amigos!",
+		"single_player": "Um jogador",
+		"multi_player": "Multijogador"
+	},
+	"home": {
+		"loading": "Carregando",
+		"profile": "Perfil",
+		"information": "Informações",
+		"enabled": "Ativado",
+		"disabled": "Desativado",
+		"change_login": "Alterar login",
+		"enter_login": "Insira um novo login",
+		"confirm": "Confirmar",
+		"game": "Jogo",
+		"never_play": "Pong como você nunca jogou antes.",
+		"lets_play": "Vamos jogar",
+		"dashboard": "Painel de controle",
+		"settings": "Configurações",
+		"settings_paragraph": "Aqui está uma visão geral de todas as opções disponíveis para configurar seu perfil e conta.",
+		"settings_description": "Nas configurações, você pode alterar seu login, senha, e-mail, preferências de idioma e ativar ou desativar a autenticação de dois fatores.",
+		"dashboard_description": "No painel de controle, você pode visualizar suas estatísticas, acompanhar seu progresso e acessar suas partidas recentes."
+	},
+	"login": {
+		"login_page": "Página de login",
+		"click": "Clique aqui",
+		"login": "Entrar",
+		"status": "Status do login:"
+	},
+	"register": {
+		"ph_name": "nome",
+		"ph_lastname": "sobrenome",
+		"ph_email": "email",
+		"ph_password": "senha",
+		"register_page": "Página de registro",
+		"click": "Clique aqui",
+		"sign": "Registrar-se",
+		"success": "Registro bem-sucedido! Redirecionando...",
+		"failed": "Erro ao registrar. Por favor, tente novamente."
+	}
+}
+  

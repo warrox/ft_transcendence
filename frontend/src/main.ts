@@ -1,14 +1,12 @@
-// function createElem(tag: string, txt: string) : HTMLElement {
-// 	const elem = document.createElement(tag);
-// 	elem.textContent = txt;
-// 	return elem;
-// }
-
-
-import { router } from './router/router';
+import { rerender, router } from './router/router';
 import './types/window.d.ts';
-// import './styles/index.css'
+import './i18n';
+import { AuthStore } from './stores/AuthStore.ts';
 
-window.addEventListener('DOMContentLoaded', router);
-window.addEventListener('popstate', router);
-// window.addEventListener('hashchange', router);
+window.addEventListener("DOMContentLoaded", async () => {
+	AuthStore.instance.subscribe(rerender);
+	await AuthStore.instance.fetchMe();
+	router();
+});
+
+window.addEventListener("popstate", router);

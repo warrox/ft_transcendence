@@ -1,0 +1,62 @@
+{
+	"navbar": {
+		"home": "Accueil",
+		"register": "Inscription",
+		"login": "Connexion",
+		"game": "Jeu",
+		"disconnect": "Déconnexion"
+	},
+	"landing": {
+		"register": "Inscription",
+		"login": "Connexion",
+		"play_pong": "Jouez au Pong.",
+		"have_fun": "Amusez-vous et développez vos compétences au pong.",
+		"lvl_up": "Améliores vos compétences avec des jeux et des tournois.",
+		"start_playing": "Commencer à jouer",
+		"why_42": "Découvrez pourquoi les développeurs de 42 adorent Transcendence. 100% gratuit.",
+		"multi_map": "Jouez sur plusieurs cartes",
+		"show_off": "Montrez vos talents de Pong en tournoi ou affrontez une IA pour vous entraîner."
+	},
+	"game": {
+		"never_play": "Un Pong comme vous n’en avez jamais joué.",
+		"choose_map": "Choisissez votre carte :",
+		"select_map": "Selectionnez une carte",
+		"solo_friends": "Jouez en solo ou affrontez vos amis !",
+		"single_player": "Joueur seul",
+		"multi_player": "Multijoueur"
+	},
+	"home": {
+		"loading": "Chargement",
+		"profile": "Profil",
+		"information": "Informations",
+		"enabled": "Activé",
+		"disabled": "Désactivé",
+		"change_login": "Modifier le login",
+		"enter_login": "Nouveau login",
+		"confirm": "Confirmer",
+		"game": "Jeu",
+		"never_play": "Un Pong comme vous n'y avez jamais joué...",
+		"lets_play": "Jouer",
+		"dashboard": "Tableau de bord",
+		"settings": "Paramètres",
+		"settings_paragraph": "Voici un aperçu de toutes les options disponibles pour configurer votre profil et votre compte.",
+		"settings_description": "Dans les paramètres, vous pouvez modifier votre identifiant, mot de passe, adresse e-mail, préférences linguistiques et activer ou désactiver la vérification en deux étapes.",
+		"dashboard_description": "Dans le tableau de bord, vous pouvez consulter vos statistiques, suivre votre progression et accéder à vos parties récentes."
+	},
+	"login": {
+		"login_page": "Page de connexion",
+		"click": "Cliquez ici",
+		"login": "Connexion"
+	},
+	"register": {
+		"ph_name": "prénom",
+		"ph_lastname": "nom",
+		"ph_email": "email",
+		"ph_password": "mot de passe",
+		"register_page": "Page d'inscription",
+		"click": "Cliquez ici",
+		"sign": "S'inscrire",
+		"success": "Inscription réussie ! Redirection en cours...",
+		"failed": "Erreur lors de l'inscription. Veuillez réessayer."
+	}
+}

@@ -28,6 +28,8 @@ import {
 	circle10Css,
 	inputMailCss
 } from "../styles/cssFactory";
+import { t } from "i18next";
+import i18n from "i18next";
 
 let registerState: "idle" | "success" | "error" = "idle";
 
@@ -44,21 +46,21 @@ export function Register(): PongNode<any> {
 		id: "name", 
 		required: true, 
 		onChange: () => {},
-		placeholder: "name",
+		placeholder: t("register.ph_name"),
 		class: inputCss,
 	});
 	const lastNameInput = Input({
 		id: "lastname", 
 		required: true, 
 		onChange: () => {},
-		placeholder: "last name",
+		placeholder: t("register.ph_lastname"),
 		class: inputCss,
 	});
 	const mailInput = Input({
 		id: "mail", 
 		required: true, 
 		onChange: () => {},
-		placeholder: "email",
+		placeholder: t("register.ph_email"),
 		class: inputMailCss,
 		pattern: "[^\\s@]+@[^\\s@]+\\.[^\\s@]+",
 	});
@@ -67,7 +69,7 @@ export function Register(): PongNode<any> {
 		type: "password", 
 		required: true, 
 		onChange: () => {},
-		placeholder: "password",
+		placeholder: t("register.ph_password"),
 		class: inputCss,
 	});
 
@@ -181,7 +183,7 @@ export function Register(): PongNode<any> {
 		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
 			Div({ class: loginCardCss }, [
 				Div({ class: headerCss }, [
-					P({ class: neonTextCss }, ["Register Page"]),
+					P({ class: neonTextCss }, [t("register.register_page")]),
 				]),
 				Div({ class: inputWrapperCss }, [
 					nameInput,
@@ -196,20 +198,20 @@ export function Register(): PongNode<any> {
 					class: fancyButtonCss,
 				}, [
 					Div({ class: fancyLeftBorderCss }),
-					P({ class: disappearingTextCss }, ["Click here"]),
-					Span({ class: appearingTextCss }, ["Sign In"]),
+					P({ class: disappearingTextCss }, [t("register.click")]),
+					Span({ class: appearingTextCss }, [t("register.sign")]),
 					Div({ class: fancyRightBorderCss }),
 				]),
 				registerState === "success" 
 				? Div({ class: "mt-4 p-4 bg-green-500/20 border border-green-500 rounded-lg" }, [
 					P({ class: "text-green-500 text-center" }, [
-						"Inscription réussie! Redirection en cours..."
+						t("register.ph_success")
 					])
 				  ])
 				: registerState === "error"
 				? Div({ class: "mt-4 p-4 bg-red-500/20 border border-red-500 rounded-lg" }, [
 					P({ class: "text-red-500 text-center" }, [
-						"Erreur lors de l'inscription. Veuillez réessayer."
+						t("register.failed")
 					])
 				  ]) :
 				  Div({}),

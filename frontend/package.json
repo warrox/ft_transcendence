@@ -22,7 +22,11 @@
     "@tailwindcss/vite": "^4.1.4",
     "crypto-browserify": "^3.12.1",
     "google-auth-library": "^9.15.1",
+    "sleep-ts": "^0.1.1",
+    "i18next": "^25.0.2",
+    "i18next-browser-languagedetector": "^8.0.5",
     "tailwind": "^4.0.0",
-    "tailwindcss": "^4.1.4"
+    "tailwindcss": "^4.1.4",
+    "usleep": "^1.0.3"
   }
 }

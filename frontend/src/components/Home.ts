@@ -22,9 +22,12 @@ import {
 	cardBackCss,
 	neonTitleCss,
 	playButtonDarkCss,
-	inputScaleCss
 } from "../styles/cssFactory";
+
 import { navigateTo, rerender } from "../router/router";
+import { t } from "i18next";
+import i18n from "i18next";
+import { AuthStore } from "../stores/AuthStore";
 
 let userInfo: UserInfo | null = null;
 
@@ -35,7 +38,7 @@ interface UserInfo {
 	is_2FA: boolean;
 }
 
-interface MeData {
+export interface MeData {
 	id: number,
 	is_2FA: boolean, 
 	name: string,
@@ -68,10 +71,10 @@ export function Home(): PongNode<any> {
 
 	fetchUserInfo();
 
-	const userLogin = userInfo ? userInfo.login : "Loading...";
-	const userEmail = userInfo ? userInfo.email : "Loading...";
-	const userSurname = userInfo ? userInfo.surname : "Loading...";
-	const user2FAStatus = userInfo ? userInfo.is_2FA : false;
+	const userLogin = userInfo ? userInfo.login : t("home.loading");
+	const userEmail = userInfo ? userInfo.email : t("home.loading");
+	const userSurname = userInfo ? userInfo.surname : t("home.loading");
+	const user2FAStatus = AuthStore.instance.user?.is_2FA;
 
 	const toggleLoginForm = () => {
 		const loginInputContainer = document.getElementById('login-input-container');
@@ -104,18 +107,18 @@ export function Home(): PongNode<any> {
 			Div({ id: "first", class: cardFlipCss }, [
 				Div({ id: "second", class: cardInnerCss }, [
 					Div({ id: "third", class: cardFrontCss }, [
-						Span({ class: neonTitleCss }, ["Profil"]),
+						Span({ class: neonTitleCss }, [t("home.profile")]),
 						Image({ id: "profil_img", src: "../assets/profil.png", alt: "profil_img", class: "imageCenter" })
 					]),
 					Div({ class: `${cardBackCss} flex flex-col justify-start p-6` }, [
 						// Partie haute (titre + image)
 						Div({ class: "flex flex-col items-center mb-6" }, [ // <- Augmente l'espacement sous titre+img
-							Span({ class: "text-xl font-bold" }, ["Informations"]),
+							Span({ class: "text-xl font-bold" }, [t("home.information")]),
 							Image({ id: "infos_img", src: "../assets/infos.png", alt: "infos_img", class: "imageCenter w-20" })
 						]),
 						// Partie basse
 						Div({ class: "flex flex-col flex-grow items-center" }, [
-							Div({ class: "flex flex-col items-start w-full mt-.1 mb-.1" }, [ // <- Ajoute plus de haut ET bas
+							Div({ class: "flex flex-col items-start w-full mt-10 mb-10" }, [ // <- Ajoute plus de haut ET bas
 								Div({ class: "flex items-center mb-2" }, [
 									Image({ id: "test", src: "../assets/login.png", alt: "login", class: "w-10 h-10 mr-2" }),
 									Span({ class: "text-md" }, [userLogin]),
@@ -132,42 +135,23 @@ export function Home(): PongNode<any> {
 									Image({ id: "test3", src: "../assets/2fa.png", alt: "2fa", class: "w-10 h-10 mr-2" }),
 									Span({ 
 										class: `text-md font-semibold ${user2FAStatus ? 'text-green-400' : 'text-red-400'}`
-									}, [user2FAStatus ? "Enabled" : "Disabled"]),
+									}, [user2FAStatus ? t("home.enabled") : t("home.disabled")]),
 								]),
 							]),
-							// Bouton
-							Div({ class: "flex justify-center w-full mt-1" }, [ // <- Rapproche le bouton
+							Div({ id: "confirm-button-container", class: "hidden mt-3 w-full flex justify-center" }, [
 								Button({
-									id: "test",
+									id: "confirm-button",
 									class: `${playButtonDarkCss}`,
-									onClick: () => {navigateTo('/profil')},
-								}, ["Edit profil"]),
+									onClick: () => {
+										// Tu peux ajouter ici la logique pour envoyer le nouveau login
+										const inputElement = document.getElementById('login-input') as HTMLInputElement;
+										if (inputElement && inputElement.value.trim() !== '') {
+											console.log('New login:', inputElement.value); // ici envoyer via fetch par ex
+										}
+										toggleLoginForm();
+									}
+								}, [t("home.confirm")]),
 							]),
-							// Input
-							// // Input container
-							// Div({ id: "login-input-container", class: "hidden mt-4 w-full flex justify-center" }, [
-							// 	Input({
-							// 		id: "login-input",
-							// 		class: inputScaleCss,
-							// 		placeholder: "Enter new login",
-							// 	}),
-							// ]),
-
-							// // Confirm button container
-							// Div({ id: "confirm-button-container", class: "hidden mt-3 w-full flex justify-center" }, [
-							// 	Button({
-							// 		id: "confirm-button",
-							// 		class: `${playButtonDarkCss}`,
-							// 		onClick: () => {
-							// 			// Tu peux ajouter ici la logique pour envoyer le nouveau login
-							// 			const inputElement = document.getElementById('login-input') as HTMLInputElement;
-							// 			if (inputElement && inputElement.value.trim() !== '') {
-							// 				console.log('New login:', inputElement.value); // ici envoyer via fetch par ex
-							// 			}
-							// 			toggleLoginForm();
-							// 		}
-							// 	}, ["Confirm"]),
-							// ]),
 						]),
 					])
 				])
@@ -176,7 +160,7 @@ export function Home(): PongNode<any> {
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
-						Span({ class: neonTitleCss }, ["Game"]),
+						Span({ class: neonTitleCss }, [t("home.game")]),
 						Image({ id: "game_img", src: "../assets/pong.png", alt: "game_img", class: "imageCenter" })
 					]),
 					Div({ class: `${cardBackCss} flex flex-col items-center justify-center text-center p-6` }, [
@@ -186,13 +170,13 @@ export function Home(): PongNode<any> {
 								Your browser does not support the video tag.
 							</video>
 						`),
-						Span({}, ["Pong like you’ve never played it before..."]),
+						Span({}, [t("home.never_play")]),
 						Div({ class: "mt-10 flex justify-center" }, [
 							Button({
 								id: "play_button",
 								class: playButtonDarkCss,
 								onClick: () => navigateTo("/game"),
-							}, ["Let's play"])
+							}, [t("home.lets_play")])
 						])
 					])
 				])
@@ -201,11 +185,20 @@ export function Home(): PongNode<any> {
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
-						Span({ class: neonTitleCss }, ["Dashboard"]),
+						Span({ class: neonTitleCss }, [t("home.dashboard")]),
 						Image({ id: "dash_img", src: "../assets/dashboard.png", alt: "dash_img", class: "imageCenter" })
 					]),
-					Div({ class: cardBackCss }, [
-						Span({}, ["Card 3 Back"])
+					Div({ class: `${cardBackCss} flex flex-col justify-center text-center p-6` }, [
+						// Span({}, ["Card 3 Back"]),
+						Image({ id: "dashboard_img_back", src: "../assets/dashboard.png", alt: "dashboard_img_back", class: "imageCenter w-1/3 mx-auto mb-4" }),
+						Div({ class: "mb-4" }, [
+							Span({ class: "text-sm" }, [t("home.dashboard_description")]),
+						]),
+						Button({
+							id: "dashboard_button",
+							class: playButtonDarkCss,
+							onClick: () => navigateTo("/dashboard"),
+						}, [t("home.dashboard")])
 					])
 				])
 			]),
@@ -213,11 +206,19 @@ export function Home(): PongNode<any> {
 			Div({ class: cardFlipCss }, [
 				Div({ class: cardInnerCss }, [
 					Div({ class: cardFrontCss }, [
-						Span({ class: neonTitleCss }, ["Settings"]),
+						Span({ class: neonTitleCss }, [t("home.settings")]),
 						Image({ id: "settings_img", src: "../assets/settings.png", alt: "settings_img", class: "imageCenter" })
 					]),
-					Div({ class: cardBackCss }, [
-						Span({}, ["Card 4 Back"])
+					Div({ class: `${cardBackCss} flex flex-col justify-center text-center p-6` }, [
+						Image({ id: "settings_img_back", src: "../assets/settings.png", alt: "settings_img_back", class: "imageCenter w-1/3 mx-auto mb-4" }),
+						Div({ class: "mb-4" }, [
+							Span({ class: "text-sm" }, [t("home.settings_description")]),
+						]),
+						Button({
+							id: "setting_button",
+							class: playButtonDarkCss,
+							onClick: () => navigateTo("/profil"),
+						}, [t("home.settings")])
 					])
 				])
 			])

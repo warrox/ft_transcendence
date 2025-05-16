@@ -1,0 +1,63 @@
+{
+  "navbar": {
+    "home": "Home",
+    "register": "Register",
+    "login": "Login",
+    "game": "Game",
+		"disconnect": "Disconnect"
+  },
+  "landing": {
+    "register": "Register",
+    "login": "Login",
+    "play_pong": "Play Pong.",
+    "have_fun": "Have Fun. Build table tennis skills.",
+    "lvl_up": "Level up your skills with game and tournament.",
+    "start_playing": "Start Playing",
+    "why_42": "Discover why 42 developers love Transcendence. 100% free.",
+    "multi_map": "Play on multiple maps",
+    "show_off": "Show off your Pong skills in a tournament or brush up your fingers while destroying an AI opponent."
+  },
+  "game": {
+    "never_play": "Pong like you’ve never played it before.",
+    "choose_map": "Choose your map:",
+    "select_map": "Select map",
+    "solo_friends": "Go solo or battle your friends !",
+    "single_player": "Single Player",
+    "multi_player": "Multiple Player"
+  },
+  "home": {
+    "loading": "Loading",
+    "profile": "Profile",
+    "information": "Information",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "change_login": "Change login",
+    "enter_login": "Enter new login",
+    "confirm": "Confirm",
+    "game": "Game",
+    "never_play": "Pong like you’ve never played it before.",
+    "lets_play": "Let's play",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "settings_paragraph": "Here's an overview of all the available options to configure your profile and account.",
+    "settings_description": "In the settings, you can change your login, password, email, language preferences, and enable or disable two-factor authentication.",
+    "dashboard_description": "In the dashboard, you can view your statistics, track your progress, and access your recent games."
+  },
+  "login": {
+    "login_page": "Login Page",
+    "click": "Click here",
+    "login": "Login",
+    "status": "Login status:"
+  },
+  "register": {
+    "ph_name": "name",
+    "ph_lastname": "lastname",
+    "ph_email": "email",
+    "ph_password": "password",
+    "register_page": "Register Page",
+    "click": "Click here",
+    "sign": "Sign In",
+    "success": "Registration successful! Redirecting...",
+    "failed": "Error during registration. Please try again."
+  }
+}

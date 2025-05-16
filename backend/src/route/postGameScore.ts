@@ -4,23 +4,24 @@ const contract = require("../../blockchain/contractConfig")
 
 export interface PostGameScoreBody {
 	userId: number;
-	score: "win" | "loose";
-	guestName?: string;
+	result: "win" | "lose";
+	score: string;
+	guestName: string;
 }
 
 export const postGameScore = async (
 	request: FastifyRequest<{ Body: PostGameScoreBody }>,
 	reply: FastifyReply
 ) => {
-	const { userId, score, guestName } = request.body;
+	const { userId, result, score, guestName } = request.body;
 
 	try {
-		const result = await new Promise((resolve, reject) => {
+		const res = await new Promise((resolve, reject) => {
 			const query = `
-			INSERT INTO games (user_id, result, guest_name)
-			VALUES (?, ?, ?)
+			INSERT INTO games (user_id, result, guest_name, score)
+			VALUES (?, ?, ?, ?)
 			`;
-			db.run(query, [userId, score, guestName || null], function (err) {
+			db.run(query, [userId, result, score, guestName], function (err) {
 				if (err) return reject(err);
 				resolve({ message: "Game score inserted", gameId: this.lastID });
 
