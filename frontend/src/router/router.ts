@@ -26,8 +26,8 @@ const routes: Route[] = [
 	{ path: '/game', component: Game},
 	{ path: '/profil', component: Profil},
 	{ path: '/tournament', component: Tournament},
-]
-
+	{ path: '/dashboard', component: Dashboard},	
+	
 // await AuthStore.fetchMe();
 // rerender();
 
@@ -125,6 +125,11 @@ export async function router() {
 		path = '/landing';
 		history.replaceState({}, "", path);
 	}
+	if (path === '/dashboard' && !AuthStore.instance.isLoggedIn) {
+		path = '/landing';
+		history.replaceState({}, "", path);
+	}
+
 
 	if ((path === '/register' || path === '/login') && AuthStore.instance.isLoggedIn) {
 		path = '/home';
