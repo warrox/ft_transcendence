@@ -68,9 +68,6 @@ export function Login(): PongNode<any> {
 		class: inputCss,
 	});
 
-	// TESTING IMG
-	// const testImg = Image({ id: "test_button", src: logo, alt: "my_logo"});
-
 	const handleLogin = () => {
 		const email = (document.querySelector("#emailInput") as HTMLInputElement)?.value;
 		const password = (document.querySelector("#password") as HTMLInputElement)?.value;
@@ -98,11 +95,13 @@ export function Login(): PongNode<any> {
 			try {
 				const parseBody = JSON.parse(text);
 				console.log("Response parsed from JSON :", parseBody);
+				console.log("user = ", AuthStore.instance.user);
+				console.log("is2fa = ", AuthStore.instance.user?.is_2FA);
 
 				if (parseBody.success === true && AuthStore.instance.user?.is_2FA === 1) {
 					requires2FA = true;
 					rerender();
-					return; // on attend le 2FA avant de continuer
+					return;
 				}
 
 				loginStatus = parseBody.success === true ? "OK" : "KO";
@@ -167,29 +166,29 @@ export function Login(): PongNode<any> {
 			Li({ class: circle9Css }),
 			Li({ class: circle10Css }),
 		]),
-		// requires2FA
-		// ? Div({ class: "fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50" }, [
-		// 	Div({ class: "bg-white rounded-xl p-6 shadow-lg w-80 text-center" }, [
-		// 		P({ class: "text-xl font-semibold mb-4 text-gray-800" }, ["Enter 2FA Code"]),
-		// 		Input({
-		// 			id: "test",
-		// 			type: "text",
-		// 			placeholder: "4-digit code",
-		// 			// maxLength: 4,
-		// 			value: twoFactorCode,
-		// 			class: "border border-gray-300 rounded px-3 py-2 w-full text-center text-lg mb-4",
-		// 			onChange: () => {
-		// 				const input = document.querySelector("#twoFactorInput") as HTMLInputElement;
-		// 				if (!input) return;
-		// 				twoFactorCode = input.value;
-		// 				if (twoFactorCode.length === 4) {
-		// 					handle2FAValidation();
-		// 				}
-		// 			}
-		// 		}),
-		// 	])
-		// ])
-		// : Div({}),
+		requires2FA
+		? Div({ class: "fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50" }, [
+			Div({ class: "bg-white rounded-xl p-6 shadow-lg w-80 text-center" }, [
+				P({ class: "text-xl font-semibold mb-4 text-gray-800" }, ["Enter 2FA Code"]),
+				Input({
+					id: "test",
+					type: "text",
+					placeholder: "4-digit code",
+					maxlength: 4,
+					value: twoFactorCode,
+					class: "border border-gray-300 rounded px-3 py-2 w-full text-center text-lg mb-4",
+					onChange: () => {
+						const input = document.querySelector("#twoFactorInput") as HTMLInputElement;
+						if (!input) return;
+						twoFactorCode = input.value;
+						if (twoFactorCode.length === 4) {
+							handle2FAValidation();
+						}
+					}
+				}),
+			])
+		])
+		: Div({}),
 		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
 			Div({ class: loginCardCss }, [
 				Div({ class: headerCss }, [
