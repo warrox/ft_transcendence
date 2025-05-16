@@ -22,44 +22,43 @@ import { navigateTo, rerender } from "../router/router";
 import { t } from "i18next";
 import i18n from "i18next";
 
+let userGameStats: GameStats | null = null;
+
+interface GameStats {
+	id: number;
+	user_id: number;
+	result: "win" | "lose";
+	guest_name: string;
+	game_date: string;
+	score: string;
+}
+
 export function Dashboard(): PongNode<any> {
+	const fetchUserGameStats = () => {
+		if (userGameStats !== null) return;
 
-	let gameInfoContent: PongNode<any>[] = [Span({ class: "text-white" }, ["Chargement..."])];
-
-	// Lancer le fetch dès le rendu initial
-	fetch("/api/getGameScore", {
-		credentials: "include",
-	})
-		.then(res => {
-			console.log(res); // Log la réponse complète ici
-			return res.json(); // Ensuite, on continue avec la conversion en JSON
+		fetch("/api/getGameScore", {
+			credentials: "include",
 		})
-		.then(data => {
-			console.log(data);
-			if (data.error) {
-				gameInfoContent = [Span({ class: "text-red-500" }, [data.error])];
-			} else {
-				gameInfoContent = [
-					Span({}, [`Résultat : ${data.result}`]),
-					RawHTML(`<br>`),
-					Span({}, [`Adversaire : ${data.guest_name || "N/A"}`]),
-					RawHTML(`<br>`),
-					Span({}, [`Date : ${new Date(data.game_date).toLocaleString("fr-FR")}`]),
-					RawHTML(`<br>`),
-					Span({}, [`Score : ${data.score}`]),
-				];
-			}
-			// rerender(); // Forcer la mise à jour de l'affichage
-		})
-		.catch(err => {
-			console.error(err);
-			gameInfoContent = [Span({ class: "text-red-500" }, ["Erreur lors du chargement"])];
-			// rerender();
-		});
+			.then((res) => {
+				if (!res.ok) throw new Error("/api/getGameScore: Failed");
+				return res.json();
+			})
+			.then((data: GameStats) => {
+				userGameStats = data;
+				rerender();
+			})
+			.catch((e) => console.error(e));
+	}
 
-	// Fonction qui renvoie le nœud de stats (reconstruit à chaque rerender)
-	const gameInfoNode = (): PongNode<any> =>
-		Div({ class: "text-center text-white mt-10" }, gameInfoContent);
+	fetchUserGameStats();
+
+	const idGameStats = userGameStats ? userGameStats.id : "Loading...";
+	const user_idGameStats = userGameStats ? userGameStats.user_id : "Loading...";
+	const resultGameStats = userGameStats ? userGameStats.result : "Loading...";
+	const guest_nameGameStats = userGameStats ? userGameStats.guest_name : "Loading...";
+	const game_dateGameStats = userGameStats ? userGameStats.game_date : "Loading...";
+	const scoreGameStats = userGameStats ? userGameStats.score : "Loading...";
 
 	return Div({ class: areaCss }, [
 		UList({ class: circlesCss }, [
@@ -74,12 +73,18 @@ export function Dashboard(): PongNode<any> {
 			Li({ class: circle9Css }),
 			Li({ class: circle10Css }),
 		]),
-		Div({ class: `${WrapperCss} ${backgroundCss}` }),
-		Div({ id: "header", class: "absolute top-40 left-0 w-full flex justify-center" }, [
-			Span({ class: `${neonTitleCss} text-7xl` }, ["Dashboard"]),
-		]),
-		Div({ class: "absolute top-[28rem] w-full flex justify-center" }, [
-			gameInfoNode()
-		]),
+		Div({ class: `${WrapperCss} ${backgroundCss} absolute top-0 left-0 w-full h-full z-[-1]` }),
+		// Div({ class: `${WrapperCss} ${backgroundCss}` }),
+		Div({ class: "flex flex-col items-center justify-center min-h-screen text-white p-8" }, [
+			Span({ class: neonTitleCss }, ["Dashboard"]),
+			Div({ class: "mt-8 text-left bg-gray-600 bg-opacity-40 rounded-xl p-6 w-full max-w-xl shadow-xl" }, [
+				Span({ class: "block mb-2" }, [`ID: ${idGameStats}`]),
+				Span({ class: "block mb-2" }, [`User ID: ${user_idGameStats}`]),
+				Span({ class: "block mb-2" }, [`Result: ${resultGameStats}`]),
+				Span({ class: "block mb-2" }, [`Guest Name: ${guest_nameGameStats}`]),
+				Span({ class: "block mb-2" }, [`Game Date: ${game_dateGameStats}`]),
+				Span({ class: "block mb-2" }, [`Score: ${scoreGameStats}`]),
+			])
+		])
 	]);
 }
