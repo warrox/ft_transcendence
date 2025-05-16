@@ -340,18 +340,18 @@ function playPong(){
 				"Content-Type": "application/json",
 				},
 			})
-			.then(async res => {
-				if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-				const text = await res.text();
-				console.log("Réponse brute du serveur :", text);
-	
-				try {
-					const parseBody = JSON.parse(text);
-					console.log("Response parsed from JSON :", parseBody);
-				} catch (e) {
-					console.log("Error parsing JSON: ", e);
+			.then(async (res) => {
+				const data = await res.text(); // ou res.json() si c'est du JSON
+				if (!res.ok) {
+				  console.error("Erreur HTTP :", res.status, data); // 👈 affiche l’erreur
+				  throw new Error(`HTTP error! Status: ${res.status}`);
+				} else {
+				  console.log("Succès:", data);
 				}
-			})
+			  })
+			  .catch((err) => {
+				console.error("Erreur dans fetch:", err);
+			  });
 			gameStarted = 3;
 			registerplayer = false;
 			rerender();
