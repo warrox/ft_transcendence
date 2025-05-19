@@ -249,17 +249,16 @@ return Div({ class: areaCss }, [
 				]
 			),
 			// === Donut au MILIEU ===
-Div(
-  { class: "relative z-20 w-64 h-64 text-center" }, // centrage horizontal du texte
-  [
-    Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["% de victoire"]), // block pour prendre toute la largeur
-    Div(
-      { class: "mx-auto" }, // pour centrer le donut
-      [Donut({ percent: progressPercent })]
-    ),
-  ]
-),
-
+			Div(
+			{ class: "relative z-20 w-64 h-64 text-center" }, // centrage horizontal du texte
+			[
+				Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["% de victoire"]), // block pour prendre toute la largeur
+				Div(
+				{ class: "mx-auto" }, // pour centrer le donut
+				[Donut({ percent: progressPercent })]
+				),
+			]
+			),
 			// === Colonne DROITE ===
 			Div(
 				{ class: "relative z-10 w-1/3 flex flex-col items-center justify-center p-4" },
