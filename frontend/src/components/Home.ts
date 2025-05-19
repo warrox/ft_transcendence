@@ -198,7 +198,12 @@ export function Home(): PongNode<any> {
 							id: "dashboard_button",
 							class: playButtonDarkCss,
 							onClick: () => navigateTo("/dashboard"),
-						}, [t("home.dashboard")])
+						}, [t("home.dashboard")]),
+						Button({
+							id: "blockchain_button",
+							class: playButtonDarkCss,
+							onClick: () => navigateTo("/blockchain"),
+						}, ["Tableau blockchain"])
 					])
 				])
 			]),
