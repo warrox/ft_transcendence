@@ -6,17 +6,29 @@ type JWTClaims = {
 	email: string,
 };
 
-interface FriendsBody {
+export interface FriendsBody {
 	action: "add" | "del";
-	emailClient: string;
-	friendsId: number;
+	emailClient: string,
 }
 
-const friends = async (
+export const friends = async (
 	request: FastifyRequest<{ Body: FriendsBody }>,
 	reply: FastifyReply
 ) => {
-	const { action, friendsId } = request.body;
+	const { action, emailClient } = request.body;
+
+	const friendId = await new Promise<number>((resolve, reject) => {
+		db.get<{ id: number }>(
+			`SELECT id FROM users WHERE email = ?`,
+			[emailClient],
+			(err, row) => {
+				if (err) return reject(err);
+				if (!row) return reject(new Error("Ami introuvable"));
+				resolve(row.id);
+			}
+		);
+	});
+	
 
 	try {
 		const token = request.cookies["access_token"];
@@ -34,7 +46,7 @@ const friends = async (
 		if (action === "add") {
 			const query = `INSERT INTO friends (user_id, friend_id, is_online) VALUES (?, ?, 0)`;
 			await new Promise((resolve, reject) => {
-				db.run(query, [userId, friendsId], function (err) {
+				db.run(query, [userId, friendId], function (err) {
 					if (err) {
 						if (err.message.includes("UNIQUE")) {
 							return reject(new Error("Friend already added"));
@@ -50,7 +62,7 @@ const friends = async (
 		if (action === "del") {
 			const query = `DELETE FROM friends WHERE user_id = ? AND friend_id = ?`;
 			await new Promise((resolve, reject) => {
-				db.run(query, [userId, friendsId], function (err) {
+				db.run(query, [userId, friendId], function (err) {
 					if (err) return reject(err);
 					if (this.changes === 0) return reject(new Error("Friend not found"));
 					resolve(true);
@@ -67,5 +79,5 @@ const friends = async (
 	}
 };
 
-export default friends;
+// export default friends;
 

@@ -51,7 +51,12 @@ function resetRegisterState(delay = 3000) {
 
 let requires2FA = false;
 let twoFactorCode = "";
+let emailValue = "";
 
+function getEmailFromInput(): string {
+	const input = document.querySelector("#emailInput") as HTMLInputElement | null;
+	return input?.value || "";
+}
 
 export function Login(): PongNode<any> {
 	const emailInput = Input({ 
@@ -69,13 +74,13 @@ export function Login(): PongNode<any> {
 	});
 
 	const handleLogin = () => {
-		const email = (document.querySelector("#emailInput") as HTMLInputElement)?.value;
+		emailValue = (document.querySelector("#emailInput") as HTMLInputElement)?.value;
 		const password = (document.querySelector("#password") as HTMLInputElement)?.value;
 
 		console.log("is2fa", AuthStore.instance.user?.is_2FA)
 
 		const body = {
-			email,
+			email: emailValue,
 			password,
 		};
 
@@ -127,15 +132,18 @@ export function Login(): PongNode<any> {
 	});
 
 	const handle2FAValidation = () => {
-		const email = AuthStore.instance.user?.email;
-		const id = AuthStore.instance.user?.id;
+		const email = emailValue;
+		// const email = AuthStore.instance.user?.email;
+		// const id = AuthStore.instance.user?.id;
 		const twoFactorCode = (document.querySelector("#twoFaInput") as HTMLInputElement)?.value;
 
 		console.log("2factorcode: ", twoFactorCode);
+		// console.log("email && id : ", email, id);
+		
 
 		fetch("/api/verify2Fa", {
 			method: "POST",
-			body: JSON.stringify({ code2FA: twoFactorCode, email, id }),
+			body: JSON.stringify({ code2FA: twoFactorCode, email}),
 			// credentials: "include",
 			headers: {
 				"Content-Type": "application/json",

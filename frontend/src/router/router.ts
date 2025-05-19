@@ -10,26 +10,26 @@ import { Tournament } from '../components/Tournament';
 import { Landing } from '../components/Landing';
 import { Profil } from '../components/Profil'
 import { AuthStore } from '../stores/AuthStore';
+import { Friends } from '../components/Friends';
 
 
 type Route = {
 	path: string;
 	component: () => PongNode<any>;
 	showNavbar?: boolean,
+	protected?: boolean,
 }
 
 const routes: Route[] = [
 	{ path: '/landing', component: Landing, showNavbar: false},
-	{ path: '/home', component: Home },
+	{ path: '/home', component: Home, protected: true},
 	{ path: '/register', component: Register},
 	{ path: '/login', component: Login},
-	{ path: '/game', component: Game},
-	{ path: '/profil', component: Profil},
-	{ path: '/tournament', component: Tournament},
+	{ path: '/game', component: Game, protected: true },
+	{ path: '/profil', component: Profil, protected: true},
+	{ path: '/tournament', component: Tournament, protected: true},
+	{ path: '/friends', component: Friends, protected: true },
 ]
-
-// await AuthStore.fetchMe();
-// rerender();
 
 export function renderToDOM(node: PongNode<any>, container: HTMLElement) {
 	container.innerHTML = node.render();
@@ -112,6 +112,22 @@ export function navigateTo(path: string) {
 // 	if (path === pathString && isLoggedIn)
 // }
 
+function protectedRoute(route : Route | undefined) : Route {
+	if (!route) return { path: '/404', component: NotFound};
+
+	const isLoggedIn = AuthStore.instance.isLoggedIn;
+
+	if (route.protected && !isLoggedIn) {
+		return { path: '/landing', component: Landing, showNavbar: false };
+	}
+	
+	if ((route.path === '/login' || route.path === '/register') && isLoggedIn) {
+		return { path: '/home', component: Home };
+	}
+	
+	return route;
+}
+
 
 export async function router() {
 	const app = document.getElementById('app');
@@ -130,37 +146,46 @@ export async function router() {
 		history.replaceState({}, "", path);
 	}
 
-	if (path === '/home' && !AuthStore.instance.isLoggedIn) {
-		path = '/landing';
-		history.replaceState({}, "", path);
+	// if (path === '/home' && !AuthStore.instance.isLoggedIn) {
+	// 	path = '/landing';
+	// 	history.replaceState({}, "", path);
+	// }
+
+
+	// if (path === '/game' && !AuthStore.instance.isLoggedIn) {
+	// 	path = '/landing';
+	// 	history.replaceState({}, "", path);
+	// }
+
+	// if ((path === '/register' || path === '/login') && AuthStore.instance.isLoggedIn) {
+	// 	path = '/home';
+	// 	history.replaceState({}, "" , path)
+	// }
+
+	// if (path === '/profil' && !AuthStore.instance.isLoggedIn) {
+	// 	path = '/landing';
+	// 	history.replaceState({}, "", path);
+	// }
+
+	// const route = routes.find(r => r.path == path);
+
+	// setCurrentPage(route?.component || NotFound);
+	// const showNavbar = route?.showNavbar != false;
+	// const page = route ? route.component() : NotFound();
+
+	let route = routes.find(r => r.path === path);
+	route = protectedRoute(route);
+  
+	if (route.path !== path) {
+	  history.replaceState({}, "", route.path);
 	}
-
-
-	if (path === '/game' && !AuthStore.instance.isLoggedIn) {
-		path = '/landing';
-		history.replaceState({}, "", path);
-	}
-
-	if ((path === '/register' || path === '/login') && AuthStore.instance.isLoggedIn) {
-		path = '/home';
-		history.replaceState({}, "" , path)
-	}
-
-	if (path === '/profil' && !AuthStore.instance.isLoggedIn) {
-		path = '/landing';
-		history.replaceState({}, "", path);
-	}
-
-	const route = routes.find(r => r.path == path);
-
-	setCurrentPage(route?.component || NotFound);
-	const showNavbar = route?.showNavbar != false;
-	const page = route ? route.component() : NotFound();
+  
+	setCurrentPage(route.component);
 
 	renderToDOM(
 		Div({}, [
-			...(showNavbar ? [Navbar()] : []),
-			page
+			...(route.showNavbar === false ? [] : [Navbar()]),
+			route.component(),
 		]),
 		app
 	)

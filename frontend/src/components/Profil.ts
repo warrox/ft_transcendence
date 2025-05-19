@@ -1,22 +1,17 @@
 import { Div, P, Button, Input, Image } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
-import { rerender } from "../router/router";
+import { navigateTo, rerender } from "../router/router";
 import { AuthStore } from "../stores/AuthStore";
 import {
 	inputScaleCss,
 	inputMailProfilCss
 } from "../styles/cssFactory";
 import "../styles/index.css";
-let Status: null | "OK" | "KO" = null;
+
+let mailStatus: null | "OK" | "KO" = null;
+let passStatus: null | "OK" | "KO" = null;
 
 
-// let avatarPath: string = "../assets/avatar.png";
-// let avatarPath = 'http://127.0.0.1/uploads/avatar-user-test@test.com-1746538352822-testpng.jpeg';
-// let avatarPath = '../assets/testpng.jpeg'
-
-// let avatarPath = AuthStore.user?.avatar_path
-// 	? "http://localhost:3000" + AuthStore.user.avatar_path
-// 	: "../assets/avatar.png";
 
 function getAvatarPath() {
 	return AuthStore.instance.user?.avatar_path
@@ -26,6 +21,7 @@ function getAvatarPath() {
 
 
 export function Profil() : PongNode<any> {
+
 	const email = AuthStore.instance.user?.email;
 
 	const fileInput = Input({
@@ -86,9 +82,72 @@ export function Profil() : PongNode<any> {
 		});
 	
 	}
+
+	// const handleEditMail = async () => {
+	// 	const newMail = (document.querySelector("#emailInputProfil") as HTMLInputElement)?.value; 
+		
+	// 	const body = { 
+	// 		email,
+	// 		newMail, 
+	// 	};
+	
+	// 	try {
+	// 		// Réinitialiser le statut avant la requête
+	// 		mailStatus = null;
+	// 		rerender();
+	
+	// 		const updateMail = await fetch("/api/updateMail", {
+	// 			method: "POST",
+	// 			body: JSON.stringify(body),
+	// 			credentials: "include",
+	// 			headers: {
+	// 				"Content-Type": "application/json",
+	// 			},
+	// 		});
+	
+	// 		const responseData = await updateMail.json();
+	// 		console.log("Backend response:", responseData);
+	
+	// 		if (!updateMail.ok) {
+	// 			mailStatus = "KO";
+	// 			console.error("Update failed:", responseData.error || "Unknown error");
+	// 			rerender();
+	// 			setTimeout(() => {
+	// 				mailStatus = null;
+	// 				rerender();
+	// 			}, 3000);
+				
+	// 			return;
+	// 		}
+			
+	// 		mailStatus = "OK";
+	// 		await AuthStore.instance.refresh();
+			
+	// 		// Forcer un rendu immédiat pour afficher l'état OK
+	// 		// rerender();
+			
+	// 		// Réinitialiser après 3 secondes
+	// 		setTimeout(() => {
+	// 			mailStatus = null;
+	// 			rerender();
+	// 		}, 3000);
+			
+	// 	} catch (e) {
+	// 		console.error("Email update failed:", e);
+	// 		mailStatus = "KO";
+			
+	// 		// Forcer un rendu immédiat
+	// 		rerender();
+			
+	// 		setTimeout(() => {
+	// 			mailStatus = null;
+	// 			rerender();
+	// 		}, 3000);
+	// 	}
+	// };
 	
 	
-	const handleEditMail = () => {
+	const handleEditMail = async () => {
 
 		const newMail = (document.querySelector("#emailInputProfil") as HTMLInputElement)?.value; 
 		
@@ -99,43 +158,84 @@ export function Profil() : PongNode<any> {
 
 		console.log(email, newMail);
 
-		fetch("/api/updateMail", {
-			method: "POST",
-			body: JSON.stringify(body),
-			credentials: "include",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-		.then(async res => {
-			if (res.ok) {
-				const text = await res.text();
-		
-				try {
-					const json = JSON.parse(text);
-					console.log(json);
-					AuthStore.instance.user!.email = body.newMail;
-				} catch (_) {
-					AuthStore.instance.user!.email = body.newMail;
-					Status = "OK";
-				}
-			} else {
-				console.log("here");
-				
-				Status = "KO";
+		try  {
+			const updateMail = await fetch("/api/updateMail", {
+				method: "POST",
+				body: JSON.stringify(body),
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+
+			const responseData = await updateMail.json();
+			console.log(responseData);
+			
+			if (!responseData.success) {
+				mailStatus = "KO";
+				console.error("Update failed:", responseData.error || "Unknown error");
+				rerender();
+				setTimeout(() => {
+					mailStatus = null;
+					rerender();
+				}, 3000);
+				throw new Error("Failed to update Mail");
+				return;
 			}
-		})
-		.catch(e => {
-			console.error("Fetch failed:", e);
-			Status = "KO";
-		})
-		.finally(() => {
+			
+			mailStatus = "OK";
+			await AuthStore.instance.refresh();
+			setTimeout(() => {
+				mailStatus = null;
+				rerender();
+			}, 3000);
+		} catch (e) {
+			console.error("Email update failed: ", e);
+			mailStatus = "KO";
 			rerender();
-		});
+			setTimeout(() => {
+				mailStatus = null;
+				rerender();
+			}, 3000);
+		}
+
+	// 	// fetch("/api/updateMail", {
+	// 	// 	method: "POST",
+	// 	// 	body: JSON.stringify(body),
+	// 	// 	credentials: "include",
+	// 	// 	headers: {
+	// 	// 		"Content-Type": "application/json",
+	// 	// 	},
+	// 	// })
+	// 	// .then(async res => {
+	// 	// 	if (res.ok) {
+	// 	// 		const text = await res.text();
 		
+	// 	// 		try {
+	// 	// 			const json = JSON.parse(text);
+	// 	// 			console.log(json);
+	// 	// 			AuthStore.instance.user!.email = body.newMail;
+	// 	// 		} catch (_) {
+	// 	// 			AuthStore.instance.user!.email = body.newMail;
+	// 	// 			Status = "OK";
+	// 	// 		}
+	// 	// 	} else {
+	// 	// 		console.log("here");
+				
+	// 	// 		Status = "KO";
+	// 	// 	}
+	// 	// })
+	// 	// .catch(e => {
+	// 	// 	console.error("Fetch failed:", e);
+	// 	// 	Status = "KO";
+	// 	// })
+	// 	// .finally(() => {
+	// 	// 	rerender();
+	// 	// });
+
 	};
 
-	const handleEditPass = () => {
+	const handleEditPass = async () => {
  
 		const newpassword = (document.querySelector("#passwordInputProfil") as HTMLInputElement)?.value;
 
@@ -146,21 +246,59 @@ export function Profil() : PongNode<any> {
 
 		console.log(email, newpassword);
 
-		fetch("/api/updatePassword", {
-			method: "POST",
-			body: JSON.stringify(body),
-			credentials: "include",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-		.catch(e => {
-			console.error("Fetch failed:", e);
-			Status = "KO";
-		})
-		.finally(() => {
+		try  {
+			const updatePass = await fetch("/api/updatePassword", {
+				method: "POST",
+				body: JSON.stringify(body),
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+
+			if (!updatePass.ok) {
+				passStatus = "KO"; 
+				rerender();
+				setTimeout(() => {
+					passStatus = null;
+					rerender();
+				}, 3000);
+				throw new Error("Failed to update Pass");
+			}
+			
+			passStatus = "OK";
+			await AuthStore.instance.refresh();
 			rerender();
-		});
+			setTimeout(() => {
+				passStatus = null;
+				rerender();
+			}, 3000);
+		} catch (e) {
+			console.error("Pass update failed: ", e);
+			passStatus = "KO";
+			rerender();
+			setTimeout(() => {
+				passStatus = null;
+				rerender();
+			}, 3000);
+			
+		}
+
+		// fetch("/api/updatePassword", {
+		// 	method: "POST",
+		// 	body: JSON.stringify(body),
+		// 	credentials: "include",
+		// 	headers: {
+		// 		"Content-Type": "application/json",
+		// 	},
+		// })
+		// .catch(e => {
+		// 	console.error("Fetch failed:", e);
+		// 	Status = "KO";
+		// })
+		// .finally(() => {
+		// 	rerender();
+		// });
 	};
 
 
@@ -193,7 +331,8 @@ export function Profil() : PongNode<any> {
 		rerender();
 	};
 
-
+	console.log("mailStatus: ", mailStatus);
+	
 
 	return Div({
 		class: "min-h-screen bg-yellow-400 flex flex-col items-center pt-20"
@@ -240,22 +379,47 @@ export function Profil() : PongNode<any> {
 				Image({ id: "login_img", src: "../assets/login.png", alt: "login_img", class: "imageCenter w-8" }),
 				emailInput,
 				Button({ id: "editorButton1",  onClick: handleEditMail}, [
+					mailStatus == "KO" ?
+					Image({
+						id : "editorImg",
+						class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto bg-red-500",
+						src: "../assets/save.webp"
+					}) 
+					:
+					mailStatus == "OK" ?
+					Image({
+						id : "editorImg",
+						class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto bg-green-500",
+						src: "../assets/save.webp"
+					}) :
 					Image({
 						id : "editorImg",
 						class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto",
 						src: "../assets/save.webp"
-					})
+					}),
 				])
 			]),
 			Div({ class: "flex items-center justify-between" }, [
 				Image({ id: "pass_img", src: "../assets/lock.svg", alt: "pass_img", class: "imageCenter w-8" }),
 				passwordInput,
 				Button({ id: "editorButton2", onClick: handleEditPass}, [
+					passStatus == "KO" ?
 					Image({
-						id : "editorImg2",
-						class: "w-5 transition-transform duration-200 hover:scale-110",
+						id : "editorImg",
+						class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto bg-red-500",
 						src: "../assets/save.webp"
-					})
+					}) : 
+					passStatus == "OK" ?
+					Image({
+						id : "editorImg",
+						class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto bg-green-500",
+						src: "../assets/save.webp"
+					}) :
+					Image({
+						id : "editorImg",
+						class: "w-5 transition-transform duration-200 hover:scale-110 cursor-auto",
+						src: "../assets/save.webp"
+					}),
 				])
 			]),
 			Div({ class: "flex items-center justify-between" }, [

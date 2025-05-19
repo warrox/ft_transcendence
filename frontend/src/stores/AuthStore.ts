@@ -43,20 +43,36 @@ export class AuthStore {
 				credentials: "include",
 				headers: { "Content-Type": "application/json" },
 			});
+	
 			if (!res.ok) {
-				this.resetAuthState();
+				if (this.user !== null || this.isLoggedIn !== false) {
+					this.user = null;
+					this.isLoggedIn = false;
+					this.notify();
+				}
 				return;
 			}
-			const data = (await res.json()) as User;
-			this.user = data;
-			this.isLoggedIn = true;
-		} catch (err) {
-			console.error("AuthStore.fetchMe error:", err);
-			this.resetAuthState();
-		} finally {
-			this.notify();
+	
+			const newUser = await res.json();
+	
+			if (
+				JSON.stringify(this.user) !== JSON.stringify(newUser) ||
+				this.isLoggedIn !== true
+			) {
+				this.user = newUser;
+				this.isLoggedIn = true;
+				this.notify();
+			}
+		} catch (e) {
+			console.error("Erreur fetchMe:", e);
+			if (this.user !== null || this.isLoggedIn !== false) {
+				this.user = null;
+				this.isLoggedIn = false;
+				this.notify();
+			}
 		}
 	}
+	
 
 	public async refresh(): Promise<void> {
 		await this.fetchMe();

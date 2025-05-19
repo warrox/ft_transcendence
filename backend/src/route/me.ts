@@ -21,9 +21,8 @@ export const me = async (request: FastifyRequest, reply: FastifyReply) => {
 		if (!token) {
 			return reply.status(401).send({ error: 'Token manquant' });
 		}
-
-		const claims = request.server.jwt.decode<JWTClaims>(token);
-		const userId = claims!.id;
+		const claims = await request.server.jwt.verify<JWTClaims>(token);
+		const userId = claims.id;
 
 		const row = await dbGet(
 			'SELECT id, is_2FA, name, surname, email, avatar_path, win , loose FROM users WHERE id = ?',
@@ -34,21 +33,18 @@ export const me = async (request: FastifyRequest, reply: FastifyReply) => {
 			[userId]
 		);
 
-
 		if (!row) {
 			return reply.status(404).send({ error: 'Utilisateur non trouvé' });
 		}
-		if(gameInfo){
-			const result = {
-				row ,
-				gameInfo
-			};
-			return reply.status(200).send(result);
+
+		if (gameInfo) {
+			return reply.status(200).send({ row, gameInfo });
 		}
 		return reply.status(200).send(row);
 
 	} catch (err) {
-		console.error(err);
+		console.error("Erreur JWT ou DB :", err);
 		return reply.status(401).send({ error: 'JWT invalide, expiré ou erreur serveur' });
 	}
 };
+
