@@ -18,7 +18,7 @@ export const postGameScore = async (
 	try {
 		const res = await new Promise((resolve, reject) => {
 			const query = `
-			INSERT INTO games (user_id, result, score, guest_name)
+			INSERT INTO games (user_id, result, guest_name, score)
 			VALUES (?, ?, ?, ?)
 			`;
 			db.run(query, [userId, result, score, guestName], function (err) {
@@ -26,13 +26,12 @@ export const postGameScore = async (
 				resolve({ message: "Game score inserted", gameId: this.lastID });
 
 			});
-		});
-		
-		const tx = await contract.putScore(new Date().toISOString(), score, guestName || "");
+		});	
+		const tx = await contract.putScore(userId , new Date().toISOString(), score === "win", guestName || "");
 		await tx.wait();
 		reply.code(200).send(result);
 	} catch (err: any) {
-		console.error("Insert error:", err.message);
 		reply.code(400).send({ error: err.message });
 	}
 };
+
