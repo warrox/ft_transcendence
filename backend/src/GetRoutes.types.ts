@@ -19,7 +19,7 @@ import {  langBody , postLang} from "./route/postLang"
 import {  getFriends} from "./route/getFriends"
 import { getAvatar} from "./route/getAvatar"
 import { twoFaBody } from "./route/post2Fa";
-
+import { getBlockchain } from "./route/getBlockchain";
 
 export interface GetRoutes {
 	me (request: FastifyRequest, reply: FastifyReply): any
@@ -40,8 +40,7 @@ export interface GetRoutes {
 	postLang( request: FastifyRequest<{ Body : langBody}> , reply: FastifyReply) : any
 	getFriends( request: FastifyRequest , reply: FastifyReply) : any
 	getAvatar( request: FastifyRequest , reply: FastifyReply) : any
-
-
+	getBlockchain( request: FastifyRequest, reply: FastifyReply) : any
 }
 
 export const getRoutes: GetRoutes = {
@@ -62,5 +61,6 @@ export const getRoutes: GetRoutes = {
 	postGameScore: postGameScore,
 	postLang: postLang,
 	getFriends : getFriends,
-	getAvatar: getAvatar
+	getAvatar: getAvatar,
+	getBlockchain: getBlockchain
 };

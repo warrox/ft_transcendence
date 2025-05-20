@@ -109,7 +109,7 @@ async function startupRoutine(server: FastifyInstance): Promise<any> {
 	server.post('/postLang', getRoutes.postLang);	
 	server.get('/getFriends', getRoutes.getFriends);	
 	server.get('/getAvatar', getRoutes.getAvatar);
-
+	server.get('/getBlockchain', getRoutes.getBlockchain);
 	//checkJWT(server);
 	//postRoute(server); // check tout le shmilbique pour export cette merde 
 	//getRoute(server); // get 

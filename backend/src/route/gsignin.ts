@@ -14,28 +14,29 @@ interface GoogleDecodedToken {
 }
 export const gsignin = async(request : FastifyRequest<{Body : GoogleTokenRequest} >, reply : FastifyReply) => {
 	// Step 1 stock call from google api 
-	
+	console.log("Go in");
+		
 	const { token } = request.body;
 
 	console.log(token);
 	
 	const decoded = server.jwt.decode(token) as GoogleDecodedToken;
 	console.log(decoded.name);
-
+	const is_gUser = 0;
 	try{
 		const userExists = await new Promise <boolean>((resolve, reject )=>{	
-			db.get('SELECT email FROM users WHERE email = ?', [decoded.email], (err, row) => {
+			db.get('SELECT email, is_googleUser FROM users WHERE email = ?', [decoded.email , is_gUser], (err, row) => {
 			if(err) return reject;
 			resolve(!!row);
 		});
 	});
-	if(userExists){
+	if(userExists && is_gUser === 0){
 		return reply.status(409).send({ error: "Cet email est déjà utilisé" });
 	}
 	const userId = await new Promise<number>((resolve, reject) => {
 			const test = db.run(
-				'INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
-				[decoded.given_name, decoded.family_name, decoded.email, "wtZSAGd9B*#p&p3"],
+				'INSERT INTO users (name, surname, email, password, is_googleUser) VALUES (?, ?, ?, ?)',
+				[decoded.given_name, decoded.family_name, decoded.email, "wtZSAGd9B*#p&p3", 1],
 				function (err: Error | null) {
 					if (err) return reject(new Error("Erreur lors de l'insertion de l'utilisateur"));
 					resolve(this.lastID);
