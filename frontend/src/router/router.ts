@@ -10,7 +10,7 @@ import { Tournament } from '../components/Tournament';
 import { Landing } from '../components/Landing';
 import { Profil } from '../components/Profil'
 import { AuthStore } from '../stores/AuthStore';
-
+import { Blockchain } from '../components/Blockchain';
 
 type Route = {
 	path: string;
@@ -26,6 +26,8 @@ const routes: Route[] = [
 	{ path: '/game', component: Game},
 	{ path: '/profil', component: Profil},
 	{ path: '/tournament', component: Tournament},
+	{ path: '/blockchain', component: Blockchain},
+
 ]
 
 // await AuthStore.fetchMe();

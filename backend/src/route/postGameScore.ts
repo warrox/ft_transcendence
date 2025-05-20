@@ -26,9 +26,8 @@ export const postGameScore = async (
 				resolve({ message: "Game score inserted", gameId: this.lastID });
 
 			});
-		});
-		
-		const tx = await contract.putScore(new Date().toISOString(), score === "win", guestName || "");
+		});	
+		const tx = await contract.putScore(userId , new Date().toISOString(), score === "win", guestName || "");
 		await tx.wait();
 		reply.code(200).send(result);
 	} catch (err: any) {
