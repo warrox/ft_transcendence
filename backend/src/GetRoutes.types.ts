@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest} from "fastify";
 import { me } from "./route/me";
 import { users } from "./route/get";
 import { checkJWT } from "./route/get";
-import { User, GoogleTokenRequest } from ".";
+import { User, GoogleTokenRequest, Code2FARequestBody } from ".";
 import { register } from "./route/post"
 import { login } from "./route/login"
 import { gsignin } from "./route/gsignin"
@@ -17,8 +17,11 @@ import { UpdateWinLooseBody, updateWinLoose} from "./route/updateWinLoose"
 import { PostGameScoreBody , postGameScore} from "./route/postGameScore"
 import {  langBody , postLang} from "./route/postLang"
 import {  getFriends} from "./route/getFriends"
+import { friends } from "./route/postFriends"
 import { getAvatar} from "./route/getAvatar"
 import { twoFaBody } from "./route/post2Fa";
+import { FriendsBody } from "./route/postFriends";
+import { getGameScore } from "./route/getGameScore";
 import { getBlockchain } from "./route/getBlockchain";
 
 export interface GetRoutes {
@@ -30,7 +33,7 @@ export interface GetRoutes {
 	gsignin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
 	glogin( request: FastifyRequest <{ Body : GoogleTokenRequest }>, reply: FastifyReply ) : any
 	post2Fa( request: FastifyRequest<{ Body : twoFaBody }> , reply: FastifyReply) : any
-	verify2Fa( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
+	verify2Fa( request: FastifyRequest<{ Body : Code2FARequestBody }> , reply: FastifyReply) : any
 	logout( request: FastifyRequest<{ Body : User }> , reply: FastifyReply) : any
 	updateAvatar( request: FastifyRequest<{ Body : UpdateAvatarBody }> , reply: FastifyReply) : any
 	updateMail( request: FastifyRequest<{ Body : UpdateMailBody }> , reply: FastifyReply) : any
@@ -40,6 +43,8 @@ export interface GetRoutes {
 	postLang( request: FastifyRequest<{ Body : langBody}> , reply: FastifyReply) : any
 	getFriends( request: FastifyRequest , reply: FastifyReply) : any
 	getAvatar( request: FastifyRequest , reply: FastifyReply) : any
+	friends( request: FastifyRequest<{Body: FriendsBody}>, reply: FastifyReply): any
+	getGameScore( request: FastifyRequest, reply: FastifyReply) : any
 	getBlockchain( request: FastifyRequest, reply: FastifyReply) : any
 }
 
@@ -61,6 +66,8 @@ export const getRoutes: GetRoutes = {
 	postGameScore: postGameScore,
 	postLang: postLang,
 	getFriends : getFriends,
+	friends: friends,
 	getAvatar: getAvatar,
-	getBlockchain: getBlockchain
+	getGameScore: getGameScore,
+	getBlockchain: getBlockchain,
 };

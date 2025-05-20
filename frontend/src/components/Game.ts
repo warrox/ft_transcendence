@@ -1,10 +1,15 @@
-import { Div, Button, Input, Span, Li } from "../lib/PongFactory";
+import { Div, Button, Input, Span } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { MeData } from "./Home";
 import { rerender, navigateTo } from "../router/router";
 import { inputScaleCss } from "../styles/cssFactory";
 
 import { sleep } from 'sleep-ts';
+import { userInfo } from "os";
+import { Tournament } from "./Tournament";
+
+import { t } from "i18next";
+import i18n from "i18next";
 
 let gameStarted = 0;
 
@@ -36,6 +41,8 @@ const ballState = {
 
 let leftScore = 0;
 let rightScore = 0;
+let leftResult = 0;
+let rightResult = 0;
 
 
 export function Game(): PongNode<any> {
@@ -113,11 +120,9 @@ export function Game(): PongNode<any> {
 
 	if (gameStarted == 0)
 	{
-		leftScore = 0;
-		rightScore = 0;
-			return Div({ class: "relative flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
-				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, ["Pong like you’ve never played it before."]),
-				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, ["Choose your map:"]),
+			return Div({ class: "flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
+				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, [t("game.never_play")]),
+				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, [t("game.choose_map")]),
 				Div({ class: "flex items-center"} , [Span({ class: `block font-orbitron md:text-2xl text-${PongColor}`}, [`${mapKeys[mapIndex]}`])]),
 				Div({ class: "flex justify-between items-center" }, [
 					Button({ id: "left-arrow", class: `bg-${PongColor} hover:bg-${hoverColor} text-xl text-white px-4 py-2 rounded mr-10`, onClick: prev_color }, ["<"]),
@@ -129,7 +134,7 @@ export function Game(): PongNode<any> {
 					Button({ id: "right-arrow", class: `bg-${PongColor} hover:bg-${hoverColor} text-xl text-white px-4 py-2 rounded ml-10`, onClick: next_color }, [">"]),
 				]),
 				Div({ class: "flex flex-col justify-around items-center h-30"}, [
-					Span({ class: `block font-orbitron md:text-2xl text-${PongColor}` }, ["Go solo or battle your friends!:" ]),
+					Span({ class: `block font-orbitron md:text-2xl text-${PongColor}` }, [t("game.solo_friends")]),
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton", onClick: () => {
 							gameStarted = 2;
@@ -138,19 +143,19 @@ export function Game(): PongNode<any> {
 						},
 							class: `bg-${PongColor}  hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 
-							["Single Player"]),
+							[t("game.single_player")]),
 						Button({id: "mgplayerButton", onClick: () => {
 								registerplayer = true;
 								rerender();
 							},
 
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
-							["Multiple Player"]),
+							[t("game.multi_player")]),
 						Button({id: "tournamentButton",
 							onClick: () => {
 								localStorage.setItem("Color", mapKeys[mapIndex]); navigateTo('/tournament');},
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
-							["Tournament Mode"]),
+							[t("game.tournament")]),
 					]),
 				]),
 				...(registerplayer
@@ -216,18 +221,20 @@ export function Game(): PongNode<any> {
 		return Div({ class: "flex flex-col items-center justify-center min-h-screen bg-black" }, [
 			Div({ class: `text-${PongColor} font-orbitron text-4xl mb-4` }, [
 				Span({id: "player 1", class: "mx -8"}, [`${player1}`]),
-				Span({ id: "score-left", class: "mx-8" }, [`${String(leftScore)}`]),
+				Span({ id: "score-left", class: "mx-8" }, [`${String(leftResult)}`]),
 				Span({}, [" : "]),
-				Span({ id: "score-right", class: "mx-8" }, [`${String(rightScore)}`]),
+				Span({ id: "score-right", class: "mx-8" }, [`${String(rightResult)}`]),
 				Span({id: "player 1", class: "mx -8"}, [`${player2}`]),
 			]),
 			Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
 				Span({class: `absolute left-[550px] top-[250px] block font-orbitron md:text-7xl text-${PongColor} `}, [`WINNER: ${winner}`]),
 				Button({ id: "back-to-menu", onClick: () => {
 					gameStarted = 0;
+					leftScore = 0;
+					rightScore = 0;
 					rerender();
 				},
-				class: `absolute left-[730px] top-[450px] bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`}, ["Back to menu"]),
+				class: `absolute left-[730px] top-[450px] bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`}, [t("game.back_menu")]),
 				Div({ id: "leftpad", class:`absolute w-[15px] h-[90px] bg-${PongColor} left-[5px] top-[360px]` }),
 				Div({ id: "rightpad", class:`absolute w-[15px] h-[90px] bg-${PongColor} left-[1580px] top-[360px]` }),
 			]),
@@ -324,6 +331,8 @@ function playPong(){
 				result = "lose";
 			}
 			score = leftScore.toString() + " " + rightScore.toString();
+			leftResult = leftScore;
+			rightResult = rightScore;
 			console.log("Match score sent: ", score);
 			guestName = player2;
 			const body = {
@@ -332,6 +341,7 @@ function playPong(){
 				score,
 				guestName,
 			};
+			console.log(body);
 			fetch("/api/postGameScore", {
 				method: "POST",
 				body: JSON.stringify(body),
@@ -340,19 +350,21 @@ function playPong(){
 				"Content-Type": "application/json",
 				},
 			})
-			.then(async res => {
-				if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-				const text = await res.text();
-				console.log("Réponse brute du serveur :", text);
-	
-				try {
-					const parseBody = JSON.parse(text);
-					console.log("Response parsed from JSON :", parseBody);
-				} catch (e) {
-					console.log("Error parsing JSON: ", e);
+			.then(async (res) => {
+				const data = await res.text(); // ou res.json() si c'est du JSON
+				if (!res.ok) {
+				  console.error("Erreur HTTP :", res.status, data); // 👈 affiche l’erreur
+				  throw new Error(`HTTP error! Status: ${res.status}`);
+				} else {
+				  console.log("Succès:", data);
 				}
-			})
+			  })
+			  .catch((err) => {
+				console.error("Erreur dans fetch:", err);
+			  });
 			gameStarted = 3;
+			leftScore = 0;
+			rightScore = 0;
 			registerplayer = false;
 			rerender();
 			return ;
@@ -377,7 +389,21 @@ function playPong(){
 			ballState.y = gameArea.clientHeight / 2;
 		}
 
-        if ((ballState.y<= leftpad.offsetTop + leftpad.offsetHeight && ballState.y + ball.clientHeight >= leftpad.offsetTop) &&  (ballState.x <= leftpad.offsetLeft + leftpad.clientWidth && ballState.dx < 0))
+		const ballTop = ballState.y;
+		const ballBottom = ballState.y + ball.clientHeight;
+		const ballLeft = ballState.x;
+		const ballRight = ballState.x + ball.clientWidth;
+
+		const padTop = leftpad.offsetTop;
+		const padBottom = leftpad.offsetTop + leftpad.offsetHeight;
+		const padLeft = leftpad.offsetLeft;
+		const padRight = leftpad.offsetLeft + leftpad.clientWidth;
+
+		const verticalCollision = ballBottom >= padTop && ballTop <= padBottom;
+		const horizontalCollision = ballLeft <= padRight && ballRight >= padLeft;
+
+		if (verticalCollision && horizontalCollision && ballState.dx < 0)
+        // if ((ballState.y <= leftpad.offsetTop + leftpad.offsetHeight && ballState.y + ball.clientHeight >= leftpad.offsetTop) &&  (ballState.x <= leftpad.offsetLeft + leftpad.clientWidth && ballState.dx < 0))
 		{
             ballState.dx = (ballState.dx * -1) + 2;
 			ballState.dy = ((ballState.y + (ball.clientHeight / 2)) - (leftpad.offsetTop + (leftpad.offsetHeight / 2))) * 0.25;
@@ -463,7 +489,9 @@ async function AI_mov(){
 		if (dx > 0)
 		{
 			const timeToReach = (gameArea.clientWidth - x) / dx;
-			let target = y + (dy * timeToReach )+ Math.floor((Math.random() * rightpad.clientHeight)) - rightpad.clientHeight;	
+			// let target = y + (dy * timeToReach )+ Math.floor((Math.random() * rightpad.clientHeight)) - rightpad.clientHeight;	
+			let randomness = (Math.random() - 0.5) * rightpad.clientHeight * 0.3;
+			let target = y + dy * timeToReach + randomness;
 
 			while (target < 0 || target > gameArea.clientHeight) {
 				if (target < 0) target = -target;

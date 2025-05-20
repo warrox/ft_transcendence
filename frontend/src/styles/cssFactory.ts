@@ -56,7 +56,6 @@ export const cardFlipCss = `
   group
 `;
 
-// Inner ne gère que la transition et la rotation SANS hover directement
 export const cardInnerCss = `
   relative w-full h-full transition-transform duration-400 transform-style-preserve-3d
   group-hover:rotate-y-180
@@ -117,11 +116,30 @@ export const playButtonDarkCss = `
   hover:shadow-[0_0_20px_rgba(139,92,246,0.9)]
   transition
   duration-300
+  font-orbitron
+`;
+
+export const playButtonLangDarkCss = `
+  bg-black
+  text-gray-400
+  font-bold
+  px-6
+  py-2
+  rounded-lg
+  border
+  border-black-400
+  shadow-[0_0_10px_rgba(253,224,71,0.6)]
+  hover:bg-violet-500
+  hover:text-black
+  hover:border-violet-400
+  hover:shadow-[0_0_20px_rgba(139,92,246,0.9)]
+  transition
+  duration-300
 `;
 
 // const forceTailwindToIncludeThese = [
-// 	"bg-yellow-400", "bg-emerald-500", "bg-neutral-400", "bg-cyan-500", "bg-rose-600", "bg-fuchsia-400", "bg-indigo-900",
-// 	"text-yellow-400", "text-emerald-500", "text-neutral-400", "text-cyan-500", "text-rose-600", "text-fuchsia-400", "text-indigo-900",
-// 	"hover:bg-yellow-500", "hover:bg-emerald-600", "hover:bg-neutral-500", "hover:bg-cyan-600", "hover:bg-rose-700", "hover:bg-fuchsia-500", "hover:bg-indigo-950",
+//     "bg-yellow-400", "bg-emerald-500", "bg-neutral-400", "bg-cyan-500", "bg-rose-600", "bg-fuchsia-400", "bg-indigo-900",
+//     "text-yellow-400", "text-emerald-500", "text-neutral-400", "text-cyan-500", "text-rose-600", "text-fuchsia-400", "text-indigo-900",
+//     "hover:bg-yellow-500", "hover:bg-emerald-600", "hover:bg-neutral-500", "hover:bg-cyan-600", "hover:bg-rose-700", "hover:bg-fuchsia-500", "hover:bg-indigo-950",
 //  "border-yellow-500", "border-emerald-500", "border-neutral-400", "border-cyan-500", "border-rose-600", "border-fuchsia-400", "border-indigo-900",
 // ];

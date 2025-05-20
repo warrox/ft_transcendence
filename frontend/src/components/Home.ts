@@ -1,5 +1,5 @@
 import { PongNode } from "../lib/PongNode";
-import { Div, UList, Li, Span, Image, Button, RawHTML, Input } from "../lib/PongFactory";
+import { Div, UList, Li, Span, Image, Button, RawHTML } from "../lib/PongFactory";
 import {
 	areaCss,
 	circlesCss,
@@ -198,7 +198,12 @@ export function Home(): PongNode<any> {
 							id: "dashboard_button",
 							class: playButtonDarkCss,
 							onClick: () => navigateTo("/dashboard"),
-						}, [t("home.dashboard")])
+						}, [t("home.dashboard")]),
+						Button({
+							id: "blockchain_button",
+							class: playButtonDarkCss,
+							onClick: () => navigateTo("/blockchain"),
+						}, ["Tableau blockchain"])
 					])
 				])
 			]),

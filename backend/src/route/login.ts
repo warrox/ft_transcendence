@@ -1,6 +1,9 @@
-export const twoFAStore : { code : number} = {
-	code:0
-};
+// export const twoFAStore : { code : number} = {
+// 	code:0
+// };
+
+export const twoFAStore: Record<string, number> = {};
+
 
 // *******************8 if is 2fa ok -> send mail to user and boolean to front to wait. **************************
 
@@ -84,18 +87,38 @@ export const login = async (
 		if (!isMatch)
 			return reply.status(401).send({ error: "Invalid email or password" });
 
-		if (user.is2FA) {
-			twoFAStore.code = Math.floor(1000 + Math.random() * 9000);
-			console.log("2FA Code:", twoFAStore.code);
+		// if (user.is2FA) {
+		// 	twoFAStore.code = Math.floor(1000 + Math.random() * 9000);
+		// 		// twoFAStore[email] = Math.floor(1000 + Math.random() * 9000);
+		// 	console.log("2FA Code:", twoFAStore.code);
 
+		// 	await transporter.sendMail({
+		// 		from: '"Transcendance" <Transcendance@trans.com>',
+		// 		to: email,
+		// 		subject: "Authentification 2FA to transcendance",
+		// 		text: `copy/paste your unique code : ${twoFAStore.code}`,
+		// 		html: `<b>copy/paste your unique code : </b><span>${twoFAStore.code}</span>`,
+		// 	});
+
+		// 	return reply.status(200).send({
+		// 		success: true,
+		// 		twoFA: true,
+		// 		message: "2FA code sent to email",
+		// 	});
+		// }
+
+		if (user.is2FA) {
+			twoFAStore[email] = Math.floor(1000 + Math.random() * 9000);
+			console.log("2FA Code:", twoFAStore[email]);
+		
 			await transporter.sendMail({
 				from: '"Transcendance" <Transcendance@trans.com>',
 				to: email,
 				subject: "Authentification 2FA to transcendance",
-				text: `copy/paste your unique code : ${twoFAStore.code}`,
-				html: `<b>copy/paste your unique code : </b><span>${twoFAStore.code}</span>`,
+				text: `copy/paste your unique code : ${twoFAStore[email]}`,
+				html: `<b>copy/paste your unique code : </b><span>${twoFAStore[email]}</span>`,
 			});
-
+		
 			return reply.status(200).send({
 				success: true,
 				twoFA: true,

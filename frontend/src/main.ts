@@ -2,10 +2,14 @@ import { rerender, router } from './router/router';
 import './types/window.d.ts';
 import './i18n';
 import { AuthStore } from './stores/AuthStore.ts';
+import { navigateTo } from './router/router';
 
 window.addEventListener("DOMContentLoaded", async () => {
 	AuthStore.instance.subscribe(rerender);
-	await AuthStore.instance.fetchMe();
+
+	const token = localStorage.getItem("access_token");
+	if (token)
+		await AuthStore.instance.fetchMe();
 	router();
 });
 
