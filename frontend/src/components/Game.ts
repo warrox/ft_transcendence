@@ -97,9 +97,31 @@ export function Game(): PongNode<any> {
 		"Indigo": "indigo-950",
 	}
 
+	const backButtonStyles: { [key: string]: string} = {
+		"Default": "text-yellow-300",
+		"Classic": "text-neutral-300",
+		"Emerald": "text-emerald-400",
+		"Cyan": "text-cyan-400",
+		"Rose": "text-rose-500",
+		"Fushia": "text-fuchsia-300",
+		"Indigo": "text-indigo-800",
+	};
+
+const backButtonHoverStyles: { [key: string]: string} = {
+		"Default": "hover:text-yellow-100",
+		"Classic": "hover:text-neutral-100",
+		"Emerald": "hover:text-emerald-200",
+		"Cyan": "hover:text-cyan-200",
+		"Rose": "hover:text-rose-300",
+		"Fushia": "hover:text-fuchsia-100",
+		"Indigo": "hover:text-indigo-600",
+	};
+
 	const mapKeys = Object.keys(mapStyles);
 	let PongColor = mapStyles[mapKeys[mapIndex]];
 	let hoverColor = hoverStyles[mapKeys[mapIndex]];
+	let backButtonColor = backButtonStyles[mapKeys[mapIndex]];
+	let backButtonHoverColor = backButtonHoverStyles[mapKeys[mapIndex]];
 
 	const prev_color = () => {
 		if (mapIndex != 0) {
@@ -120,7 +142,7 @@ export function Game(): PongNode<any> {
 
 	if (gameStarted == 0)
 	{
-			return Div({ class: "flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
+			return Div({ class: "flex flex-col justify-between items-center min-h-screen p-5 bg-black" }, [
 				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, [t("game.never_play")]),
 				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, [t("game.choose_map")]),
 				Div({ class: "flex items-center"} , [Span({ class: `block font-orbitron md:text-2xl text-${PongColor}`}, [`${mapKeys[mapIndex]}`])]),
@@ -133,7 +155,7 @@ export function Game(): PongNode<any> {
 					]),
 					Button({ id: "right-arrow", class: `bg-${PongColor} hover:bg-${hoverColor} text-xl text-white px-4 py-2 rounded ml-10`, onClick: next_color }, [">"]),
 				]),
-				Div({ class: "flex flex-col justify-around items-center h-30"}, [
+				Div({ class: "flex flex-col justify items-center h-30"}, [
 					Span({ class: `block font-orbitron md:text-2xl text-${PongColor}` }, [t("game.solo_friends")]),
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton", onClick: () => {
@@ -157,6 +179,7 @@ export function Game(): PongNode<any> {
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							[t("game.tournament")]),
 					]),
+					Button({id: "IneedtogoHome", onClick: () => {navigateTo("/home");}, class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["← Back to Menu"])
 				]),
 				...(registerplayer
 				? [
@@ -188,12 +211,15 @@ export function Game(): PongNode<any> {
 							// Lancer le jeu ou logique suivante ici :
 							console.log("Second player is:", player2);
 							gameStarted = 1;
+							resetKeys();
 							rerender();
 						},
 						class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`
 					}, ["Start Game"]),
 					...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Player 2 must have a name."])] : []),
 					...(errLength ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Name should not exceed 10 characters."])] : []),
+					Button({ id: "backtoblack", onClick: () => {registerplayer = false; rerender()},
+					class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["Back to selection mode"])
 				]),
 				] : [])
 		]);
@@ -253,6 +279,13 @@ document.addEventListener("keyup", (event) => {
 });
 
 
+const resetKeys = () => {
+	for (const key in keysPressed) {
+		keysPressed[key] = false;
+	}
+};
+
+
 const padSpeeed = 10;
 
 function movePad(){
@@ -275,12 +308,12 @@ function movePad(){
 		if (leftpad.offsetTop + leftpad.offsetHeight + padSpeeed < gameArea.clientHeight)
 			leftpad.style.top = `${leftpad.offsetTop + padSpeeed}px`;
 	}
-	if (keysPressed["3"] && gameStarted != 2)
+	if (keysPressed["ArrowUp"] && gameStarted != 2)
 	{
 		if (rightpad.offsetTop - padSpeeed > 0)
 			rightpad.style.top = `${rightpad.offsetTop - padSpeeed}px`;
 	}
-	if (keysPressed["."] && gameStarted != 2)
+	if (keysPressed["ArrowDown"] && gameStarted != 2)
 	{
 		if (rightpad.offsetTop + rightpad.offsetHeight + padSpeeed < gameArea.clientHeight)
 			rightpad.style.top = `${rightpad.offsetTop + padSpeeed}px`;
@@ -490,7 +523,7 @@ async function AI_mov(){
 		{
 			const timeToReach = (gameArea.clientWidth - x) / dx;
 			// let target = y + (dy * timeToReach )+ Math.floor((Math.random() * rightpad.clientHeight)) - rightpad.clientHeight;	
-			let randomness = (Math.random() - 0.5) * rightpad.clientHeight * 0.3;
+			let randomness = (Math.random() - 0.1) * rightpad.clientHeight * 0.3;
 			let target = y + dy * timeToReach + randomness;
 
 			while (target < 0 || target > gameArea.clientHeight) {

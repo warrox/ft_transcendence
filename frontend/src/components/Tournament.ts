@@ -133,7 +133,7 @@ export function Tournament(): PongNode<any>{
 			Button({ id: "back-to-menu-game",
 				onClick: () => { navigateTo('/game'); },
 				class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`
-			}, ["← Back to Menu"])
+			}, ["← Back to game Menu"])
 		]);
 	}
 	else
@@ -395,12 +395,12 @@ export function movePad(){
 		if (leftpad.offsetTop + leftpad.offsetHeight + padSpeeed < gameArea.clientHeight)
 			leftpad.style.top = `${leftpad.offsetTop + padSpeeed}px`;
 	}
-	if (keysPressed["3"])
+	if (keysPressed["ArrowUp"])
 	{
 		if (rightpad.offsetTop - padSpeeed > 0)
 			rightpad.style.top = `${rightpad.offsetTop - padSpeeed}px`;
 	}
-	if (keysPressed["."])
+	if (keysPressed["ArrowDown"])
 	{
 		if (rightpad.offsetTop + rightpad.offsetHeight + padSpeeed < gameArea.clientHeight)
 			rightpad.style.top = `${rightpad.offsetTop + padSpeeed}px`;
