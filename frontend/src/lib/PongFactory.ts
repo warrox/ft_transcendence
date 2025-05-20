@@ -58,7 +58,6 @@ export function Input(props: InputProps, child?: Array<PongNode<any> | string>):
 export function RawHTML(html: string): PongNode<any> {
 	return new RawNode({ html });
 }
-
 function coerceChild(child: PongNode<any> | string): PongNode<any> {
 	if (typeof child === "string") {
 		return new TextNode(child);

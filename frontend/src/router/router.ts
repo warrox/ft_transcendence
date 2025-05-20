@@ -12,7 +12,7 @@ import { Profil } from '../components/Profil'
 import { AuthStore } from '../stores/AuthStore';
 import { Friends } from '../components/Friends';
 import { Dashboard } from '../components/Dashboard'
-
+import { Blockchain } from '../components/Blockchain';
 
 type Route = {
 	path: string;
@@ -31,6 +31,7 @@ const routes: Route[] = [
 	{ path: '/friends', component: Friends, protected: true },
 	{ path: '/game', component: Game, protected: true},
 	{ path: '/dashboard', component: Dashboard },
+	{ path: '/blockchain', component: Blockchain },
 ]
 
 export function renderToDOM(node: PongNode<any>, container: HTMLElement) {

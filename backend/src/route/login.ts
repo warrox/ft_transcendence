@@ -144,6 +144,6 @@ export const login = async (
 		});
 	} catch (e: any) {
 		console.error("Login error:", e);
-		return reply.status(500).send({ error: "Erreur serveur" });
+		return reply.status(401).send({ error: "Erreur serveur" });
 	}
 };
