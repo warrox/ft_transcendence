@@ -32,6 +32,7 @@ export const postGameScore = async (
 		await tx.wait();
 		reply.code(200).send(result);
 	} catch (err: any) {
+		console.error("Insert error:", err.message);
 		reply.code(400).send({ error: err.message });
 	}
 };
