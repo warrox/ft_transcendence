@@ -51,9 +51,12 @@ const fetchBlockchainData = () => {
 	});
 };
 
+let hasFetched = false;
 export  function Blockchain(): PongNode<any> {
-	fetchBlockchainData();
 
+	if(hasFetched === false )
+		fetchBlockchainData();
+	hasFetched = true;
 	return Div({ class: `${areaCss} min-h-screen bg-yellow-400 flex flex-col items-center pt-20` }, [
 		P({ class: "text-3xl font-bold mb-6" }, ["Historique des parties Blockchain"]),
 
