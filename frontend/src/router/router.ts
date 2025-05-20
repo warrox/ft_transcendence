@@ -11,6 +11,7 @@ import { Landing } from '../components/Landing';
 import { Profil } from '../components/Profil'
 import { AuthStore } from '../stores/AuthStore';
 import { Friends } from '../components/Friends';
+import { Dashboard } from '../components/Dashboard'
 
 
 type Route = {
@@ -25,10 +26,11 @@ const routes: Route[] = [
 	{ path: '/home', component: Home, protected: true},
 	{ path: '/register', component: Register},
 	{ path: '/login', component: Login},
-	{ path: '/game', component: Game, protected: true },
 	{ path: '/profil', component: Profil, protected: true},
 	{ path: '/tournament', component: Tournament, protected: true},
 	{ path: '/friends', component: Friends, protected: true },
+	{ path: '/game', component: Game, protected: true},
+	{ path: '/dashboard', component: Dashboard },
 ]
 
 export function renderToDOM(node: PongNode<any>, container: HTMLElement) {

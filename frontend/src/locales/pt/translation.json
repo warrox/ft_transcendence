@@ -21,9 +21,11 @@
 		"never_play": "Pong como você nunca jogou antes.",
 		"choose_map": "Escolha o seu mapa:",
 		"select_map": "Selecionar mapa",
-		"solo_friends": "Jogue sozinho ou desafie seus amigos!",
+		"solo_friends": "Jogue sozinho ou desafie seus amigos !",
 		"single_player": "Um jogador",
-		"multi_player": "Multijogador"
+		"multi_player": "Multijogador",
+		"tournament": "Torneio",
+		"back_menu": "Voltar ao menu"
 	},
 	"home": {
 		"loading": "Carregando",

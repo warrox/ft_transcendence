@@ -205,7 +205,7 @@ export function Register(): PongNode<any> {
 				registerState === "success" 
 				? Div({ class: "mt-4 p-4 bg-green-500/20 border border-green-500 rounded-lg" }, [
 					P({ class: "text-green-500 text-center" }, [
-						t("register.ph_success")
+						t("register.success")
 					])
 				  ])
 				: registerState === "error"

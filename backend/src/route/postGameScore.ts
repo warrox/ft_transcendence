@@ -18,7 +18,7 @@ export const postGameScore = async (
 	try {
 		const res = await new Promise((resolve, reject) => {
 			const query = `
-			INSERT INTO games (user_id, result, guest_name, score)
+			INSERT INTO games (user_id, result, score, guest_name)
 			VALUES (?, ?, ?, ?)
 			`;
 			db.run(query, [userId, result, score, guestName], function (err) {

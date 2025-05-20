@@ -180,6 +180,7 @@ export class ButtonNode extends PongNode<ButtonProps> {
 
 export interface DivProps {
 	class?: string,
+	style?: string,
 	id?: string,
 	dataType?: string,
 	dataClientId?: string,
@@ -397,3 +398,4 @@ export class RawNode extends PongNode<{ html: string }> {
 		return this.props?.html || "";
 	}
 }
+
