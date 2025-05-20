@@ -6,6 +6,22 @@ type JWTClaims = {
 	email: string,
 };
 
+
+function bigIntToString(obj: any): any {
+	if (typeof obj === 'bigint') {
+		return obj.toString();
+	} else if (Array.isArray(obj)) {
+		return obj.map(bigIntToString);
+	} else if (typeof obj === 'object' && obj !== null) {
+		const newObj: any = {};
+		for (const key in obj) {
+			newObj[key] = bigIntToString(obj[key]);
+		}
+		return newObj;
+	}
+	return obj;
+}
+
 export const getBlockchain = async (request : FastifyRequest, reply: FastifyReply) => {
 	try{
 		const token = request.cookies["access_token"];
@@ -17,12 +33,9 @@ export const getBlockchain = async (request : FastifyRequest, reply: FastifyRepl
 		if(!claims || !claims.id){
 			return reply.status(401).send({ error: 'Token invalide'})
 		}
-		console.log("YYYY");
-		
-		const score = await contract.getUserScores(BigInt(claims.id));
+		const rawScore = await contract.getUserScores(BigInt(claims.id));
+		const score = bigIntToString(rawScore);
 
-		console.log(score + "prout");
-		
 		return reply.status(200).send({ score });
 		
 		
