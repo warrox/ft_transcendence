@@ -29,9 +29,9 @@ const routes: Route[] = [
 	{ path: '/profil', component: Profil, protected: true},
 	{ path: '/tournament', component: Tournament, protected: true},
 	{ path: '/friends', component: Friends, protected: true },
-	{ path: '/game', component: Game, protected: true},
-	{ path: '/dashboard', component: Dashboard },
-	{ path: '/blockchain', component: Blockchain },
+	{ path: '/game', component: Game, protected: true },
+	{ path: '/dashboard', component: Dashboard, protected: true},
+	{ path: '/blockchain', component: Blockchain, protected: true},
 ]
 
 export function renderToDOM(node: PongNode<any>, container: HTMLElement) {

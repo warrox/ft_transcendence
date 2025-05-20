@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
+import { onlineUsers } from '../index';
 import db from '../../db';
 
 type JWTClaims = {
@@ -13,7 +14,7 @@ type Friend = {
   email: string;
 };
 
-declare const onlineUsers: Set<number>; 
+// declare const onlineUsers: Set<number>; 
 export const getFriends = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
 	const token = request.cookies["access_token"];
@@ -43,8 +44,8 @@ export const getFriends = async (request: FastifyRequest, reply: FastifyReply) =
 
 	const enriched = friends.map(friend => ({
 	  ...friend,
-	//   online: onlineUsers.has(friend.id), A CAHNGER !!!! FALSE PR DEBUG
-		online: false,
+		online: onlineUsers.has(friend.id),
+		// online: false,
 	}));
 
 	return reply.status(200).send(enriched);
