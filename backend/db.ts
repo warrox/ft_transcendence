@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS games (
 	guest_name TEXT,
 	game_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	score TEXT NOT NULL ,
-	bounce INTEGER,
-	input_per_second INTEGER,
+	bounce INTEGER DEFAULT 0,
+	input_per_second INTEGER DEFAULT 0,
 	FOREIGN KEY (user_id) REFERENCES users(id)
 )`);
 

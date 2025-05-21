@@ -21,10 +21,11 @@ import {
 	inputCss,
 	playButtonDarkCss,
 } from "../styles/cssFactory";
-import { log } from "console";
+// import { log } from "console";
 
 let userGameStats: GameStats[] | null = null;
 let nameUser: NameUser | null = null;
+let selectedGame: GameStats | null = null;
 
 interface NameUser {
 	name: string;
@@ -37,6 +38,8 @@ interface GameStats {
 	guest_name: string;
 	game_date: string;
 	score: string;
+	bounce: number;
+	input_per_second: number;
 }
 
 export function Dashboard(): PongNode<any> {
@@ -50,6 +53,7 @@ export function Dashboard(): PongNode<any> {
 				return res.json();
 			})
 			.then((data: GameStats[]) => {
+				console.log(data);
 				userGameStats = data;
 				rerender();
 			})
@@ -111,6 +115,13 @@ export function Dashboard(): PongNode<any> {
 	const winRate = totalGames > 0 ? ((winCount / totalGames) * 100).toFixed(1) : "0";
 	const winLoseRatio = loseCount > 0 ? (winCount / loseCount).toFixed(2) : "∞";
 	const topOpponent = Object.entries(opponentMap).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+
+	// if (userGameStats) {
+	// 	for (const game of userGameStats) {
+	// 		const bounces = game.bounce;
+	// 		const inputsPerSecond = game.input_per_second;
+	// 	}
+	// }
 
 	if (userGameStats) {
 		for (const game of userGameStats) {
@@ -177,6 +188,7 @@ export function Dashboard(): PongNode<any> {
 
 	const progressPercent = parseFloat(winRate);
 
+
 	const gameInput = Input({
 		id: "gameInput",
 		required: true,
@@ -197,10 +209,60 @@ export function Dashboard(): PongNode<any> {
 
 			if (gameInfo.length == 0) {
 				//errro handling
+				selectedGame = null;
+				rerender();
+				return;
 			}
+			selectedGame = gameInfo[0];
+			rerender();
 		},
 		class: playButtonDarkCss,
 	})
+
+	const selectedGameDisplay: PongNode<any>[] = [];
+	if (selectedGame) {
+		selectedGameDisplay.push(
+			//display des infos de la game choisi
+			Div(
+				{
+					class: "bg-gray-600 bg-opacity-70 rounded-xl p-6 w-full max-w-md shadow-2xl space-y-6",
+				},
+				[
+					Div(
+						{class: "text-center"},
+						[
+							Span(
+								{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+								["Total de rebond (joueur)"]
+							),
+							Span(
+								{ class: "text-4xl font-bold mt-1 block"}, [
+									String(selectedGame.bounce)
+								]
+							)
+						]
+					),
+					Div (
+						{class: "text-center"},
+						[
+							Span(
+								{ class: "txt-xs text-gray-400 uppercase tracking-widest" },
+								["Temps de pression continue sur les touches (en secondes)"]
+							),
+							Span(
+								{ class: "text-4xl font-bold mt-1 block" }, [
+									String(selectedGame.input_per_second)
+								]
+							)
+						]
+					)
+				]
+			)
+		);
+	} else {
+		selectedGameDisplay.push(Span({ class: "mt-4 text-red-400" }, ["Partie non trouvée"]));
+	}
+
 
 	return Div(
 		{ class: areaCss },
@@ -336,9 +398,11 @@ export function Dashboard(): PongNode<any> {
 							Div({ class: "mx-auto mb-8" }, [Donut({ percent: progressPercent })]),
 							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["Détails des parties"]),
 							Div(
-								{ class: "relative z-10 w-1/3 flex flex-col justify-center items-center p-4" },
-								[gameInput, gameButton],
-
+								{ class: "relative z-10 flex flex-col justify-center items-center p-4 w-full max-w-md" },
+								[	gameInput, 
+									gameButton, 
+									...selectedGameDisplay
+								]  // Affichage sous le bouton ici
 							),
 						]
 					),
