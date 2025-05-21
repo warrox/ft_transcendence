@@ -378,17 +378,19 @@ export class InputNode extends PongNode<InputProps> {
 			accept,
 		} = this.props || {};
 
+		const escape = escapeHtml; // alias raccourci
+
 		return `<input
-			class="${className || ""}"
-			id="${id}"
-			${type ? `type="${type}"` : ""}
+			class="${className ? escape(className) : ""}"
+			id="${escape(id || "")}"
+			${type ? `type="${escape(type)}"` : ""}
 			${required ? `required` : ""}
 			${minlength ? `minlength="${minlength}"` : ""}
 			${maxlength ? `maxlength="${maxlength}"` : ""}
-			${placeholder ? `placeholder="${placeholder}"` : ""}
-			${pattern ? `pattern="${pattern}"` : ""}
-			${value ? `value="${value}"` : ""}
-			${accept ? `accept="${accept}"` : ""}
+			${placeholder ? `placeholder="${escape(placeholder)}"` : ""}
+			${pattern ? `pattern="${escape(pattern)}"` : ""}
+			${value ? `value="${escape(value)}"` : ""}
+			${accept ? `accept="${escape(accept)}"` : ""}
 		/>`;
 	}
 }
@@ -399,3 +401,11 @@ export class RawNode extends PongNode<{ html: string }> {
 	}
 }
 
+function escapeHtml(unsafe: string): string {
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}

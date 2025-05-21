@@ -460,12 +460,12 @@ export function playPong(){
 
 		if ((y <= leftpad.offsetTop + leftpad.offsetHeight && y >= leftpad.offsetTop) &&  (x <= leftpad.offsetLeft + leftpad.clientWidth && dx < 0))
 		{
-			dx = (dx * -1) + 2;
+			dx = (dx * -1) + 1;
 			dy = ((y + (ball.clientHeight / 2)) - (leftpad.offsetTop + (leftpad.offsetHeight / 2))) * 0.3;
 		}
 		if ((y <= rightpad.offsetTop + rightpad.offsetHeight && y >= rightpad.offsetTop) && (x + ball.clientWidth >= rightpad.offsetLeft && dx > 0))
 		{
-			dx = (dx * -1) - 2;
+			dx = (dx * -1) - 1;
 			dy = ((y + (ball.clientHeight / 2)) - (rightpad.offsetTop + (rightpad.offsetHeight / 2))) * 0.3;
 		}
 		if (dx >= 15)
