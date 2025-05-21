@@ -19,8 +19,9 @@ import {
 	backgroundCss,
 	neonTitleCss,
 	inputCss,
-	fancyButtonCss,
+	playButtonDarkCss,
 } from "../styles/cssFactory";
+import { log } from "console";
 
 let userGameStats: GameStats[] | null = null;
 let nameUser: NameUser | null = null;
@@ -183,6 +184,24 @@ export function Dashboard(): PongNode<any> {
 		class: inputCss,
 	});
 
+	const gameButton = Button({
+		id: "gameButton",
+		onClick: () => {
+			const field = document.querySelector("#gameInput") as HTMLInputElement;
+			if (!field) return;
+
+			console.log(field.value);
+			const fieldAsInt = parseInt(field.value);
+			const gameInfo = userGameStats!.filter((game) => game.id == fieldAsInt);
+			console.log("Game info: ",	gameInfo);
+
+			if (gameInfo.length == 0) {
+				//errro handling
+			}
+		},
+		class: playButtonDarkCss,
+	})
+
 	return Div(
 		{ class: areaCss },
 		[
@@ -318,7 +337,8 @@ export function Dashboard(): PongNode<any> {
 							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["Détails des parties"]),
 							Div(
 								{ class: "relative z-10 w-1/3 flex flex-col justify-center items-center p-4" },
-								[gameInput]
+								[gameInput, gameButton],
+
 							),
 						]
 					),
