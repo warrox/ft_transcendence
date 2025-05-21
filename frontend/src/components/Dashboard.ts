@@ -1,5 +1,5 @@
 import { PongNode } from "../lib/PongNode";
-import { Div, UList, Li, Span } from "../lib/PongFactory";
+import { Div, UList, Li, Span, Input, Button } from "../lib/PongFactory";
 import { rerender } from "../router/router";
 import { MeData } from "./Home";
 import {
@@ -18,10 +18,14 @@ import {
 	WrapperCss,
 	backgroundCss,
 	neonTitleCss,
+	inputCss,
+	playButtonDarkCss,
 } from "../styles/cssFactory";
+// import { log } from "console";
 
 let userGameStats: GameStats[] | null = null;
 let nameUser: NameUser | null = null;
+let selectedGame: GameStats | null = null;
 
 interface NameUser {
 	name: string;
@@ -34,6 +38,8 @@ interface GameStats {
 	guest_name: string;
 	game_date: string;
 	score: string;
+	bounce: number;
+	input_per_second: number;
 }
 
 export function Dashboard(): PongNode<any> {
@@ -47,6 +53,7 @@ export function Dashboard(): PongNode<any> {
 				return res.json();
 			})
 			.then((data: GameStats[]) => {
+				console.log(data);
 				userGameStats = data;
 				rerender();
 			})
@@ -109,6 +116,13 @@ export function Dashboard(): PongNode<any> {
 	const winLoseRatio = loseCount > 0 ? (winCount / loseCount).toFixed(2) : "∞";
 	const topOpponent = Object.entries(opponentMap).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
 
+	// if (userGameStats) {
+	// 	for (const game of userGameStats) {
+	// 		const bounces = game.bounce;
+	// 		const inputsPerSecond = game.input_per_second;
+	// 	}
+	// }
+
 	if (userGameStats) {
 		for (const game of userGameStats) {
 			gameElements.push(
@@ -144,9 +158,8 @@ export function Dashboard(): PongNode<any> {
 
 	function getDonutClass(percent: number): string {
 		const safePercent = Math.max(0, Math.min(100, Math.round(percent)));
-	return `bg-donut-${safePercent}`;
-}
-
+		return `bg-donut-${safePercent}`;
+	}
 
 	function Donut({ percent }: { percent: number }): PongNode<any> {
 		const donutClass = getDonutClass(percent);
@@ -156,126 +169,260 @@ export function Dashboard(): PongNode<any> {
 				class: `relative w-56 h-56 rounded-full flex items-center justify-center ${donutClass}`,
 			},
 			[
-				Div({
-					class:
-						"absolute w-40 h-40 bg-gray-700 rounded-full flex items-center justify-center",
-				}, [
-					Span({
-						class:
-							"text-white text-4xl font-orbitron font-bold select-none",
-					}, [`${percent.toFixed(1)} %`]),
-				]),
+				Div(
+					{
+						class: "absolute w-40 h-40 bg-gray-700 rounded-full flex items-center justify-center",
+					},
+					[
+						Span(
+							{
+								class: "text-white text-4xl font-orbitron font-bold select-none",
+							},
+							[`${percent.toFixed(1)} %`]
+						),
+					]
+				),
 			]
 		);
 	}
+
 	const progressPercent = parseFloat(winRate);
 
-return Div({ class: areaCss }, [
-	UList(
-		{ class: circlesCss },
-		[
-			Li({ class: circle1Css }),
-			Li({ class: circle2Css }),
-			Li({ class: circle3Css }),
-			Li({ class: circle4Css }),
-			Li({ class: circle5Css }),
-			Li({ class: circle6Css }),
-			Li({ class: circle7Css }),
-			Li({ class: circle8Css }),
-			Li({ class: circle9Css }),
-			Li({ class: circle10Css }),
-		]
-	),
-	Div({ class: `${WrapperCss} ${backgroundCss} absolute top-0 left-0 w-full h-full z-[-1]` }),
 
-	Div(
-		{ class: "flex flex-row min-h-screen text-white font-orbitron gap-6 px-4 justify-center items-center" },
-		[
-			// === Colonne GAUCHE ===
+	const gameInput = Input({
+		id: "gameInput",
+		required: true,
+		onChange: () => {},
+		class: inputCss,
+	});
+
+	const gameButton = Button({
+		id: "gameButton",
+		onClick: () => {
+			const field = document.querySelector("#gameInput") as HTMLInputElement;
+			if (!field) return;
+
+			console.log(field.value);
+			const fieldAsInt = parseInt(field.value);
+			const gameInfo = userGameStats!.filter((game) => game.id == fieldAsInt);
+			console.log("Game info: ",	gameInfo);
+
+			if (gameInfo.length == 0) {
+				//errro handling
+				selectedGame = null;
+				rerender();
+				return;
+			}
+			selectedGame = gameInfo[0];
+			rerender();
+		},
+		class: playButtonDarkCss,
+	})
+
+	const selectedGameDisplay: PongNode<any>[] = [];
+	if (selectedGame) {
+		selectedGameDisplay.push(
+			//display des infos de la game choisi
 			Div(
-				{ class: "relative z-10 w-1/3 flex flex-col justify-center items-center p-4" },
+				{
+					class: "bg-gray-600 bg-opacity-70 rounded-xl p-6 w-full max-w-md shadow-2xl space-y-6",
+				},
 				[
-					Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Statistics"]),
 					Div(
-						{
-							class:
-								"bg-gray-600 bg-opacity-70 rounded-xl p-6 w-full max-w-md shadow-2xl space-y-6",
-						},
+						{class: "text-center"},
 						[
+							Span(
+								{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+								["Total de rebond (joueur)"]
+							),
+							Span(
+								{ class: "text-4xl font-bold mt-1 block"}, [
+									String(selectedGame.bounce)
+								]
+							)
+						]
+					),
+					Div (
+						{class: "text-center"},
+						[
+							Span(
+								{ class: "txt-xs text-gray-400 uppercase tracking-widest" },
+								["Temps de pression continue sur les touches (en secondes)"]
+							),
+							Span(
+								{ class: "text-4xl font-bold mt-1 block" }, [
+									String(selectedGame.input_per_second)
+								]
+							)
+						]
+					)
+				]
+			)
+		);
+	} else {
+		selectedGameDisplay.push(Span({ class: "mt-4 text-red-400" }, ["Partie non trouvée"]));
+	}
+
+
+	return Div(
+		{ class: areaCss },
+		[
+			UList(
+				{ class: circlesCss },
+				[
+					Li({ class: circle1Css }),
+					Li({ class: circle2Css }),
+					Li({ class: circle3Css }),
+					Li({ class: circle4Css }),
+					Li({ class: circle5Css }),
+					Li({ class: circle6Css }),
+					Li({ class: circle7Css }),
+					Li({ class: circle8Css }),
+					Li({ class: circle9Css }),
+					Li({ class: circle10Css }),
+				]
+			),
+			Div({ class: `${WrapperCss} ${backgroundCss} absolute top-0 left-0 w-full h-full z-[-1]` }),
+
+			Div(
+				{
+					class:
+						"flex flex-row min-h-screen text-white font-orbitron gap-6 px-4 justify-center items-center",
+				},
+				[
+					// === Colonne GAUCHE ===
+					Div(
+						{ class: "relative z-10 w-1/3 flex flex-col justify-center items-center p-4" },
+						[
+							Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Statistics"]),
 							Div(
-								{ class: "text-center" },
+								{
+									class:
+										"bg-gray-600 bg-opacity-70 rounded-xl p-6 w-full max-w-md shadow-2xl space-y-6",
+								},
 								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Total parties jouées"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [String(totalGames)]),
+									Div(
+										{ class: "text-center" },
+										[
+											Span(
+												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+												["Total parties jouées"]
+											),
+											Span({ class: "text-4xl font-bold mt-1 block" }, [
+												String(totalGames),
+											]),
+										]
+									),
+									Div(
+										{ class: "text-center" },
+										[
+											Span(
+												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+												["Total de victoires"]
+											),
+											Span({ class: "text-4xl font-bold mt-1 block" }, [
+												String(winCount),
+											]),
+										]
+									),
+									Div(
+										{ class: "text-center" },
+										[
+											Span(
+												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+												["Total de défaites"]
+											),
+											Span({ class: "text-4xl font-bold mt-1 block" }, [
+												String(loseCount),
+											]),
+										]
+									),
+									Div(
+										{ class: "text-center" },
+										[
+											Span(
+												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+												["Nombre de points marqués"]
+											),
+											Span({ class: "text-4xl font-bold mt-1 block" }, [
+												String(totalPlayerScore),
+											]),
+										]
+									),
+									Div(
+										{ class: "text-center" },
+										[
+											Span(
+												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+												["Série de victoires la plus longue"]
+											),
+											Span({ class: "text-4xl font-bold mt-1 block" }, [
+												String(Math.max(...streaks)),
+											]),
+										]
+									),
+									Div(
+										{ class: "text-center" },
+										[
+											Span(
+												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+												["Ratio défaites/victoires"]
+											),
+											Span({ class: "text-4xl font-bold mt-1 block" }, [
+												winLoseRatio,
+											]),
+										]
+									),
+									Div(
+										{ class: "text-center" },
+										[
+											Span(
+												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
+												["Ami le plus affronté"]
+											),
+											Span({ class: "text-4xl font-bold mt-1 block" }, [
+												topOpponent,
+											]),
+										]
+									),
 								]
 							),
+						]
+					),
+
+					// === Colonne CENTRALE avec Donut + Détails des parties ===
+					Div(
+						{ class: "relative z-20 flex flex-col items-center w-1/3 text-center" },
+						[
+							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["% de victoire"]),
+							Div({ class: "mx-auto mb-8" }, [Donut({ percent: progressPercent })]),
+							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["Détails des parties"]),
 							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Nombre de points marqués"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [String(totalPlayerScore)]),
-								]
+								{ class: "relative z-10 flex flex-col justify-center items-center p-4 w-full max-w-md" },
+								[	gameInput, 
+									gameButton, 
+									...selectedGameDisplay
+								]  // Affichage sous le bouton ici
 							),
+						]
+					),
+
+					// === Colonne DROITE ===
+					Div(
+						{ class: "relative z-10 w-1/3 flex flex-col items-center justify-center p-4" },
+						[
+							Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Score"]),
 							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Taux de victoire (%)"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [winRate]),
-								]
-							),
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Série de victoires la plus longue"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [String(Math.max(...streaks))]),
-								]
-							),
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Ratio défaites/victoires"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [winLoseRatio]),
-								]
-							),
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Ami le plus affronté"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [topOpponent]),
-								]
+								{
+									class:
+										"relative mt-8 text-left bg-gray-600 bg-opacity-40 rounded-xl p-6 w-full max-w-2xl shadow-xl max-h-[66rem] overflow-y-auto",
+								},
+								[...gameElements]
 							),
 						]
 					),
 				]
 			),
-			// === Donut au MILIEU ===
-			Div(
-			{ class: "relative z-20 w-64 h-64 text-center" }, // centrage horizontal du texte
-			[
-				Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["% de victoire"]), // block pour prendre toute la largeur
-				Div(
-				{ class: "mx-auto" }, // pour centrer le donut
-				[Donut({ percent: progressPercent })]
-				),
-			]
-			),
-			// === Colonne DROITE ===
-			Div(
-				{ class: "relative z-10 w-1/3 flex flex-col items-center justify-center p-4" },
-				[
-					Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Score"]),
-					Div(
-						{
-							class:
-								"relative mt-8 text-left bg-gray-600 bg-opacity-40 rounded-xl p-6 w-full max-w-xl shadow-xl max-h-[66rem] overflow-y-auto",
-						},
-						[...gameElements]
-					),
-				]
-			),
 		]
-	),
-]);
-
-
+	);
 }

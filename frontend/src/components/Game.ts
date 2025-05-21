@@ -32,7 +32,7 @@ let isplayPong = false;
 
 let registerplayer = false;
 
-let ballReturn = 0;
+let bounce = 0;
 
 const ballState = {
 	x: 0,
@@ -293,7 +293,7 @@ document.addEventListener("keyup", (event) => {
 	}
 });
 
-let	input_frames = 0;
+let	input_per_second = 0;
 
 const padSpeeed = 10;
 
@@ -314,11 +314,11 @@ function movePad(){
 
 	if (w && !s && leftpad.offsetTop > 0) {
 		leftpad.style.top = `${leftpad.offsetTop - padSpeeed}px`;
-		input_frames++;
+		input_per_second++;
 	}
 	else if (s && !w && leftpad.offsetTop + leftpad.offsetHeight < gameArea.clientHeight) {
 		leftpad.style.top = `${leftpad.offsetTop + padSpeeed}px`;
-		input_frames++;
+		input_per_second++;
 	}
 
 	if (up && !down && rightpad.offsetTop > 0)
@@ -374,14 +374,15 @@ function playPong(){
 			leftResult = leftScore;
 			rightResult = rightScore;
 			guestName = player2;
-			input_frames /= 60; /// Nombre de secondes ou tu maintiens une touche
+			input_per_second /= 60;
+			input_per_second = (Math.round(input_per_second * 100)) / 100;
 			const body = {
 				userId,
 				result,
 				score,
 				guestName,
-				ballReturn,
-				input_frames,
+				bounce, // bounce
+				input_per_second, // input_per_seconds
 			};
 			console.log(body);
 			fetch("/api/postGameScore", {
@@ -404,13 +405,13 @@ function playPong(){
 			  .catch((err) => {
 				console.error("Erreur dans fetch:", err);
 			  });
-			console.log("BOUNCE ON UR PAD", ballReturn);
+			console.log("BOUNCE ON UR PAD", bounce);
 			gameStarted = 3;
 			leftScore = 0;
 			rightScore = 0;
 			registerplayer = false;
-			input_frames = 0;
-			ballReturn = 0;
+			input_per_second = 0;
+			bounce = 0;
 			rerender();
 			return ;
 		}
@@ -451,7 +452,7 @@ function playPong(){
 		{
             ballState.dx = (ballState.dx * -1) + 1;
 			ballState.dy = ((ballState.y + (ball.clientHeight / 2)) - (leftpad.offsetTop + (leftpad.offsetHeight / 2))) * 0.25;
-			ballReturn++;
+			bounce++;
 		}
         if ((ballState.y <= rightpad.offsetTop + rightpad.offsetHeight && ballState.y + ball.clientHeight >= rightpad.offsetTop) && (ballState.x + ball.clientWidth >= rightpad.offsetLeft && ballState.dx > 0))
         {

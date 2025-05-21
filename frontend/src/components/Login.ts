@@ -37,7 +37,7 @@ import {
 import "../styles/index.css";
 import { t } from "i18next";
 import i18n from "i18next";
-import {getCookie } from "../main"
+import { getCookie } from "../main"
 import { initWebSocketClient } from '../lib/socketClient.ts';
 
 let loginStatus: null | "OK" | "KO" = null;
@@ -61,17 +61,17 @@ function getEmailFromInput(): string {
 }
 
 export function Login(): PongNode<any> {
-	const emailInput = Input({ 
-		id: "emailInput", 
-		required: true, 
-		onChange: () => {},
+	const emailInput = Input({
+		id: "emailInput",
+		required: true,
+		onChange: () => { },
 		class: inputCss,
 	});
 	const passwordInput = Input({
 		id: "password",
 		type: "password",
 		required: true,
-		onChange: () => {},
+		onChange: () => { },
 		class: inputCss,
 	});
 
@@ -93,37 +93,40 @@ export function Login(): PongNode<any> {
 				"Content-Type": "application/json",
 			},
 		})
-		.then(async res => {
-			if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-			const text = await res.text();
-			console.log("Réponse brute du serveur :", text);
+			.then(async res => {
+				if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+				const text = await res.text();
+				console.log("Réponse brute du serveur :", text);
 
-			try {
-				const parseBody = JSON.parse(text);
-				console.log("Response parsed from JSON :", parseBody);
+				try {
+					const parseBody = JSON.parse(text);
+					console.log("Response parsed from JSON :", parseBody);
 
-				if (parseBody.success === true && parseBody.twoFA == true) {
-					requires2FA = true;
-					rerender();
-					return;
-				}
+					if (parseBody.success === true && parseBody.twoFA == true) {
+						requires2FA = true;
+						rerender();
+						return;
+					}
 
-				loginStatus = parseBody.success === true ? "OK" : "KO";
-				AuthStore.instance.isLoggedIn = true;
-				setTimeout(() => {
-					navigateTo('/home');
-				}, 1500);
-				initWebSocketClient("ws://localhost:3000/ws", getCookie("access_token"));
-				
-			} catch (e) {
-				console.log("Error parsing JSON: ", e);
+					loginStatus = parseBody.success === true ? "OK" : "KO";
+					AuthStore.instance.isLoggedIn = true;
+					setTimeout(() => {
+						navigateTo('/home');
+					}, 1500);
+					initWebSocketClient("ws://localhost:3000/ws", getCookie("access_token"));
+
+				} catch (e) {
+					console.log("Error parsing JSON: ", e);
+					loginStatus = "KO";
+
+			}})
+			.catch(error => {
+				console.error("Login error: ", error);
 				loginStatus = "KO";
+			})
+			.finally(() => {
 				rerender();
-			}
-		})
-		.finally(() => {
-			rerender();
-		});
+			});
 	};
 
 	const twofaInput = Input({
@@ -143,41 +146,41 @@ export function Login(): PongNode<any> {
 
 		console.log("2factorcode: ", twoFactorCode);
 		// console.log("email && id : ", email, id);
-		
+
 
 		fetch("/api/verify2Fa", {
 			method: "POST",
-			body: JSON.stringify({ code2FA: twoFactorCode, email}),
+			body: JSON.stringify({ code2FA: twoFactorCode, email }),
 			// credentials: "include",
 			headers: {
 				"Content-Type": "application/json",
 			},
 		})
-		.then(async res => {
-			if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-			const json = await res.json();
-			console.log("json", json);
-			
-			if (json.success) {
-				console.log("hereeee");
-				
-				loginStatus = "OK";
-				AuthStore.instance.isLoggedIn = true;
-				AuthStore.instance.refresh()
-				setTimeout(() => {
-					navigateTo("/home");
-				}, 1500);
-			} else {
+			.then(async res => {
+				if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+				const json = await res.json();
+				console.log("json", json);
+
+				if (json.success) {
+					console.log("hereeee");
+
+					loginStatus = "OK";
+					AuthStore.instance.isLoggedIn = true;
+					AuthStore.instance.refresh()
+					setTimeout(() => {
+						navigateTo("/home");
+					}, 1500);
+				} else {
+					loginStatus = "KO";
+				}
+			})
+			.catch(err => {
+				console.error("2FA error:", err);
 				loginStatus = "KO";
-			}
-		})
-		.catch(err => {
-			console.error("2FA error:", err);
-			loginStatus = "KO";
-		})
-		.finally(() => {
-			rerender();
-		});
+			})
+			.finally(() => {
+				rerender();
+			});
 	};
 
 
@@ -195,18 +198,18 @@ export function Login(): PongNode<any> {
 			Li({ class: circle10Css }),
 		]),
 		requires2FA
-		? Div({ class: "fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50" }, [
-			Div({ class: "bg-white rounded-xl p-6 shadow-lg w-80 text-center" }, [
-				P({ class: "text-xl font-semibold mb-4 text-gray-800" }, ["Enter 2FA Code"]),
-				twofaInput,
-				Button({
-					id: "twofa_button",
-					class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full",
-					onClick: handle2FAValidation,
-				}, ["Done"]),
+			? Div({ class: "fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center z-50" }, [
+				Div({ class: "bg-white rounded-xl p-6 shadow-lg w-80 text-center" }, [
+					P({ class: "text-xl font-semibold mb-4 text-gray-800" }, ["Enter 2FA Code"]),
+					twofaInput,
+					Button({
+						id: "twofa_button",
+						class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full",
+						onClick: handle2FAValidation,
+					}, ["Done"]),
+				])
 			])
-		])
-		: Div({}),
+			: Div({}),
 		Div({ class: `${WrapperCss} ${backgroundCss}` }, [
 			Div({ class: loginCardCss }, [
 				Div({ class: headerCss }, [
@@ -228,7 +231,10 @@ export function Login(): PongNode<any> {
 				]),
 				...(loginStatus !== null
 					? [Div({ class: statusWrapperCss }, [
-						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`])
+						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`]),
+						...(loginStatus !== "OK"
+							? [P({ class: "text-red-600 font-semibold mt-2" }, ["Incorrect email or password."])]
+							: [])
 					])]
 					: [])
 			])
