@@ -160,6 +160,9 @@ export function Login(): PongNode<any> {
 				loginStatus = "OK";
 				AuthStore.instance.isLoggedIn = true;
 				AuthStore.instance.refresh()
+				requires2FA = false;
+				loginStatus = null;
+				rerender();
 				setTimeout(() => {
 					navigateTo("/home");
 				}, 1500);
