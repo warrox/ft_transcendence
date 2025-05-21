@@ -31,10 +31,10 @@ server.register(fCookie, {
 });
 
 server.register(cors, {
-  origin: '*',
+  origin: "https://localhost:3020", 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['*'],
-  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+  credentials: true, 
 });
 
 server.register(fastifyStatic, {
