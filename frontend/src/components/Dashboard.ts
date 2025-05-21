@@ -170,112 +170,117 @@ export function Dashboard(): PongNode<any> {
 	}
 	const progressPercent = parseFloat(winRate);
 
-return Div({ class: areaCss }, [
-	UList(
-		{ class: circlesCss },
-		[
-			Li({ class: circle1Css }),
-			Li({ class: circle2Css }),
-			Li({ class: circle3Css }),
-			Li({ class: circle4Css }),
-			Li({ class: circle5Css }),
-			Li({ class: circle6Css }),
-			Li({ class: circle7Css }),
-			Li({ class: circle8Css }),
-			Li({ class: circle9Css }),
-			Li({ class: circle10Css }),
-		]
-	),
-	Div({ class: `${WrapperCss} ${backgroundCss} absolute top-0 left-0 w-full h-full z-[-1]` }),
+	return Div({ class: areaCss }, [
+		UList(
+			{ class: circlesCss },
+			[
+				Li({ class: circle1Css }),
+				Li({ class: circle2Css }),
+				Li({ class: circle3Css }),
+				Li({ class: circle4Css }),
+				Li({ class: circle5Css }),
+				Li({ class: circle6Css }),
+				Li({ class: circle7Css }),
+				Li({ class: circle8Css }),
+				Li({ class: circle9Css }),
+				Li({ class: circle10Css }),
+			]
+		),
+		Div({ class: `${WrapperCss} ${backgroundCss} absolute top-0 left-0 w-full h-full z-[-1]` }),
 
-	Div(
-		{ class: "flex flex-row min-h-screen text-white font-orbitron gap-6 px-4 justify-center items-center" },
-		[
-			// === Colonne GAUCHE ===
-			Div(
-				{ class: "relative z-10 w-1/3 flex flex-col justify-center items-center p-4" },
+		Div(
+			{ class: "flex flex-row min-h-screen text-white font-orbitron gap-6 px-4 justify-center items-center" },
+			[
+				// === Colonne GAUCHE ===
+				Div(
+					{ class: "relative z-10 w-1/3 flex flex-col justify-center items-center p-4" },
+					[
+						Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Statistics"]),
+						Div(
+							{
+								class:
+									"bg-gray-600 bg-opacity-70 rounded-xl p-6 w-full max-w-md shadow-2xl space-y-6",
+							},
+							[
+								Div(
+									{ class: "text-center" },
+									[
+										Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Total parties jouées"]),
+										Span({ class: "text-4xl font-bold mt-1 block" }, [String(totalGames)]),
+									]
+								),
+								Div(
+									{ class: "text-center" },
+									[
+										Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Total de victoires"]),
+										Span({ class: "text-4xl font-bold mt-1 block" }, [String(winCount)]),
+									]
+								),
+								Div(
+									{ class: "text-center" },
+									[
+										Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Total de défaites"]),
+										Span({ class: "text-4xl font-bold mt-1 block" }, [String(loseCount)]),
+									]
+								),
+								Div(
+									{ class: "text-center" },
+									[
+										Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Nombre de points marqués"]),
+										Span({ class: "text-4xl font-bold mt-1 block" }, [String(totalPlayerScore)]),
+									]
+								),
+								Div(
+									{ class: "text-center" },
+									[
+										Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Série de victoires la plus longue"]),
+										Span({ class: "text-4xl font-bold mt-1 block" }, [String(Math.max(...streaks))]),
+									]
+								),
+								Div(
+									{ class: "text-center" },
+									[
+										Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Ratio défaites/victoires"]),
+										Span({ class: "text-4xl font-bold mt-1 block" }, [winLoseRatio]),
+									]
+								),
+								Div(
+									{ class: "text-center" },
+									[
+										Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Ami le plus affronté"]),
+										Span({ class: "text-4xl font-bold mt-1 block" }, [topOpponent]),
+									]
+								),
+							]
+						),
+					]
+				),
+				// === Donut au MILIEU ===
+				Div(
+				{ class: "relative z-20 w-64 h-64 text-center" }, // centrage horizontal du texte
 				[
-					Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Statistics"]),
+					Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["% de victoire"]), // block pour prendre toute la largeur
 					Div(
-						{
-							class:
-								"bg-gray-600 bg-opacity-70 rounded-xl p-6 w-full max-w-md shadow-2xl space-y-6",
-						},
-						[
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Total parties jouées"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [String(totalGames)]),
-								]
-							),
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Nombre de points marqués"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [String(totalPlayerScore)]),
-								]
-							),
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Taux de victoire (%)"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [winRate]),
-								]
-							),
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Série de victoires la plus longue"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [String(Math.max(...streaks))]),
-								]
-							),
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Ratio défaites/victoires"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [winLoseRatio]),
-								]
-							),
-							Div(
-								{ class: "text-center" },
-								[
-									Span({ class: "text-xs text-gray-400 uppercase tracking-widest" }, ["Ami le plus affronté"]),
-									Span({ class: "text-4xl font-bold mt-1 block" }, [topOpponent]),
-								]
-							),
-						]
+					{ class: "mx-auto" }, // pour centrer le donut
+					[Donut({ percent: progressPercent })]
 					),
 				]
-			),
-			// === Donut au MILIEU ===
-			Div(
-			{ class: "relative z-20 w-64 h-64 text-center" }, // centrage horizontal du texte
-			[
-				Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["% de victoire"]), // block pour prendre toute la largeur
+				),
+				// === Colonne DROITE ===
 				Div(
-				{ class: "mx-auto" }, // pour centrer le donut
-				[Donut({ percent: progressPercent })]
+					{ class: "relative z-10 w-2/5 flex flex-col items-center justify-center p-4" },
+					[
+						Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Score"]),
+						Div(
+							{
+								class:
+									"relative mt-8 text-left bg-gray-600 bg-opacity-40 rounded-xl p-6 w-full max-w-2xl shadow-xl max-h-[66rem] overflow-y-auto",
+							},
+							[...gameElements]
+						),
+					]
 				),
 			]
-			),
-			// === Colonne DROITE ===
-			Div(
-				{ class: "relative z-10 w-1/3 flex flex-col items-center justify-center p-4" },
-				[
-					Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Score"]),
-					Div(
-						{
-							class:
-								"relative mt-8 text-left bg-gray-600 bg-opacity-40 rounded-xl p-6 w-full max-w-xl shadow-xl max-h-[66rem] overflow-y-auto",
-						},
-						[...gameElements]
-					),
-				]
-			),
-		]
-	),
-]);
-
-
+		),
+	]);
 }
