@@ -28,12 +28,9 @@ export const gsignin = async(request : FastifyRequest<{Body : GoogleTokenRequest
 				resolve(row);
 			});
 		});
-		is_gUser = user.is_googleUser;
 
-		if(user && is_gUser === 0){
-			return reply.status(409).send({ error: "Cet email est déjà utilisé, veuillez vous connectez sans Google" });
-		}
-		
+
+
 		//USER N'EXISTE PAS, CREER ET LOG
 		if (!user){
 			const userId = await new Promise<number>((resolve, reject) => {
@@ -58,7 +55,11 @@ export const gsignin = async(request : FastifyRequest<{Body : GoogleTokenRequest
 			return reply.status(201).send({ accessToken: token, message: "Utilisateur créé avec succès" });
 		}
 		///////////////////////////////////////////////////////////
-		
+
+		is_gUser = user.is_googleUser;
+		if(user && is_gUser === 0){
+			return reply.status(409).send({ error: "Cet email est déjà utilisé, veuillez vous connectez sans Google" });
+		}
 
 		//USER EXISTE DEJA, LOG SEULEMENT
 		console.log("User:", user);
@@ -75,5 +76,7 @@ export const gsignin = async(request : FastifyRequest<{Body : GoogleTokenRequest
 		console.error(e);
 		return reply.status(500).send({ error: "Erreur serveur" });
 	}
+
+
 }
 
