@@ -76,8 +76,6 @@ async function updateOnlineStatus(id: number, status: number) {
 	});
 }
 
-
-const activeConnections = new Map<number, WebSocket>();
 async function startupRoutine(server: FastifyInstance): Promise<any> {
 	await server.register(fastifyWebsocket);
 

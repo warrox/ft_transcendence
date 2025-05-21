@@ -20,21 +20,7 @@ const state = {
 	socket: null as WebSocket | null,
 };
 
-
 export function Friends(): PongNode<any> {
-
-	// subscribeSocket((event) => {
-	// 	if (event.type === "friend_status") {
-	// 		const { userId, online } = event.payload;
-	// 		const friend = state.friendsList.find(f => f.id === userId);
-	// 		if (friend) {
-	// 			friend.online = online;
-	// 			console.log(`Friend ${friend.name} is now ${online ? "online" : "offline"}`);
-	// 			rerender();
-	// 		}
-	// 	}
-	// });
-
 	let socketInitialized = false;
 
 	const loadFriends = async () => {
@@ -66,7 +52,6 @@ export function Friends(): PongNode<any> {
 					}
 				});
 			}
-
 		} catch (error) {
 			console.error("Error loading friends:", error);
 		} finally {
@@ -129,7 +114,6 @@ export function Friends(): PongNode<any> {
 
 	const handleTest = (isOnline: boolean) => {
 		console.log("isOnline : ", isOnline);
-
 	}
 
 	console.log("friend list before filter", state.friendsList);
