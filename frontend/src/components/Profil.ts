@@ -67,8 +67,7 @@ export function Profil() : PongNode<any> {
 		})
 		.then(async (res) => {
 			if (res.ok) {
-				const { avatarPath: avatarPathFromBackend } = await res.json();
-				AuthStore.instance.user!.avatar_path = avatarPathFromBackend;
+				await AuthStore.instance.refresh();
 				console.log("Upload success")
 			} else {
 				console.error("Upload failed");
@@ -77,74 +76,7 @@ export function Profil() : PongNode<any> {
 		.catch((e) => {
 			console.error("Fetch failed:", e);
 		})
-		.finally(() => {
-			rerender();
-		});
-	
 	}
-
-	// const handleEditMail = async () => {
-	// 	const newMail = (document.querySelector("#emailInputProfil") as HTMLInputElement)?.value; 
-		
-	// 	const body = { 
-	// 		email,
-	// 		newMail, 
-	// 	};
-	
-	// 	try {
-	// 		// Réinitialiser le statut avant la requête
-	// 		mailStatus = null;
-	// 		rerender();
-	
-	// 		const updateMail = await fetch("/api/updateMail", {
-	// 			method: "POST",
-	// 			body: JSON.stringify(body),
-	// 			credentials: "include",
-	// 			headers: {
-	// 				"Content-Type": "application/json",
-	// 			},
-	// 		});
-	
-	// 		const responseData = await updateMail.json();
-	// 		console.log("Backend response:", responseData);
-	
-	// 		if (!updateMail.ok) {
-	// 			mailStatus = "KO";
-	// 			console.error("Update failed:", responseData.error || "Unknown error");
-	// 			rerender();
-	// 			setTimeout(() => {
-	// 				mailStatus = null;
-	// 				rerender();
-	// 			}, 3000);
-				
-	// 			return;
-	// 		}
-			
-	// 		mailStatus = "OK";
-	// 		await AuthStore.instance.refresh();
-			
-	// 		// Forcer un rendu immédiat pour afficher l'état OK
-	// 		// rerender();
-			
-	// 		// Réinitialiser après 3 secondes
-	// 		setTimeout(() => {
-	// 			mailStatus = null;
-	// 			rerender();
-	// 		}, 3000);
-			
-	// 	} catch (e) {
-	// 		console.error("Email update failed:", e);
-	// 		mailStatus = "KO";
-			
-	// 		// Forcer un rendu immédiat
-	// 		rerender();
-			
-	// 		setTimeout(() => {
-	// 			mailStatus = null;
-	// 			rerender();
-	// 		}, 3000);
-	// 	}
-	// };
 	
 	
 	const handleEditMail = async () => {
@@ -198,41 +130,6 @@ export function Profil() : PongNode<any> {
 				rerender();
 			}, 3000);
 		}
-
-	// 	// fetch("/api/updateMail", {
-	// 	// 	method: "POST",
-	// 	// 	body: JSON.stringify(body),
-	// 	// 	credentials: "include",
-	// 	// 	headers: {
-	// 	// 		"Content-Type": "application/json",
-	// 	// 	},
-	// 	// })
-	// 	// .then(async res => {
-	// 	// 	if (res.ok) {
-	// 	// 		const text = await res.text();
-		
-	// 	// 		try {
-	// 	// 			const json = JSON.parse(text);
-	// 	// 			console.log(json);
-	// 	// 			AuthStore.instance.user!.email = body.newMail;
-	// 	// 		} catch (_) {
-	// 	// 			AuthStore.instance.user!.email = body.newMail;
-	// 	// 			Status = "OK";
-	// 	// 		}
-	// 	// 	} else {
-	// 	// 		console.log("here");
-				
-	// 	// 		Status = "KO";
-	// 	// 	}
-	// 	// })
-	// 	// .catch(e => {
-	// 	// 	console.error("Fetch failed:", e);
-	// 	// 	Status = "KO";
-	// 	// })
-	// 	// .finally(() => {
-	// 	// 	rerender();
-	// 	// });
-
 	};
 
 	const handleEditPass = async () => {
@@ -245,8 +142,7 @@ export function Profil() : PongNode<any> {
 		};
 
 		console.log(email, newpassword);
-
-		try  {
+		try {
 			const updatePass = await fetch("/api/updatePassword", {
 				method: "POST",
 				body: JSON.stringify(body),
@@ -283,24 +179,7 @@ export function Profil() : PongNode<any> {
 			}, 3000);
 			
 		}
-
-		// fetch("/api/updatePassword", {
-		// 	method: "POST",
-		// 	body: JSON.stringify(body),
-		// 	credentials: "include",
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 	},
-		// })
-		// .catch(e => {
-		// 	console.error("Fetch failed:", e);
-		// 	Status = "KO";
-		// })
-		// .finally(() => {
-		// 	rerender();
-		// });
 	};
-
 
 	const handle2FA = async () => {
 		const currentState = AuthStore.instance.user!.is_2FA;
@@ -329,10 +208,7 @@ export function Profil() : PongNode<any> {
 			console.error("2FA update failed:", e);
 		}
 		rerender();
-	};
-
-	console.log("mailStatus: ", mailStatus);
-	
+	};	
 
 	return Div({
 		class: "min-h-screen bg-yellow-400 flex flex-col items-center pt-20"

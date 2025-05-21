@@ -37,6 +37,8 @@ import {
 import "../styles/index.css";
 import { t } from "i18next";
 import i18n from "i18next";
+import {getCookie } from "../main"
+import { initWebSocketClient } from '../lib/socketClient.ts';
 
 let loginStatus: null | "OK" | "KO" = null;
 
@@ -111,6 +113,8 @@ export function Login(): PongNode<any> {
 				setTimeout(() => {
 					navigateTo('/home');
 				}, 1500);
+				initWebSocketClient("ws://localhost:3000/ws", getCookie("access_token"));
+				
 			} catch (e) {
 				console.log("Error parsing JSON: ", e);
 				loginStatus = "KO";

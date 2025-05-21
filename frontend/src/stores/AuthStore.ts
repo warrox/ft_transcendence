@@ -73,7 +73,6 @@ export class AuthStore {
 		}
 	}
 	
-
 	public async refresh(): Promise<void> {
 		await this.fetchMe();
 	}

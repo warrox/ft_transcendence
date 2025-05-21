@@ -43,7 +43,6 @@ export const gsignin = async(request : FastifyRequest<{Body : GoogleTokenRequest
 				}
 			);
 			console.log(test);
-			
 		});
 
 		const token = server.jwt.sign({ id: userId, email: decoded.email}, {expiresIn: 3600 }); 

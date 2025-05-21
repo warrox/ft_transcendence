@@ -23,10 +23,11 @@ CREATE TABLE IF NOT EXISTS users (
 	surname TEXT UNIQUE NOT NULL,
 	email TEXT UNIQUE NOT NULL,
 	password TEXT NOT NULL,
-	avatar_path TEXT,  
+	avatar_path TEXT,
 	win INTEGER DEFAULT 0,
 	loose INTEGER DEFAULT 0,
-	lang TEXT DEFAULT 'fr'
+	lang TEXT DEFAULT 'fr',
+	online INTEGER DEFAULT 0
 )`);
 
 	db.run(`
