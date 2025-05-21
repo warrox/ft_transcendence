@@ -27,9 +27,9 @@ const routes: Route[] = [
 	{ path: '/register', component: Register},
 	{ path: '/login', component: Login},
 	{ path: '/profil', component: Profil, protected: true},
-	{ path: '/tournament', component: Tournament, protected: true},
+	{ path: '/tournament', component: Tournament, protected: true, showNavbar: false},
 	{ path: '/friends', component: Friends, protected: true },
-	{ path: '/game', component: Game, protected: true},
+	{ path: '/game', component: Game, protected: true, showNavbar: false},
 	{ path: '/dashboard', component: Dashboard },
 	{ path: '/blockchain', component: Blockchain },
 ]
