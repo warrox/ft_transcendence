@@ -132,6 +132,7 @@ export function Register(): PongNode<any> {
 
 		fetch("http://localhost:3000/gsignin", {
 			method: "POST",
+			credentials: "include",
 			headers: {
 				"Content-Type": "application/json",
 			},

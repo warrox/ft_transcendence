@@ -42,7 +42,8 @@ export const friends = async (
 		}
 
 		const userId = parseInt(claims.id);
-
+		if(userId === friendId)
+			return(reply.status(409).send("Can't add the client as friend"))
 		if (action === "add") {
 			const query = `INSERT INTO friends (user_id, friend_id, is_online) VALUES (?, ?, 0)`;
 			await new Promise((resolve, reject) => {

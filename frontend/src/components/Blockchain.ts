@@ -11,29 +11,52 @@ type Score = {
 
 let scores: Score[] = [];
 
- const fetchBlockchainData = ()=> {
-		fetch("/api/getBlockchain", {
-			method: "GET",
-			credentials: "include",
-		})
-		.then(async res => {
-			if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-			const text = await res.text();
-			console.log("Réponse brute du serveur :", text);
-
-			try {
-				const parseBody = JSON.parse(text);
-				console.log("Response parsed from JSON :", parseBody);
-			} catch (e) {
-				console.log("Error parsing JSON: ", e);
-			}
-		})
-
+function formatDateFR(isoDate: string): string {
+	const date = new Date(isoDate);
+	return date.toLocaleString("fr-FR", {
+		day: "2-digit",
+		month: "2-digit",
+		year: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+	});
 }
+const fetchBlockchainData = () => {
+	fetch("/api/getBlockchain", {
+		method: "GET",
+		credentials: "include",
+	})
+	.then(async res => {
+		if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+		const text = await res.text();
+		console.log("Réponse brute du serveur :", text);
 
+		try {
+			const parseBody = JSON.parse(text);
+			console.log("Response parsed from JSON :", parseBody);
+
+			scores = parseBody.score.map(([id, date, won, guest_name]: [string, string, boolean, string]) => ({
+				id: parseInt(id),
+				date,
+				won,
+				guest_name,
+			}));	
+			rerender();
+		} catch (e) {
+			console.log("Error parsing JSON: ", e);
+		}
+	})
+	.catch(err => {
+		console.error("Erreur HTTP : ", err);
+	});
+};
+
+let hasFetched = false;
 export  function Blockchain(): PongNode<any> {
-	fetchBlockchainData();
 
+	if(hasFetched === false )
+		fetchBlockchainData();
+	hasFetched = true;
 	return Div({ class: `${areaCss} min-h-screen bg-yellow-400 flex flex-col items-center pt-20` }, [
 		P({ class: "text-3xl font-bold mb-6" }, ["Historique des parties Blockchain"]),
 
@@ -45,8 +68,8 @@ export  function Blockchain(): PongNode<any> {
 			]),
 
 			...scores.map((score) =>
-				UList({ class: "grid grid-cols-3 text-center py-2 border-b border-gray-500" }, [
-					Li({}, [score.date]),
+				UList({ class: "grid grid-cols-3 text-center py-2 border-b border-gray-500" }, [	
+					Li({}, [formatDateFR(score.date)]),
 					Li({}, [score.guest_name]),
 					Li({}, [score.won ? "Win" : "Loose"]),
 				])

@@ -156,28 +156,26 @@ export function Login(): PongNode<any> {
 				"Content-Type": "application/json",
 			},
 		})
-			.then(async res => {
-				if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-				const json = await res.json();
-				console.log("json", json);
-
-				if (json.success) {
-					console.log("hereeee");
-
-					loginStatus = "OK";
-					AuthStore.instance.isLoggedIn = true;
-					AuthStore.instance.refresh()
-					setTimeout(() => {
-						navigateTo("/home");
-					}, 1500);
-				} else {
-					loginStatus = "KO";
-				}
-			})
-			.catch(err => {
-				console.error("2FA error:", err);
+		.then(async res => {
+			if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+			const json = await res.json();
+			console.log("json", json);
+			
+			if (json.success) {
+				console.log("hereeee");
+				
+				loginStatus = "OK";
+				AuthStore.instance.isLoggedIn = true;
+				AuthStore.instance.refresh()
+				requires2FA = false;
+				loginStatus = null;
+				rerender();
+				setTimeout(() => {
+					navigateTo("/home");
+				}, 1500);
+			} else {
 				loginStatus = "KO";
-			})
+			}})
 			.finally(() => {
 				rerender();
 			});
