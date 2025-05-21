@@ -26,6 +26,7 @@ import {
 let userGameStats: GameStats[] | null = null;
 let nameUser: NameUser | null = null;
 let selectedGame: GameStats | null = null;
+let hasTriedToSearch = false;
 
 interface NameUser {
 	name: string;
@@ -196,29 +197,6 @@ export function Dashboard(): PongNode<any> {
 		class: inputCss,
 	});
 
-	const gameButton = Button({
-		id: "gameButton",
-		onClick: () => {
-			const field = document.querySelector("#gameInput") as HTMLInputElement;
-			if (!field) return;
-
-			console.log(field.value);
-			const fieldAsInt = parseInt(field.value);
-			const gameInfo = userGameStats!.filter((game) => game.id == fieldAsInt);
-			console.log("Game info: ",	gameInfo);
-
-			if (gameInfo.length == 0) {
-				//errro handling
-				selectedGame = null;
-				rerender();
-				return;
-			}
-			selectedGame = gameInfo[0];
-			rerender();
-		},
-		class: playButtonDarkCss,
-	})
-
 	const selectedGameDisplay: PongNode<any>[] = [];
 	if (selectedGame) {
 		selectedGameDisplay.push(
@@ -228,6 +206,20 @@ export function Dashboard(): PongNode<any> {
 					class: "bg-gray-600 bg-opacity-70 rounded-xl p-6 w-full max-w-md shadow-2xl space-y-6",
 				},
 				[
+					Div(
+						{class: "text-center"},
+						[
+							Span(
+								{class: "text-xs text-gray-400 uppercase tracking-widest"},
+								["Score final (JOUEUR - ADVERSAIRE)"]
+							),
+							Span(
+								{class: "text-4xl font-bold mt-1 block"}, [
+									String(selectedGame.score)
+								]
+							)
+						]
+					),
 					Div(
 						{class: "text-center"},
 						[
@@ -259,7 +251,7 @@ export function Dashboard(): PongNode<any> {
 				]
 			)
 		);
-	} else {
+	} else if(hasTriedToSearch) {
 		selectedGameDisplay.push(Span({ class: "mt-4 text-red-400" }, ["Partie non trouvée"]));
 	}
 
@@ -398,11 +390,34 @@ export function Dashboard(): PongNode<any> {
 							Div({ class: "mx-auto mb-8" }, [Donut({ percent: progressPercent })]),
 							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["Détails des parties"]),
 							Div(
-								{ class: "relative z-10 flex flex-col justify-center items-center p-4 w-full max-w-md" },
+								{ class: "relative z-10 flex flex-col justify-center items-center p-4 w-full max-w-md space-y-4" },
 								[	gameInput, 
-									gameButton, 
+									Button({
+										id: "gameButton",
+										onClick: () => {
+											const field = document.querySelector("#gameInput") as HTMLInputElement;
+											if (!field) return;
+								
+											// console.log(field.value);
+											const fieldAsInt = parseInt(field.value);
+											const gameInfo = userGameStats!.filter((game) => game.id == fieldAsInt);
+											// console.log("Game info: ",	gameInfo);
+
+											hasTriedToSearch = true;
+								
+											if (gameInfo.length == 0) {
+												//errro handling
+												selectedGame = null;
+												rerender();
+												return;
+											}
+											selectedGame = gameInfo[0];
+											rerender();
+										},
+										class: playButtonDarkCss,
+									}, ["Rechercher"]),
 									...selectedGameDisplay
-								]  // Affichage sous le bouton ici
+								]
 							),
 						]
 					),
