@@ -71,6 +71,7 @@ export const gsignin = async(request : FastifyRequest<{Body : GoogleTokenRequest
 			secure: true,
 			maxAge: 36000
 		});
+
 		return reply.status(200).send({ accessToken: token, message: "Utilisateur connecte avec succès" });
 	} catch (e: any) {
 		console.error(e);
