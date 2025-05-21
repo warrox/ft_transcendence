@@ -32,6 +32,8 @@ let isplayPong = false;
 
 let registerplayer = false;
 
+let ballReturn = 0;
+
 const ballState = {
 	x: 0,
 	y: 0,
@@ -54,7 +56,6 @@ export function Game(): PongNode<any> {
 
 	const fetchUsername = () => {
 		if (player1 != null && userId != -1) return;
-		console.log("Je recup un username");
 		fetch("/api/me", {
 			credentials: "include",
 			headers: {
@@ -66,7 +67,6 @@ export function Game(): PongNode<any> {
 				return res.json();
 			})
 			.then((data: MeData) => {
-				console.log("DATA name: ", data.name);
 				if (player1 == null) player1 = data.name;
 				if (userId == -1) userId = data.id;
 			})
@@ -74,9 +74,6 @@ export function Game(): PongNode<any> {
 	};
 	
 	fetchUsername();
-	console.log("Player1: ", player1);
-	console.log("PlayerId: ", userId);
-	
 	const mapStyles: { [key: string]: string} = {
 		"Default": "yellow-400",
 		"Classic": "neutral-400",
@@ -97,9 +94,31 @@ export function Game(): PongNode<any> {
 		"Indigo": "indigo-950",
 	}
 
+	const backButtonStyles: { [key: string]: string} = {
+		"Default": "text-yellow-300",
+		"Classic": "text-neutral-300",
+		"Emerald": "text-emerald-400",
+		"Cyan": "text-cyan-400",
+		"Rose": "text-rose-500",
+		"Fushia": "text-fuchsia-300",
+		"Indigo": "text-indigo-800",
+	};
+
+const backButtonHoverStyles: { [key: string]: string} = {
+		"Default": "hover:text-yellow-100",
+		"Classic": "hover:text-neutral-100",
+		"Emerald": "hover:text-emerald-200",
+		"Cyan": "hover:text-cyan-200",
+		"Rose": "hover:text-rose-300",
+		"Fushia": "hover:text-fuchsia-100",
+		"Indigo": "hover:text-indigo-600",
+	};
+
 	const mapKeys = Object.keys(mapStyles);
 	let PongColor = mapStyles[mapKeys[mapIndex]];
 	let hoverColor = hoverStyles[mapKeys[mapIndex]];
+	let backButtonColor = backButtonStyles[mapKeys[mapIndex]];
+	let backButtonHoverColor = backButtonHoverStyles[mapKeys[mapIndex]];
 
 	const prev_color = () => {
 		if (mapIndex != 0) {
@@ -120,7 +139,7 @@ export function Game(): PongNode<any> {
 
 	if (gameStarted == 0)
 	{
-			return Div({ class: "flex flex-col justify-around items-center min-h-screen p-5 bg-black" }, [
+			return Div({ class: "flex flex-col justify-between items-center min-h-screen p-5 bg-black" }, [
 				Span({ class: `block font-orbitron md:text-5xl text-${PongColor}` }, [t("game.never_play")]),
 				Span({ class: `block font-orbitron md:text-3xl text-${PongColor}` }, [t("game.choose_map")]),
 				Div({ class: "flex items-center"} , [Span({ class: `block font-orbitron md:text-2xl text-${PongColor}`}, [`${mapKeys[mapIndex]}`])]),
@@ -133,7 +152,7 @@ export function Game(): PongNode<any> {
 					]),
 					Button({ id: "right-arrow", class: `bg-${PongColor} hover:bg-${hoverColor} text-xl text-white px-4 py-2 rounded ml-10`, onClick: next_color }, [">"]),
 				]),
-				Div({ class: "flex flex-col justify-around items-center h-30"}, [
+				Div({ class: "flex flex-col justify items-center h-30"}, [
 					Span({ class: `block font-orbitron md:text-2xl text-${PongColor}` }, [t("game.solo_friends")]),
 					Div({ class: "flex justify-between w-130"}, [
 						Button({id: "sgplayerButton", onClick: () => {
@@ -157,6 +176,7 @@ export function Game(): PongNode<any> {
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							[t("game.tournament")]),
 					]),
+					Button({id: "IneedtogoHome", onClick: () => {navigateTo("/home");}, class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["← Back to Menu"])
 				]),
 				...(registerplayer
 				? [
@@ -185,17 +205,22 @@ export function Game(): PongNode<any> {
 								rerender();
 								return;
 							}
-							// Lancer le jeu ou logique suivante ici :
-							console.log("Second player is:", player2);
 							gameStarted = 1;
+							nameError = false;
+							errLength = false;
+							resetKeys();
 							rerender();
 						},
 						class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`
 					}, ["Start Game"]),
 					...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Player 2 must have a name."])] : []),
 					...(errLength ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Name should not exceed 10 characters."])] : []),
+					Button({ id: "backtoblack", onClick: () => {registerplayer = false; rerender()},
+					class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["Back to selection mode"])
 				]),
-				] : [])
+				] : []),
+				Div({}),
+				Div({})
 		]);
 	}
 	else if (gameStarted == 1 || gameStarted == 2)
@@ -230,8 +255,6 @@ export function Game(): PongNode<any> {
 				Span({class: `absolute left-[550px] top-[250px] block font-orbitron md:text-7xl text-${PongColor} `}, [`WINNER: ${winner}`]),
 				Button({ id: "back-to-menu", onClick: () => {
 					gameStarted = 0;
-					leftScore = 0;
-					rightScore = 0;
 					rerender();
 				},
 				class: `absolute left-[730px] top-[450px] bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`}, [t("game.back_menu")]),
@@ -242,16 +265,35 @@ export function Game(): PongNode<any> {
 	}
 }
 
-const keysPressed: { [key: string]: boolean} = {};
+const resetKeys = () => {
+	for (const key in keysPressed) {
+		keysPressed[key] = false;
+	}
+};
+
+
+const keysPressed: Record<string, boolean> = {
+	w: false,
+	W: false,
+	s: false,
+	S: false,
+	ArrowUp: false,
+	ArrowDown: false,
+};
 
 document.addEventListener("keydown", (event) => {
-	keysPressed[event.key] = true;
+	if (event.key in keysPressed) {
+		keysPressed[event.key] = true;
+	}
 });
 
 document.addEventListener("keyup", (event) => {
-	keysPressed[event.key] = false;
+	if (event.key in keysPressed) {
+		keysPressed[event.key] = false;
+	}
 });
 
+let	input_frames = 0;
 
 const padSpeeed = 10;
 
@@ -265,26 +307,24 @@ function movePad(){
 		return ;
 
 
-	if (keysPressed["w"] || keysPressed["W"])
-	{
-		if (leftpad.offsetTop - padSpeeed > 0)
-			leftpad.style.top = `${leftpad.offsetTop - padSpeeed}px`;
+	const w = keysPressed["w"] || keysPressed["W"];
+	const s = keysPressed["s"] || keysPressed["S"];
+	const up = keysPressed["ArrowUp"];
+	const down = keysPressed["ArrowDown"];
+
+	if (w && !s && leftpad.offsetTop > 0) {
+		leftpad.style.top = `${leftpad.offsetTop - padSpeeed}px`;
+		input_frames++;
 	}
-	if (keysPressed["s"] || keysPressed["S"])
-	{
-		if (leftpad.offsetTop + leftpad.offsetHeight + padSpeeed < gameArea.clientHeight)
-			leftpad.style.top = `${leftpad.offsetTop + padSpeeed}px`;
+	else if (s && !w && leftpad.offsetTop + leftpad.offsetHeight < gameArea.clientHeight) {
+		leftpad.style.top = `${leftpad.offsetTop + padSpeeed}px`;
+		input_frames++;
 	}
-	if (keysPressed["3"] && gameStarted != 2)
-	{
-		if (rightpad.offsetTop - padSpeeed > 0)
-			rightpad.style.top = `${rightpad.offsetTop - padSpeeed}px`;
-	}
-	if (keysPressed["."] && gameStarted != 2)
-	{
-		if (rightpad.offsetTop + rightpad.offsetHeight + padSpeeed < gameArea.clientHeight)
-			rightpad.style.top = `${rightpad.offsetTop + padSpeeed}px`;
-	}
+
+	if (up && !down && rightpad.offsetTop > 0)
+		rightpad.style.top = `${rightpad.offsetTop - padSpeeed}px`;
+	else if (down && !up && rightpad.offsetTop + rightpad.offsetHeight < gameArea.clientHeight)
+		rightpad.style.top = `${rightpad.offsetTop + padSpeeed}px`;
 
 	requestAnimationFrame(movePad);
 }
@@ -333,13 +373,15 @@ function playPong(){
 			score = leftScore.toString() + " " + rightScore.toString();
 			leftResult = leftScore;
 			rightResult = rightScore;
-			console.log("Match score sent: ", score);
 			guestName = player2;
+			input_frames /= 60; /// Nombre de secondes ou tu maintiens une touche
 			const body = {
 				userId,
 				result,
 				score,
 				guestName,
+				ballReturn,
+				input_frames,
 			};
 			console.log(body);
 			fetch("/api/postGameScore", {
@@ -362,10 +404,13 @@ function playPong(){
 			  .catch((err) => {
 				console.error("Erreur dans fetch:", err);
 			  });
+			console.log("BOUNCE ON UR PAD", ballReturn);
 			gameStarted = 3;
 			leftScore = 0;
 			rightScore = 0;
 			registerplayer = false;
+			input_frames = 0;
+			ballReturn = 0;
 			rerender();
 			return ;
 		}
@@ -403,14 +448,14 @@ function playPong(){
 		const horizontalCollision = ballLeft <= padRight && ballRight >= padLeft;
 
 		if (verticalCollision && horizontalCollision && ballState.dx < 0)
-        // if ((ballState.y <= leftpad.offsetTop + leftpad.offsetHeight && ballState.y + ball.clientHeight >= leftpad.offsetTop) &&  (ballState.x <= leftpad.offsetLeft + leftpad.clientWidth && ballState.dx < 0))
 		{
-            ballState.dx = (ballState.dx * -1) + 2;
+            ballState.dx = (ballState.dx * -1) + 1;
 			ballState.dy = ((ballState.y + (ball.clientHeight / 2)) - (leftpad.offsetTop + (leftpad.offsetHeight / 2))) * 0.25;
+			ballReturn++;
 		}
         if ((ballState.y <= rightpad.offsetTop + rightpad.offsetHeight && ballState.y + ball.clientHeight >= rightpad.offsetTop) && (ballState.x + ball.clientWidth >= rightpad.offsetLeft && ballState.dx > 0))
         {
-			ballState.dx = (ballState.dx * -1) - 2;
+			ballState.dx = (ballState.dx * -1) - 1;
 			ballState.dy = ((ballState.y + (ball.clientHeight / 2)) - (rightpad.offsetTop + (rightpad.offsetHeight / 2))) * 0.25;
 		}
 		if (ballState.dx >= 15)
@@ -490,7 +535,7 @@ async function AI_mov(){
 		{
 			const timeToReach = (gameArea.clientWidth - x) / dx;
 			// let target = y + (dy * timeToReach )+ Math.floor((Math.random() * rightpad.clientHeight)) - rightpad.clientHeight;	
-			let randomness = (Math.random() - 0.5) * rightpad.clientHeight * 0.3;
+			let randomness = (Math.random() - 0.1) * rightpad.clientHeight * 0.3;
 			let target = y + dy * timeToReach + randomness;
 
 			while (target < 0 || target > gameArea.clientHeight) {

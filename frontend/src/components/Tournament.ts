@@ -133,7 +133,7 @@ export function Tournament(): PongNode<any>{
 			Button({ id: "back-to-menu-game",
 				onClick: () => { navigateTo('/game'); },
 				class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`
-			}, ["← Back to Menu"])
+			}, ["← Back to game Menu"])
 		]);
 	}
 	else
@@ -395,12 +395,12 @@ export function movePad(){
 		if (leftpad.offsetTop + leftpad.offsetHeight + padSpeeed < gameArea.clientHeight)
 			leftpad.style.top = `${leftpad.offsetTop + padSpeeed}px`;
 	}
-	if (keysPressed["3"])
+	if (keysPressed["ArrowUp"])
 	{
 		if (rightpad.offsetTop - padSpeeed > 0)
 			rightpad.style.top = `${rightpad.offsetTop - padSpeeed}px`;
 	}
-	if (keysPressed["."])
+	if (keysPressed["ArrowDown"])
 	{
 		if (rightpad.offsetTop + rightpad.offsetHeight + padSpeeed < gameArea.clientHeight)
 			rightpad.style.top = `${rightpad.offsetTop + padSpeeed}px`;
@@ -460,12 +460,12 @@ export function playPong(){
 
 		if ((y <= leftpad.offsetTop + leftpad.offsetHeight && y >= leftpad.offsetTop) &&  (x <= leftpad.offsetLeft + leftpad.clientWidth && dx < 0))
 		{
-			dx = (dx * -1) + 2;
+			dx = (dx * -1) + 1;
 			dy = ((y + (ball.clientHeight / 2)) - (leftpad.offsetTop + (leftpad.offsetHeight / 2))) * 0.3;
 		}
 		if ((y <= rightpad.offsetTop + rightpad.offsetHeight && y >= rightpad.offsetTop) && (x + ball.clientWidth >= rightpad.offsetLeft && dx > 0))
 		{
-			dx = (dx * -1) - 2;
+			dx = (dx * -1) - 1;
 			dy = ((y + (ball.clientHeight / 2)) - (rightpad.offsetTop + (rightpad.offsetHeight / 2))) * 0.3;
 		}
 		if (dx >= 15)
