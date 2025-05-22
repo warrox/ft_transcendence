@@ -21,7 +21,8 @@ import {
 	inputCss,
 	playButtonDarkCss,
 } from "../styles/cssFactory";
-// import { log } from "console";
+import { t } from "i18next";
+import i18n from "i18next";
 
 let userGameStats: GameStats[] | null = null;
 let nameUser: NameUser | null = null;
@@ -117,13 +118,6 @@ export function Dashboard(): PongNode<any> {
 	const winLoseRatio = loseCount > 0 ? (winCount / loseCount).toFixed(2) : "∞";
 	const topOpponent = Object.entries(opponentMap).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
 
-	// if (userGameStats) {
-	// 	for (const game of userGameStats) {
-	// 		const bounces = game.bounce;
-	// 		const inputsPerSecond = game.input_per_second;
-	// 	}
-	// }
-
 	if (userGameStats) {
 		for (const game of userGameStats) {
 			gameElements.push(
@@ -154,7 +148,7 @@ export function Dashboard(): PongNode<any> {
 			);
 		}
 	} else {
-		gameElements.push(Span({}, ["Loading..."]));
+		gameElements.push(Span({}, [t("dashboard.loading")]));
 	}
 
 	function getDonutClass(percent: number): string {
@@ -192,6 +186,7 @@ export function Dashboard(): PongNode<any> {
 
 	const gameInput = Input({
 		id: "gameInput",
+		placeholder: t("dashboard.placeholder"),
 		required: true,
 		onChange: () => {},
 		class: inputCss,
@@ -211,7 +206,7 @@ export function Dashboard(): PongNode<any> {
 						[
 							Span(
 								{class: "text-xs text-gray-400 uppercase tracking-widest"},
-								["Score final (JOUEUR - ADVERSAIRE)"]
+								[t("dashboard.final_score")]
 							),
 							Span(
 								{class: "text-4xl font-bold mt-1 block"}, [
@@ -225,7 +220,7 @@ export function Dashboard(): PongNode<any> {
 						[
 							Span(
 								{ class: "text-xs text-gray-400 uppercase tracking-widest" },
-								["Total de rebond (joueur)"]
+								[t("dashboard.tot_bounce")]
 							),
 							Span(
 								{ class: "text-4xl font-bold mt-1 block"}, [
@@ -239,7 +234,7 @@ export function Dashboard(): PongNode<any> {
 						[
 							Span(
 								{ class: "txt-xs text-gray-400 uppercase tracking-widest" },
-								["Temps de pression continue sur les touches (en secondes)"]
+								[t("dashboard.tot_press")]
 							),
 							Span(
 								{ class: "text-4xl font-bold mt-1 block" }, [
@@ -252,7 +247,7 @@ export function Dashboard(): PongNode<any> {
 			)
 		);
 	} else if(hasTriedToSearch) {
-		selectedGameDisplay.push(Span({ class: "mt-4 text-red-400" }, ["Partie non trouvée"]));
+		selectedGameDisplay.push(Span({ class: "mt-4 text-red-400" }, [t("dashboard.not_found")]));
 	}
 
 
@@ -286,7 +281,7 @@ export function Dashboard(): PongNode<any> {
 					Div(
 						{ class: "relative z-10 w-1/3 flex flex-col justify-center items-center p-4" },
 						[
-							Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Statistics"]),
+							Span({ class: neonTitleCss + " mb-4 text-3xl" }, [t("dashboard.stats")]),
 							Div(
 								{
 									class:
@@ -298,7 +293,7 @@ export function Dashboard(): PongNode<any> {
 										[
 											Span(
 												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
-												["Total parties jouées"]
+												[t("dashboard.total_games_played")]
 											),
 											Span({ class: "text-4xl font-bold mt-1 block" }, [
 												String(totalGames),
@@ -310,7 +305,7 @@ export function Dashboard(): PongNode<any> {
 										[
 											Span(
 												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
-												["Total de victoires"]
+												[t("dashboard.total_wins")]
 											),
 											Span({ class: "text-4xl font-bold mt-1 block" }, [
 												String(winCount),
@@ -322,7 +317,7 @@ export function Dashboard(): PongNode<any> {
 										[
 											Span(
 												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
-												["Total de défaites"]
+												[t("dashboard.total_losses")]
 											),
 											Span({ class: "text-4xl font-bold mt-1 block" }, [
 												String(loseCount),
@@ -334,7 +329,7 @@ export function Dashboard(): PongNode<any> {
 										[
 											Span(
 												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
-												["Nombre de points marqués"]
+												[t("dashboard.points_scored")]
 											),
 											Span({ class: "text-4xl font-bold mt-1 block" }, [
 												String(totalPlayerScore),
@@ -346,7 +341,7 @@ export function Dashboard(): PongNode<any> {
 										[
 											Span(
 												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
-												["Série de victoires la plus longue"]
+												[t("dashboard.longest_win_streak")]
 											),
 											Span({ class: "text-4xl font-bold mt-1 block" }, [
 												String(Math.max(...streaks)),
@@ -358,7 +353,7 @@ export function Dashboard(): PongNode<any> {
 										[
 											Span(
 												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
-												["Ratio défaites/victoires"]
+												[t("dashboard.loss_win_ratio")]
 											),
 											Span({ class: "text-4xl font-bold mt-1 block" }, [
 												winLoseRatio,
@@ -370,7 +365,7 @@ export function Dashboard(): PongNode<any> {
 										[
 											Span(
 												{ class: "text-xs text-gray-400 uppercase tracking-widest" },
-												["Ami le plus affronté"]
+												[t("dashboard.most_played_friend")]
 											),
 											Span({ class: "text-4xl font-bold mt-1 block" }, [
 												topOpponent,
@@ -386,9 +381,9 @@ export function Dashboard(): PongNode<any> {
 					Div(
 						{ class: "relative z-20 flex flex-col items-center w-1/3 text-center" },
 						[
-							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["% de victoire"]),
+							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, [t("dashboard.win_rate_percent")]),
 							Div({ class: "mx-auto mb-8" }, [Donut({ percent: progressPercent })]),
-							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, ["Détails des parties"]),
+							Span({ class: neonTitleCss + " mb-4 text-3xl block" }, [t("dashboard.match_details")]),
 							Div(
 								{ class: "relative z-10 flex flex-col justify-center items-center p-4 w-full max-w-md space-y-4" },
 								[	gameInput, 
@@ -415,7 +410,7 @@ export function Dashboard(): PongNode<any> {
 											rerender();
 										},
 										class: playButtonDarkCss,
-									}, ["Rechercher"]),
+									}, [t("dashboard.search")]),
 									...selectedGameDisplay
 								]
 							),
@@ -426,7 +421,7 @@ export function Dashboard(): PongNode<any> {
 					Div(
 						{ class: "relative z-10 w-1/3 flex flex-col items-center justify-center p-4" },
 						[
-							Span({ class: neonTitleCss + " mb-4 text-3xl" }, ["Score"]),
+							Span({ class: neonTitleCss + " mb-4 text-3xl" }, [t("dashboard.score")]),
 							Div(
 								{
 									class:

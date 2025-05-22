@@ -70,6 +70,26 @@
 		"sign": "Registrar-se",
 		"success": "Registro bem-sucedido! Redirecionando...",
 		"failed": "Erro ao registrar. Por favor, tente novamente."
-	}
+	},
+	"dashboard": {
+    "loading": "Carregando...",
+    "placeholder": "Número da partida",
+    "final_score": "Placar final (JOGADOR - ADVERSÁRIO)",
+    "tot_bounce": "Total de ressaltos (jogador)",
+    "tot_press": "Tempo de pressão contínua nas teclas (em segundos)",
+    "not_found": "Partida não encontrada",
+    "stats": "Estatísticas",
+    "total_games_played": "Total de partidas jogadas",
+    "total_wins": "Total de vitórias",
+    "total_losses": "Total de derrotas",
+    "points_scored": "Número de pontos marcados",
+    "longest_win_streak": "Maior sequência de vitórias",
+    "loss_win_ratio": "Razão derrotas/vitórias",
+    "most_played_friend": "Amigo mais enfrentado",
+	"win_rate_percent": "% de vitórias",
+    "match_details": "Detalhes das partidas",
+    "search": "Pesquisar",
+	"score": "Score"
+  }
 }
   

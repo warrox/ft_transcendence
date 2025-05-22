@@ -69,5 +69,25 @@
 		"sign": "S'inscrire",
 		"success": "Inscription réussie ! Redirection en cours...",
 		"failed": "Erreur lors de l'inscription. Veuillez réessayer."
-	}
+	},
+	"dashboard": {
+    "loading": "Chargement...",
+    "placeholder": "Numéro de la partie",
+    "final_score": "Score final (JOUEUR - ADVERSAIRE)",
+    "tot_bounce": "Total de rebond (joueur)",
+    "tot_press": "Temps de pression continue sur les touches (en secondes)",
+    "not_found": "Partie non trouvée",
+    "stats": "Statistiques",
+    "total_games_played": "Total parties jouées",
+    "total_wins": "Total de victoires",
+    "total_losses": "Total de défaites",
+    "points_scored": "Nombre de points marqués",
+    "longest_win_streak": "Série de victoires la plus longue",
+    "loss_win_ratio": "Ratio défaites/victoires",
+    "most_played_friend": "Ami le plus affronté",
+    "win_rate_percent": "% de victoire",
+    "match_details": "Détails des parties",
+    "search": "Rechercher",
+	"score": "Score"
+  }
 }

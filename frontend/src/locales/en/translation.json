@@ -70,5 +70,25 @@
     "sign": "Sign In",
     "success": "Registration successful! Redirecting...",
     "failed": "Error during registration. Please try again."
+  },
+	"dashboard": {
+    "loading": "Loading...",
+    "placeholder": "Game number",
+    "final_score": "Final score (PLAYER - OPPONENT)",
+    "tot_bounce": "Total bounces (player)",
+    "tot_press": "Continuous key press time (in seconds)",
+    "not_found": "Game not found",
+    "stats": "Statistics",
+    "total_games_played": "Total games played",
+    "total_wins": "Total wins",
+    "total_losses": "Total losses",
+    "points_scored": "Points scored",
+    "longest_win_streak": "Longest win streak",
+    "loss_win_ratio": "Loss/win ratio",
+    "most_played_friend": "Most played friend",
+    "win_rate_percent": "Win rate %",
+    "match_details": "Match details",
+    "search": "Search",
+    "score": "Score"
   }
 }
