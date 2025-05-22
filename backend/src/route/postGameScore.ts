@@ -29,7 +29,7 @@ export const postGameScore = async (
 
 			});
 		});	
-		const tx = await contract.putScore(userId , new Date().toISOString(), score === "win", guestName || "");
+		const tx = await contract.putScore(userId , new Date().toISOString(), result === "win", guestName || "");
 		await tx.wait();
 		reply.code(200).send(result);
 	} catch (err: any) {
