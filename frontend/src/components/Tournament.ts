@@ -10,6 +10,7 @@ let Registerplayers = false;
 
 let nameError = false;
 let errLength = false;
+let errSameName = false;
 
 let showMatchOrder = false;
 
@@ -172,6 +173,7 @@ export function Tournament(): PongNode<any>{
 				...playerInputs,
 				...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["All players must have a name."])] : []),
 				...(errLength ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Names should not exceed 10 characters."])] : []),
+				...(errSameName ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Names should all be differents."])] : []),
 
 				Button({ id: "starttournament", 
 				class: `mt-6 bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded shadow-lg transition duration-300`,
@@ -188,8 +190,17 @@ export function Tournament(): PongNode<any>{
 						rerender();
 						return;
 					}
+					else if (playerNames.length != new Set(playerNames).size)
+					{
+						nameError = false;
+						errLength = false;
+						errSameName = true;
+						rerender();
+						return;
+					}
 					nameError = false;
 					errLength = false;
+					errSameName = false;
 					showMatchOrder = true;
 					rerender();
 					}
