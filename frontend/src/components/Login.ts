@@ -101,7 +101,7 @@ export function Login(): PongNode<any> {
 					console.log("Error parsing JSON: ", e);
 					loginStatus = "KO";
 
-			}})
+				}})
 			.catch(error => {
 				console.error("Login error: ", error);
 				loginStatus = "KO";
@@ -134,24 +134,24 @@ export function Login(): PongNode<any> {
 				"Content-Type": "application/json",
 			},
 		})
-		.then(async res => {
-			if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-			const json = await res.json();
-			console.log("json", json);
-			
-			if (json.success) {
-				loginStatus = "OK";
-				AuthStore.instance.isLoggedIn = true;
-				AuthStore.instance.refresh()
-				requires2FA = false;
-				loginStatus = null;
-				rerender();
-				setTimeout(() => {
-					navigateTo("/home");
-				}, 500);
-			} else {
-				loginStatus = "KO";
-			}})
+			.then(async res => {
+				if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+				const json = await res.json();
+				console.log("json", json);
+
+				if (json.success) {
+					loginStatus = "OK";
+					AuthStore.instance.isLoggedIn = true;
+					AuthStore.instance.refresh()
+					requires2FA = false;
+					loginStatus = null;
+					rerender();
+					setTimeout(() => {
+						navigateTo("/home");
+					}, 500);
+				} else {
+					loginStatus = "KO";
+				}})
 			.finally(() => {
 				rerender();
 			});
@@ -168,15 +168,22 @@ export function Login(): PongNode<any> {
 			},
 			body: JSON.stringify({ token: idToken }),
 		})
-		.then(res => {
-			if (!res.ok)
-				throw new Error(`HTTP error! Status: ${res.status}`);
-			return res.text();
-		})
-		.then(body => {
-			console.log("Google Sign-in response:", body);
-		})
-		.catch(e => console.error("Erreur Google Sign-in :", e));
+			.then(res => {
+				if (!res.ok)
+					throw new Error(`HTTP error! Status: ${res.status}`);
+				return res.text();
+			})
+			.then(body => {
+				console.log("Google Sign-in response:", body);
+				loginStatus = "OK";
+				rerender();
+				setTimeout(() => {
+					navigateTo('/home')
+				}, 1500);
+				//resetRegisterState(1500);
+
+			})
+			.catch(e => console.error("Erreur Google Sign-in :", e));
 	};
 
 	setTimeout(() => {
@@ -234,11 +241,11 @@ export function Login(): PongNode<any> {
 					onClick: handleLogin,
 					class: fancyButtonCss,
 				}, [
-					Div({ class: fancyLeftBorderCss }),
-					P({ class: disappearingTextCss }, [t("login.click")]),
-					Span({ class: appearingTextCss }, [t("login.login")]),
-					Div({ class: fancyRightBorderCss }),
-				]),
+						Div({ class: fancyLeftBorderCss }),
+						P({ class: disappearingTextCss }, [t("login.click")]),
+						Span({ class: appearingTextCss }, [t("login.login")]),
+						Div({ class: fancyRightBorderCss }),
+					]),
 				...(loginStatus !== null
 					? [Div({ class: statusWrapperCss }, [
 						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`]),
