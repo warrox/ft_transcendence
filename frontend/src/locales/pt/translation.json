@@ -104,6 +104,27 @@
     "date": "Data",
     "opponent": "Adversário",
     "result": "Resultado"
-	}
+  },
+  "tournament": {
+    "tournament_mode": "Modo Torneio",
+    "select_number_of_players": "Selecione o número de jogadores:",
+    "match_format_info": "Cada partida será uma eliminação 1v1.",
+    "register_players": "Registrar jogadores",
+    "player_count_requirement": "O torneio requer 4 ou 8 jogadores.",
+    "back_to_game_menu_arrow": "← Voltar ao menu do jogo",
+    "usernames": "Nomes de usuário:",
+    "name_required": "Todos os jogadores devem ter um nome.",
+    "name_length_limit": "Os nomes não devem exceder 10 caracteres.",
+    "show_match_order": "Mostrar ordem dos jogos",
+    "change_number_of_players_arrow": "← Alterar número de jogadores",
+    "quarterfinals": "Quartas de final",
+    "edit_player_names_arrow": "← Editar nomes dos jogadores",
+    "tournament_winner": "🏆 Vencedor do torneio:",
+    "winner": "Vencedor",
+    "back_to_game_menu": "← Voltar ao menu do jogo",
+    "next_game": "Próxima partida:",
+    "number_of_players": "Número de jogadores:",
+	"first_match": "Primeira partida:"
+  }
 }
   
