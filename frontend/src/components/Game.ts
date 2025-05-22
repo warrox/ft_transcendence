@@ -176,7 +176,7 @@ const backButtonHoverStyles: { [key: string]: string} = {
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							[t("game.tournament")]),
 					]),
-					Button({id: "IneedtogoHome", onClick: () => {navigateTo("/home");}, class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["← Back to Menu"])
+					Button({id: "IneedtogoHome", onClick: () => {navigateTo("/home"); window.location.reload();}, class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["← Back to Menu"])
 				]),
 				...(registerplayer
 				? [
