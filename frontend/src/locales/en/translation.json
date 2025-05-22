@@ -98,5 +98,11 @@
     "remove": "Remove",
     "no_friends_yet": "You don't have any friends yet",
     "no_friend_found": "No friend found"
+  },
+  "blockchain": {
+    "game_history": "Blockchain game history",
+    "date": "Date",
+    "opponent": "Opponent",
+    "result": "Result"
   }
 }

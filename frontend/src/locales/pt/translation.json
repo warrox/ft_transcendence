@@ -98,6 +98,12 @@
     "remove": "Remover",
     "no_friends_yet": "Você ainda não tem amigos",
     "no_friend_found": "Nenhum amigo encontrado"
-  }
+  },
+  "blockchain": {
+    "game_history": "Histórico das partidas na Blockchain",
+    "date": "Data",
+    "opponent": "Adversário",
+    "result": "Resultado"
+	}
 }
   
