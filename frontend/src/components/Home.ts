@@ -142,7 +142,7 @@ export function Home(): PongNode<any> {
 								id: "friendsButton",
 								class: playButtonDarkCss,
 								onClick: () => navigateTo("/friends"),
-							}, ["Friends"])
+							}, [t("home.friends")])
 						]),
 					])
 				])
@@ -194,7 +194,7 @@ export function Home(): PongNode<any> {
 							id: "blockchain_button",
 							class: playButtonDarkCss,
 							onClick: () => navigateTo("/blockchain"),
-						}, ["Tableau blockchain"])
+						}, [t("home.tab_blockchain")])
 					])
 				])
 			]),

@@ -43,7 +43,9 @@
 		"settings": "Paramètres",
 		"settings_paragraph": "Voici un aperçu de toutes les options disponibles pour configurer votre profil et votre compte.",
 		"settings_description": "Dans les paramètres, vous pouvez modifier votre identifiant, mot de passe, adresse e-mail, préférences linguistiques et activer ou désactiver la vérification en deux étapes.",
-		"dashboard_description": "Dans le tableau de bord, vous pouvez consulter vos statistiques, suivre votre progression et accéder à vos parties récentes."
+		"dashboard_description": "Dans le tableau de bord, vous pouvez consulter vos statistiques, suivre votre progression et accéder à vos parties récentes.",
+		"friends": "Amis",
+		"tab_blockchain": "Tableau blockchain"
 	},
 	"login": {
 		"login_page": "Page de connexion",

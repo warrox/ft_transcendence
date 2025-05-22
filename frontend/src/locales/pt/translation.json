@@ -43,7 +43,9 @@
 		"settings": "Configurações",
 		"settings_paragraph": "Aqui está uma visão geral de todas as opções disponíveis para configurar seu perfil e conta.",
 		"settings_description": "Nas configurações, você pode alterar seu login, senha, e-mail, preferências de idioma e ativar ou desativar a autenticação de dois fatores.",
-		"dashboard_description": "No painel de controle, você pode visualizar suas estatísticas, acompanhar seu progresso e acessar suas partidas recentes."
+		"dashboard_description": "No painel de controle, você pode visualizar suas estatísticas, acompanhar seu progresso e acessar suas partidas recentes.",
+		"friends": "Amigos",
+		"tab_blockchain": "Tabela de blockchain"
 	},
 	"login": {
 		"login_page": "Página de login",

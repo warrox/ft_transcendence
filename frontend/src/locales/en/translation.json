@@ -43,7 +43,9 @@
     "settings": "Settings",
     "settings_paragraph": "Here's an overview of all the available options to configure your profile and account.",
     "settings_description": "In the settings, you can change your login, password, email, language preferences, and enable or disable two-factor authentication.",
-    "dashboard_description": "In the dashboard, you can view your statistics, track your progress, and access your recent games."
+    "dashboard_description": "In the dashboard, you can view your statistics, track your progress, and access your recent games.",
+		"friends": "Friends",
+    "tab_blockchain": "Blockchain table"
   },
   "login": {
     "login_page": "Login Page",
