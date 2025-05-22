@@ -1,7 +1,7 @@
 import { Div, P, Button, Input, Image } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
-import { addWebSocketListener} from '../lib/socketClient.ts';
+import { addWebSocketListener } from '../lib/socketClient.ts';
 
 type Friend = {
 	id: number;
@@ -112,50 +112,23 @@ export function Friends(): PongNode<any> {
 		}
 	}
 
-	const handleTest = (isOnline: boolean) => {
-		console.log("isOnline : ", isOnline);
-	}
-
-	console.log("friend list before filter", state.friendsList);
-
 	const filteredFriends = state.friendsList.filter((friend) =>
 		`${friend.name} ${friend.surname} ${friend.email}`
 			.toLowerCase()
 			.includes(state.search.toLowerCase())
 	);
 
-	console.log("filtered Filter", filteredFriends);
-
-
-	// Chargement initial
 	if (!state.loading && state.friendsList.length === 0) {
 		loadFriends();
 	}
-
-	console.log("state.friendsList len = ", state.friendsList.length);
-	console.log("friend list = ", state.friendsList);
-
-	console.log(state.friendsList);
-
 
 	return Div({
 		class: "min-h-screen bg-yellow-400 flex flex-col items-center pt-20",
 	}, [
 		// Titre
-		Div({ class: "text-3xl font-bold mb-8" }, [
+		Div({ class: "font-orbitron text-3xl font-bold mb-8" }, [
 			P({}, ["Mes Amis"]),
 		]),
-		Div({ class: "flex mb-6 w-full max-w-md justify-center" }, [
-			Button({
-				id: "loadFriendButtron",
-				class: "bg-blue-500 text-white p-2 rounded-r",
-				onClick: loadFriends,
-			}, [
-				Image({ id: "loadFriendImg", src: "../assets/refresh.svg", class: "w-6 h-6" })
-			])
-		]),
-
-
 		// Ajouter un ami
 		Div({ class: "flex mb-8 w-full max-w-md" }, [
 			Input({
@@ -163,14 +136,14 @@ export function Friends(): PongNode<any> {
 				type: "text",
 				placeholder: "Email de l'ami à ajouter",
 				value: state.friendEmail,
-				class: "flex-grow p-2 rounded-l",
+				class: "flex-grow p-2 rounded border",
 				onChange: () => {
 					state.friendEmail = (document.getElementById("addFriend") as HTMLInputElement).value;
 				},
 			}),
 			Button({
 				id: "addFriendsButton",
-				class: "bg-green-500 text-white p-2 rounded-r",
+				class: "ml-2 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded",
 				onClick: handleAddFriend,
 			}, ["Ajouter"]),
 		]),
@@ -215,11 +188,6 @@ export function Friends(): PongNode<any> {
 								class: "text-red-500 hover:text-red-700",
 								onClick: () => handleDeleteFriend(friend.email),
 							}, ["Supprimer"]),
-							Button({
-								id: `friend-${friend.id}-test`,
-								class: "text-red-500 hover:text-red-700",
-								onClick: () => handleTest(friend.online),
-							}, ["test"])
 						])
 					)
 				]
