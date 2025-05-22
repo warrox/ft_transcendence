@@ -27,6 +27,7 @@ let guestName:string;
 
 let nameError = false;
 let errLength = false;
+let errSameName = false;
 
 let isplayPong = false;
 
@@ -205,9 +206,18 @@ const backButtonHoverStyles: { [key: string]: string} = {
 								rerender();
 								return;
 							}
+							else if (player2 == player1)
+							{
+								errSameName = true;
+								nameError = false;
+								errLength = false;
+								rerender();
+								return;
+							}
 							gameStarted = 1;
 							nameError = false;
 							errLength = false;
+							errSameName = false;
 							resetKeys();
 							rerender();
 						},
@@ -215,6 +225,7 @@ const backButtonHoverStyles: { [key: string]: string} = {
 					}, ["Start Game"]),
 					...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Player 2 must have a name."])] : []),
 					...(errLength ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Name should not exceed 10 characters."])] : []),
+					...(errSameName ? [Span({ class: "text-red-500 font-semibold mt-2" }, [`I need a different name than ${player1}.`])] : []),
 					Button({ id: "backtoblack", onClick: () => {registerplayer = false; rerender()},
 					class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["Back to selection mode"])
 				]),
