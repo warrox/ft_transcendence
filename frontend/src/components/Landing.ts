@@ -49,14 +49,14 @@ function navLanding(): PongNode<any> {
 					onClick: () => {
 						navigateTo('/login');
 					}
-				}, ["Login"]),
+				}, [t("landing.login")]),
 				Button({
 					id: "registerButton",
 					class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded",
 					onClick: () => {
 						navigateTo('/register');
 					},
-				}, ['Register'])
+				}, [t("landing.register")])
 			])
 		])
 	]);
@@ -85,8 +85,8 @@ function main(): PongNode<any> {
 							const target = isLogged ? "/game" : "/login";
 							navigateTo(target); 
 						}
-					}, ["Start Playing"]),
-					Span({class: "block md:text-xl text-gray-500 pt-4"}, ["Discover why 42 developers love Transcendence. 100% free."]),
+					}, [t("landing.start_playing")]),
+					Span({class: "block md:text-xl text-gray-500 pt-4"}, [t("landing.why_42")]),
 				]),
 			]),
 
