@@ -2,6 +2,8 @@ import { Div, UList, Li, P } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { areaCss } from "../styles/cssFactory";
 import {rerender} from "../router/router"
+import { AuthStore } from '../stores/AuthStore.ts';
+
 type Score = {
 	id: number;
 	date: string;
@@ -10,8 +12,11 @@ type Score = {
 };
 
 let scores: Score[] = [];
+let hasFetched = false;
+let lastFetchedUserId: string | null = null;
 
 function formatDateFR(isoDate: string): string {
+
 	const date = new Date(isoDate);
 	return date.toLocaleString("fr-FR", {
 		day: "2-digit",
@@ -21,6 +26,14 @@ function formatDateFR(isoDate: string): string {
 		minute: "2-digit",
 	});
 }
+
+function getId(){
+	if (AuthStore.instance.user){
+		return AuthStore.instance.user.id;
+	}
+	return "-1";
+}
+
 const fetchBlockchainData = () => {
 	fetch("/api/getBlockchain", {
 		method: "GET",
@@ -34,6 +47,8 @@ const fetchBlockchainData = () => {
 		try {
 			const parseBody = JSON.parse(text);
 			console.log("Response parsed from JSON :", parseBody);
+
+			lastFetchedUserId = getId();
 
 			scores = parseBody.score.map(([id, date, won, guest_name]: [string, string, boolean, string]) => ({
 				id: parseInt(id),
@@ -51,12 +66,13 @@ const fetchBlockchainData = () => {
 	});
 };
 
-let hasFetched = false;
-export  function Blockchain(): PongNode<any> {
 
-	if(hasFetched === false )
+export  function Blockchain(): PongNode<any> {
+	
+	if(hasFetched === false  || getId() != lastFetchedUserId)
 		fetchBlockchainData();
 	hasFetched = true;
+	
 	return Div({ class: `${areaCss} min-h-screen bg-yellow-400 flex flex-col items-center pt-20` }, [
 		P({ class: "text-3xl font-bold mb-6" }, ["Historique des parties Blockchain"]),
 
