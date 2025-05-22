@@ -48,7 +48,8 @@
 	"login": {
 		"login_page": "Page de connexion",
 		"click": "Cliquez ici",
-		"login": "Connexion"
+		"login": "Connexion",
+		"incorrect": "Email ou mot de passe incorrect"
 	},
 	"register": {
 		"ph_name": "prénom",

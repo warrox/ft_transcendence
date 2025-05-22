@@ -16,6 +16,7 @@ export function linkFn(linkId: string, href: string, text: string, css: string):
 		onClick: () => {
 			navigateTo(href);
 			if (href === "/home") window.location.reload();
+			if (href === "/login") window.location.reload();
 		}
 	}, [text]);
 }

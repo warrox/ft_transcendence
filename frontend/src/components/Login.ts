@@ -18,7 +18,6 @@ import {
 	statusWrapperCss,
 	statusKoCss,
 	statusOkCss,
-	inputScaleCss,
 	areaCss,
 	circlesCss,
 	circle1Css,
@@ -231,9 +230,9 @@ export function Login(): PongNode<any> {
 				]),
 				...(loginStatus !== null
 					? [Div({ class: statusWrapperCss }, [
-						P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`]),
+						// P({ class: loginStatus === "OK" ? statusOkCss : statusKoCss }, [`Login status: ${loginStatus}`]),
 						...(loginStatus !== "OK"
-							? [P({ class: "text-red-600 font-semibold mt-2" }, ["Incorrect email or password."])]
+							? [P({ class: "text-red-600 font-semibold mt-2" }, [t("login.incorrect")])]
 							: [])
 					])]
 					: [])

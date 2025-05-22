@@ -49,7 +49,8 @@
 		"login_page": "Página de login",
 		"click": "Clique aqui",
 		"login": "Entrar",
-		"status": "Status do login:"
+		"status": "Status do login:",
+		"incorrect": "E-mail ou senha incorretos"
 	},
 	"register": {
 		"ph_name": "nome",
