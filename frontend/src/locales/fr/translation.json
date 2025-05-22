@@ -89,5 +89,13 @@
     "match_details": "Détails des parties",
     "search": "Rechercher",
 	"score": "Score"
+  },
+  "friends": {
+  	"my_friends": "Mes Amis",
+	"add_friend_email_placeholder": "Email de l'ami à ajouter",
+	"add": "Ajouter",
+    "remove": "Supprimer",
+    "no_friends_yet": "Vous n'avez pas encore d'amis",
+    "no_friend_found": "Aucun ami trouvé"
   }
 }

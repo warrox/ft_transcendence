@@ -90,5 +90,13 @@
     "match_details": "Match details",
     "search": "Search",
     "score": "Score"
+  },
+  "friends": {
+  	"my_friends": "My Friends",
+    "add_friend_email_placeholder": "Friend's email to add",
+    "add": "Add",
+    "remove": "Remove",
+    "no_friends_yet": "You don't have any friends yet",
+    "no_friend_found": "No friend found"
   }
 }

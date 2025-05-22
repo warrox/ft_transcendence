@@ -2,6 +2,8 @@ import { Div, P, Button, Input, Image } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { rerender } from "../router/router";
 import { addWebSocketListener} from '../lib/socketClient.ts';
+import { t } from "i18next";
+import i18n from "i18next";
 
 type Friend = {
 	id: number;
@@ -143,7 +145,7 @@ export function Friends(): PongNode<any> {
 	}, [
 		// Titre
 		Div({ class: "text-3xl font-bold mb-8" }, [
-			P({}, ["Mes Amis"]),
+			P({}, [t("friends.my_friends")]),
 		]),
 		Div({ class: "flex mb-6 w-full max-w-md justify-center" }, [
 			Button({
@@ -161,7 +163,7 @@ export function Friends(): PongNode<any> {
 			Input({
 				id: "addFriend",
 				type: "text",
-				placeholder: "Email de l'ami à ajouter",
+				placeholder: t("friends.add_friend_email_placeholder"),
 				value: state.friendEmail,
 				class: "flex-grow p-2 rounded-l",
 				onChange: () => {
@@ -172,7 +174,7 @@ export function Friends(): PongNode<any> {
 				id: "addFriendsButton",
 				class: "bg-green-500 text-white p-2 rounded-r",
 				onClick: handleAddFriend,
-			}, ["Ajouter"]),
+			}, [t("friends.add")]),
 		]),
 
 		// Liste d'amis
@@ -214,7 +216,7 @@ export function Friends(): PongNode<any> {
 								id: `friend-${friend.id}-action`,
 								class: "text-red-500 hover:text-red-700",
 								onClick: () => handleDeleteFriend(friend.email),
-							}, ["Supprimer"]),
+							}, [t("friends.remove")]),
 							Button({
 								id: `friend-${friend.id}-test`,
 								class: "text-red-500 hover:text-red-700",
@@ -225,8 +227,8 @@ export function Friends(): PongNode<any> {
 				]
 				: [
 					Div({ class: "p-4 text-center text-gray-500" }, [state.friendsList.length === 0
-						? "Vous n'avez pas encore d'amis"
-						: "Aucun ami trouvé"]
+						? t("friends.no_friends_yet")
+						: t("friends.no_friend_found")]
 					)
 				]
 		)
