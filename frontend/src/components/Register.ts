@@ -144,7 +144,12 @@ export function Register(): PongNode<any> {
 			return res.text();
 		})
 		.then(body => {
-			console.log("Google Sign-in response:", body);
+            registerState = "success";
+            rerender();
+            setTimeout(() => {
+                navigateTo('/home')
+            }, 1500);
+            resetRegisterState(1500);
 		})
 		.catch(e => console.error("Erreur Google Sign-in :", e));
 	};

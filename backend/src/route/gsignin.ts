@@ -31,31 +31,31 @@ export const gsignin = async(request : FastifyRequest<{Body : GoogleTokenRequest
 
 
 
-		//USER N'EXISTE PAS, CREER ET LOG
-		if (!user){
-			const userId = await new Promise<number>((resolve, reject) => {
-				const test = db.run(
-					'INSERT INTO users (name, surname, email, password, is_googleUser) VALUES (?, ?, ?, ?, ?)',
-					[decoded.given_name, decoded.family_name, decoded.email, "wtZSAGd9B*#p&p3", 1],
-					function (err: Error | null) {
-						if (err) return reject(new Error("Erreur lors de l'insertion de l'utilisateur"));
-						resolve(this.lastID);
-					}
-				);
-				console.log(test);
-			});
+       //USER N'EXISTE PAS, CREER ET LOG
+        const name = decoded.family_name ? decoded.family_name : "No name";
+        if (!user){
+            const userId = await new Promise<number>((resolve, reject) => {
+                const test = db.run(
+                    'INSERT INTO users (name, surname, email, password, is_googleUser) VALUES (?, ?, ?, ?, ?)',
+                    [decoded.given_name, name, decoded.email, "wtZSAGd9B*#p&p3", 1],
+                    function (err: Error | null) {
+                        if (err) return reject(new Error("Erreur lors de l'insertion de l'utilisateur"));
+                        resolve(this.lastID);
+                    }
+                );
+                console.log(test);
+            });
 
-			const token = server.jwt.sign({ id: userId, email: decoded.email}, {expiresIn: 36000 }); 
-			reply.setCookie('access_token', token, {
-				path: '/',
-				httpOnly: true,
-				secure: true,
-				maxAge: 36000
-			});
-			return reply.status(201).send({ accessToken: token, message: "Utilisateur créé avec succès" });
-		}
-		///////////////////////////////////////////////////////////
-
+            const token = server.jwt.sign({ id: userId, email: decoded.email}, {expiresIn: 36000 }); 
+            reply.setCookie('access_token', token, {
+                path: '/',
+                httpOnly: true,
+                secure: true,
+                maxAge: 36000
+            });
+            return reply.status(201).send({ accessToken: token, message: "Utilisateur créé avec succès" });
+        }
+        ///////////////////////////////////////////////////////////
 		is_gUser = user.is_googleUser;
 		if(user && is_gUser === 0){
 			return reply.status(409).send({ error: "Cet email est déjà utilisé, veuillez vous connectez sans Google" });
