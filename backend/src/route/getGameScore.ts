@@ -27,7 +27,7 @@ export const getGameScore = async (request: FastifyRequest, reply: FastifyReply)
 		const userId = claims!.id;
 
 		const rows = await dbAll(
-			'SELECT id, user_id, result, guest_name, game_date, score FROM games WHERE user_id = ? ORDER BY game_date DESC',
+			'SELECT id, user_id, result, guest_name, game_date, score, bounce, input_per_second FROM games WHERE user_id = ? ORDER BY game_date DESC',
 			[userId]
 		);
 

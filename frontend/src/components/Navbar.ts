@@ -1,10 +1,12 @@
 import { PongNode } from "../lib/PongNode";
 import { Button, Div, Link } from "../lib/PongFactory";
 import { linkCss, playButtonLangDarkCss, playButtonDarkCss } from "../styles/cssFactory";
+import { disconnectWebSocketClient } from '../lib/socketClient.ts';
 import { AuthStore } from "../stores/AuthStore";
 import { navigateTo, rerender } from "../router/router";
 import { t } from "i18next";
 import i18n from "i18next";
+import { updateWs } from "../main"
 
 export function linkFn(linkId: string, href: string, text: string, css: string): PongNode<any> {
 	return Link({
@@ -48,9 +50,11 @@ export function Navbar(): PongNode<any> {
 					console.log("Déconnexion réussie :", parsedBody);
 					AuthStore.instance.isLoggedIn = false;
 					AuthStore.instance.refresh();
-					// setTimeout(() => {
-						navigateTo('/home');
-					// });
+					//rerender();
+					
+					navigateTo('/home');
+					// updateWs();
+					disconnectWebSocketClient();
 					rerender();
 				} catch (e) {
 					console.error("Erreur de parsing JSON :", e);

@@ -13,10 +13,11 @@ type Friend = {
   email: string;
 };
 
-declare const onlineUsers: Set<number>; 
 export const getFriends = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
 	const token = request.cookies["access_token"];
+	console.log("here !");
+	
 	if (!token) {
 	  return reply.status(401).send({ error: 'Token manquant' });
 	}
@@ -29,7 +30,7 @@ export const getFriends = async (request: FastifyRequest, reply: FastifyReply) =
 
 	const friends: Friend[] = await new Promise((resolve, reject) => {
 	  db.all(
-		`SELECT users.id, users.name, users.surname, users.email
+		`SELECT users.id, users.name, users.surname, users.email, users.online, users.avatar_path
 		 FROM users
 		 JOIN friends ON users.id = friends.friend_id
 		 WHERE friends.user_id = ?`,
@@ -41,13 +42,7 @@ export const getFriends = async (request: FastifyRequest, reply: FastifyReply) =
 	  );
 	});
 
-	const enriched = friends.map(friend => ({
-	  ...friend,
-	//   online: onlineUsers.has(friend.id), A CAHNGER !!!! FALSE PR DEBUG
-		online: false,
-	}));
-
-	return reply.status(200).send(enriched);
+	return reply.status(200).send(friends);
   } catch (err) {
 	console.error(err);
 	return reply.status(500).send({ error: "Erreur serveur" });

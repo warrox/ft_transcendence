@@ -27,11 +27,12 @@ const routes: Route[] = [
 	{ path: '/register', component: Register},
 	{ path: '/login', component: Login},
 	{ path: '/profil', component: Profil, protected: true},
-	{ path: '/tournament', component: Tournament, protected: true},
+	{ path: '/tournament', component: Tournament, protected: true, showNavbar: false},
 	{ path: '/friends', component: Friends, protected: true },
-	{ path: '/game', component: Game, protected: true},
-	{ path: '/dashboard', component: Dashboard },
-	{ path: '/blockchain', component: Blockchain },
+	{ path: '/dashboard', component: Dashboard, protected: true},
+	{ path: '/blockchain', component: Blockchain, protected: true},
+	{ path: '/game', component: Game, protected: true, showNavbar: false},
+
 ]
 
 export function renderToDOM(node: PongNode<any>, container: HTMLElement) {

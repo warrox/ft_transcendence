@@ -80,4 +80,3 @@ export const gsignin = async(request : FastifyRequest<{Body : GoogleTokenRequest
 
 
 }
-

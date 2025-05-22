@@ -138,20 +138,11 @@ export function Home(): PongNode<any> {
 									}, [user2FAStatus ? t("home.enabled") : t("home.disabled")]),
 								]),
 							]),
-							Div({ id: "confirm-button-container", class: "hidden mt-3 w-full flex justify-center" }, [
-								Button({
-									id: "confirm-button",
-									class: `${playButtonDarkCss}`,
-									onClick: () => {
-										// Tu peux ajouter ici la logique pour envoyer le nouveau login
-										const inputElement = document.getElementById('login-input') as HTMLInputElement;
-										if (inputElement && inputElement.value.trim() !== '') {
-											console.log('New login:', inputElement.value); // ici envoyer via fetch par ex
-										}
-										toggleLoginForm();
-									}
-								}, [t("home.confirm")]),
-							]),
+							Button({
+								id: "friendsButton",
+								class: playButtonDarkCss,
+								onClick: () => navigateTo("/friends"),
+							}, ["Friends"])
 						]),
 					])
 				])
