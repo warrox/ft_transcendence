@@ -25,7 +25,13 @@
 		"single_player": "Joueur seul",
 		"multi_player": "Multijoueur",
 		"tournament": "Tournois",
-		"back_menu": "Retour au menu"
+		"back_menu": "← Retour au menu",
+		"back_selection": "Retour au mode de sélection",
+		"start_game": "Démarrer la partie",
+		"placeholder": "Nom du deuxième joueur",
+		"error_1": "Le joueur 2 doit avoir un nom",
+		"error_2": "Le nom ne doit pas dépasser 10 caractères",
+		"winner": "VAINQUEUR: "
 	},
 	"home": {
 		"loading": "Chargement",

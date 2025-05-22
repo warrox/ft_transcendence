@@ -25,7 +25,13 @@
     "single_player": "Single Player",
     "multi_player": "Multiple Player",
 		"tournament": "Tournament",
-    "back_menu": "Back to menu"
+    "back_menu": "← Back to menu",
+    "back_selection": "Back to selection mode",
+    "start_game": "Start game",
+    "placeholder": "Second player name",
+    "error_1": "Player 2 must have a name",
+    "error_2": "Name should not exceed 10 characters",
+    "winner": "WINNER :"
   },
   "home": {
     "loading": "Loading",

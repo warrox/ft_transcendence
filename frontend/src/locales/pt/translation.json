@@ -25,7 +25,13 @@
 		"single_player": "Um jogador",
 		"multi_player": "Multijogador",
 		"tournament": "Torneio",
-		"back_menu": "Voltar ao menu"
+		"back_menu": "← Voltar ao menu",
+		"back_selection": "Voltar ao modo de seleção",
+		"start_game": "Iniciar o jogo",
+		"placeholder": "Nome do segundo jogador",
+		"error_1": "O jogador 2 deve ter um nome",
+		"error_2": "O nome não deve exceder 10 caracteres",
+		"winner": "VENCEDOR: "
 	},
 	"home": {
 		"loading": "Carregando",
