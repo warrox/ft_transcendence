@@ -10,7 +10,7 @@
 		"register": "Inscription",
 		"login": "Connexion",
 		"play_pong": "Jouez au Pong.",
-		"have_fun": "Amusez-vous et développez vos compétences au pong.",
+		"have_fun": "Amusez-vous et développez vos compétences au Pong.",
 		"lvl_up": "Améliores vos compétences avec des jeux et des tournois.",
 		"start_playing": "Commencer à jouer",
 		"why_42": "Découvrez pourquoi les développeurs de 42 adorent Transcendence. 100% gratuit.",
@@ -25,7 +25,14 @@
 		"single_player": "Joueur seul",
 		"multi_player": "Multijoueur",
 		"tournament": "Tournois",
-		"back_menu": "Retour au menu"
+		"back_menu": "← Retour au menu",
+		"back_selection": "Retour au mode de sélection",
+		"start_game": "Démarrer la partie",
+		"placeholder": "Nom du deuxième joueur",
+		"error_1": "Le joueur 2 doit avoir un nom",
+		"error_2": "Le nom ne doit pas dépasser 10 caractères",
+		"winner": "VAINQUEUR: ",
+		"same_name": "Un autre nom que celui-ci est requis"
 	},
 	"home": {
 		"loading": "Chargement",
@@ -43,12 +50,15 @@
 		"settings": "Paramètres",
 		"settings_paragraph": "Voici un aperçu de toutes les options disponibles pour configurer votre profil et votre compte.",
 		"settings_description": "Dans les paramètres, vous pouvez modifier votre identifiant, mot de passe, adresse e-mail, préférences linguistiques et activer ou désactiver la vérification en deux étapes.",
-		"dashboard_description": "Dans le tableau de bord, vous pouvez consulter vos statistiques, suivre votre progression et accéder à vos parties récentes."
+		"dashboard_description": "Dans le tableau de bord, vous pouvez consulter vos statistiques, suivre votre progression et accéder à vos parties récentes.",
+		"friends": "Amis",
+		"tab_blockchain": "Tableau blockchain"
 	},
 	"login": {
 		"login_page": "Page de connexion",
 		"click": "Cliquez ici",
-		"login": "Connexion"
+		"login": "Connexion",
+		"incorrect": "Email ou mot de passe incorrect"
 	},
 	"register": {
 		"ph_name": "prénom",
@@ -60,5 +70,62 @@
 		"sign": "S'inscrire",
 		"success": "Inscription réussie ! Redirection en cours...",
 		"failed": "Erreur lors de l'inscription. Veuillez réessayer."
-	}
+	},
+	"dashboard": {
+		"loading": "Chargement...",
+		"placeholder": "Numéro de la partie",
+		"final_score": "Score final (JOUEUR - ADVERSAIRE)",
+		"tot_bounce": "Total de rebond (joueur)",
+		"tot_press": "Temps de pression continue sur les touches (en secondes)",
+		"not_found": "Partie non trouvée",
+		"stats": "Statistiques",
+		"total_games_played": "Total parties jouées",
+		"total_wins": "Total de victoires",
+		"total_losses": "Total de défaites",
+		"points_scored": "Nombre de points marqués",
+		"longest_win_streak": "Série de victoires la plus longue",
+		"loss_win_ratio": "Ratio défaites/victoires",
+		"most_played_friend": "Ami le plus affronté",
+		"win_rate_percent": "% de victoire",
+		"match_details": "Détails des parties",
+		"search": "Rechercher",
+		"score": "Score"
+  },
+  "friends": {
+		"my_friends": "Mes Amis",
+		"add_friend_email_placeholder": "Email de l'ami à ajouter",
+		"add": "Ajouter",
+		"remove": "Supprimer",
+		"no_friends_yet": "Vous n'avez pas encore d'amis",
+		"no_friend_found": "Aucun ami trouvé"
+  },
+  "blockchain": {
+    "game_history": "Historique des parties Blockchain",
+    "date": "Date",
+    "opponent": "Adversaire",
+    "result": "Résultat"
+  },
+  "tournament": {
+    "tournament_mode": "Mode Tournoi",
+    "select_number_of_players": "Sélectionnez le nombre de joueurs :",
+    "match_format_info": "Chaque match sera une élimination 1v1.",
+    "register_players": "Enregistrer les joueurs",
+    "player_count_requirement": "Le tournoi requiert 4 ou 8 joueurs.",
+    "back_to_game_menu_arrow": "← Retour au menu du jeu",
+    "usernames": "Noms d'utilisateur :",
+    "name_required": "Tous les joueurs doivent avoir un nom.",
+    "name_length_limit": "Les noms ne doivent pas dépasser 10 caractères.",
+	"same_name": "Un autre nom que celui-ci est requis",
+    "show_match_order": "Afficher l'ordre des matchs",
+    "change_number_of_players_arrow": "← Modifier le nombre de joueurs",
+    "quarterfinals": "Quarts de finale",
+    "edit_player_names_arrow": "← Modifier les noms des joueurs",
+    "tournament_winner": "🏆 Vainqueur du tournoi :",
+    "winner": "Vainqueur",
+    "back_to_game_menu": "← Retour au menu du jeu",
+    "next_game": "Prochain match :",
+    "number_of_players": "Nombre de joueurs :",
+	"first_match": "Premier match :",
+	"player": "Joueur "
+  }
 }

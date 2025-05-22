@@ -2,7 +2,6 @@ import { Div, Button, Input, Span } from "../lib/PongFactory";
 import { PongNode } from "../lib/PongNode";
 import { MeData } from "./Home";
 import { rerender, navigateTo } from "../router/router";
-import { inputScaleCss } from "../styles/cssFactory";
 
 import { sleep } from 'sleep-ts';
 import { userInfo } from "os";
@@ -177,7 +176,7 @@ const backButtonHoverStyles: { [key: string]: string} = {
 							class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`},
 							[t("game.tournament")]),
 					]),
-					Button({id: "IneedtogoHome", onClick: () => {navigateTo("/home");}, class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["← Back to Menu"])
+					Button({id: "IneedtogoHome", onClick: () => {navigateTo("/home"); window.location.reload();}, class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, [t("game.back_menu")])
 				]),
 				...(registerplayer
 				? [
@@ -185,7 +184,7 @@ const backButtonHoverStyles: { [key: string]: string} = {
 					Input({
 						id: "secondPlayerInput",
 						required: true,
-						placeholder: "Enter second player name",
+						placeholder: t("game.placeholder"),
 						onChange: () => {
 							const input = document.getElementById("secondPlayerInput") as HTMLInputElement;
 							player2 = input?.value || "";
@@ -222,12 +221,12 @@ const backButtonHoverStyles: { [key: string]: string} = {
 							rerender();
 						},
 						class: `bg-${PongColor} hover:bg-${hoverColor} text-white font-bold py-2 px-4 rounded`
-					}, ["Start Game"]),
-					...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Player 2 must have a name."])] : []),
-					...(errLength ? [Span({ class: "text-red-500 font-semibold mt-2" }, ["Name should not exceed 10 characters."])] : []),
-					...(errSameName ? [Span({ class: "text-red-500 font-semibold mt-2" }, [`I need a different name than ${player1}.`])] : []),
+					}, [t("game.start_game")]),
+					...(nameError ? [Span({ class: "text-red-500 font-semibold mt-2" }, [t("game.error_1")])] : []),
+					...(errLength ? [Span({ class: "text-red-500 font-semibold mt-2" }, [t("game.error_2")])] : []),
+					...(errSameName ? [Span({ class: "text-red-500 font-semibold mt-2" }, [t("game.same_name")])] : []),
 					Button({ id: "backtoblack", onClick: () => {registerplayer = false; rerender()},
-					class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, ["Back to selection mode"])
+					class: `mt-10 ${backButtonColor} underline ${backButtonHoverColor}`}, [t("game.back_selection")])
 				]),
 				] : []),
 				Div({}),
@@ -263,7 +262,7 @@ const backButtonHoverStyles: { [key: string]: string} = {
 				Span({id: "player 1", class: "mx -8"}, [`${player2}`]),
 			]),
 			Div({ id: "game-area", class: "relative w-[1600px] h-[800px] bg-zinc-900 overflow-hidden" }, [
-				Span({class: `absolute left-[550px] top-[250px] block font-orbitron md:text-7xl text-${PongColor} `}, [`WINNER: ${winner}`]),
+				Span({class: `absolute left-[550px] top-[250px] block font-orbitron md:text-7xl text-${PongColor} `}, [t("game.winner") + `${winner}`]),
 				Button({ id: "back-to-menu", onClick: () => {
 					gameStarted = 0;
 					rerender();

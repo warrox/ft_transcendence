@@ -25,7 +25,14 @@
     "single_player": "Single Player",
     "multi_player": "Multiple Player",
 		"tournament": "Tournament",
-    "back_menu": "Back to menu"
+    "back_menu": "← Back to menu",
+    "back_selection": "Back to selection mode",
+    "start_game": "Start game",
+    "placeholder": "Second player name",
+    "error_1": "Player 2 must have a name",
+    "error_2": "Name should not exceed 10 characters",
+    "winner": "WINNER :",
+	"same_name": "A different name is required."
   },
   "home": {
     "loading": "Loading",
@@ -43,13 +50,16 @@
     "settings": "Settings",
     "settings_paragraph": "Here's an overview of all the available options to configure your profile and account.",
     "settings_description": "In the settings, you can change your login, password, email, language preferences, and enable or disable two-factor authentication.",
-    "dashboard_description": "In the dashboard, you can view your statistics, track your progress, and access your recent games."
+    "dashboard_description": "In the dashboard, you can view your statistics, track your progress, and access your recent games.",
+		"friends": "Friends",
+    "tab_blockchain": "Blockchain table"
   },
   "login": {
     "login_page": "Login Page",
     "click": "Click here",
     "login": "Login",
-    "status": "Login status:"
+    "status": "Login status:",
+		"incorrect": "Incorrect email or password"
   },
   "register": {
     "ph_name": "name",
@@ -61,5 +71,62 @@
     "sign": "Sign In",
     "success": "Registration successful! Redirecting...",
     "failed": "Error during registration. Please try again."
+  },
+	"dashboard": {
+    "loading": "Loading...",
+    "placeholder": "Game number",
+    "final_score": "Final score (PLAYER - OPPONENT)",
+    "tot_bounce": "Total bounces (player)",
+    "tot_press": "Continuous key press time (in seconds)",
+    "not_found": "Game not found",
+    "stats": "Statistics",
+    "total_games_played": "Total games played",
+    "total_wins": "Total wins",
+    "total_losses": "Total losses",
+    "points_scored": "Points scored",
+    "longest_win_streak": "Longest win streak",
+    "loss_win_ratio": "Loss/win ratio",
+    "most_played_friend": "Most played friend",
+    "win_rate_percent": "Win rate %",
+    "match_details": "Match details",
+    "search": "Search",
+    "score": "Score"
+  },
+  "friends": {
+  	"my_friends": "My Friends",
+    "add_friend_email_placeholder": "Friend's email to add",
+    "add": "Add",
+    "remove": "Remove",
+    "no_friends_yet": "You don't have any friends yet",
+    "no_friend_found": "No friend found"
+  },
+  "blockchain": {
+    "game_history": "Blockchain game history",
+    "date": "Date",
+    "opponent": "Opponent",
+    "result": "Result"
+  },
+  "tournament": {
+    "tournament_mode": "Tournament Mode",
+    "select_number_of_players": "Select Number of Players:",
+    "match_format_info": "Each match will be 1v1 elimination.",
+    "register_players": "Register players",
+    "player_count_requirement": "Tournament requires 4 or 8 players.",
+    "back_to_game_menu_arrow": "← Back to game Menu",
+    "usernames": "Usernames:",
+    "name_required": "All players must have a name.",
+    "name_length_limit": "Names should not exceed 10 characters.",
+    "show_match_order": "Show Match Order",
+    "change_number_of_players_arrow": "← Change Number of Players",
+    "quarterfinals": "Quarterfinals",
+    "edit_player_names_arrow": "← Edit Player Names",
+    "tournament_winner": "🏆 Tournament Winner:",
+    "winner": "Winner",
+    "back_to_game_menu": "← Back to Game Menu",
+    "next_game": "Next game:",
+    "number_of_players": "Number of players:",
+    "first_match": "First Match:",
+	"same_name": "A different name is required.",
+	"player": "Player "
   }
 }

@@ -121,15 +121,15 @@ export function Home(): PongNode<any> {
 							Div({ class: "flex flex-col items-start w-full mt-10 mb-10" }, [ // <- Ajoute plus de haut ET bas
 								Div({ class: "flex items-center mb-2" }, [
 									Image({ id: "test", src: "../assets/login.png", alt: "login", class: "w-10 h-10 mr-2" }),
-									Span({ class: "text-md" }, [userLogin]),
+									Span({ class: "text-md truncate max-w-[calc(100%-3rem)]" }, [userLogin]),
 								]),
 								Div({ class: "flex items-center mb-2" }, [
 									Image({ id: "test1", src: "../assets/surname.png", alt: "surname", class: "w-10 h-10 mr-2" }),
-									Span({ class: "text-md" }, [userSurname]),
+									Span({ class: "text-md truncate max-w-[calc(100%-3rem)]" }, [userSurname]),
 								]),
 								Div({ class: "flex items-center mb-2" }, [
 									Image({ id: "test2", src: "../assets/email.png", alt: "email", class: "w-10 h-10 mr-2" }),
-									Span({ class: "text-md" }, [userEmail]),
+									Span({ class: "text-md truncate max-w-[calc(100%-3rem)]" }, [userEmail]),
 								]),
 								Div({ class: "flex items-center mb-2" }, [
 									Image({ id: "test3", src: "../assets/2fa.png", alt: "2fa", class: "w-10 h-10 mr-2" }),
@@ -142,7 +142,7 @@ export function Home(): PongNode<any> {
 								id: "friendsButton",
 								class: playButtonDarkCss,
 								onClick: () => navigateTo("/friends"),
-							}, ["Friends"])
+							}, [t("home.friends")])
 						]),
 					])
 				])
@@ -194,7 +194,7 @@ export function Home(): PongNode<any> {
 							id: "blockchain_button",
 							class: playButtonDarkCss,
 							onClick: () => navigateTo("/blockchain"),
-						}, ["Tableau blockchain"])
+						}, [t("home.tab_blockchain")])
 					])
 				])
 			]),
