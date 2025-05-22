@@ -28,6 +28,7 @@ export function Profil() : PongNode<any> {
 		id: "fileInput",
 		type: "file",
 		class: "hidden",
+		accept: ".png, .jpeg, .jpg",
 		onChange: () => {
 			const input = document.getElementById("fileInput") as HTMLInputElement;
 			const file = input?.files?.[0];

@@ -29,8 +29,6 @@ import {
 	inputMailCss
 } from "../styles/cssFactory";
 import { t } from "i18next";
-import i18n from "i18next";
-
 let registerState: "idle" | "success" | "error" = "idle";
 
 function resetRegisterState(delay: number) { 
@@ -46,6 +44,7 @@ export function Register(): PongNode<any> {
 		id: "name", 
 		required: true, 
 		onChange: () => {},
+		maxlength: 10,
 		placeholder: t("register.ph_name"),
 		class: inputCss,
 	});
@@ -53,6 +52,7 @@ export function Register(): PongNode<any> {
 		id: "lastname", 
 		required: true, 
 		onChange: () => {},
+		maxlength: 10,
 		placeholder: t("register.ph_lastname"),
 		class: inputCss,
 	});
@@ -110,7 +110,7 @@ export function Register(): PongNode<any> {
 				setTimeout(() => {
 					navigateTo('/login')
 				}, 1500);
-				resetRegisterState(1500);
+				resetRegisterState(500);
 			} catch (e) {
 				console.error("Erreur de parsing JSON :", e);
 				registerState = "error";
@@ -166,8 +166,6 @@ export function Register(): PongNode<any> {
 			);
 		}
 	}, 0);
-
-	console.log()
 
 	// const registerWrapperCss = "flex items-center justify-center min-h-screen"
 	// const registerCardCss = "bg-bgGray border-borderGray border rounded-xl backdrop-blur-md space-y-6 p-8 rounded-2xl w-full max-w-md";

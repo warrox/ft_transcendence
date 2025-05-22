@@ -18,7 +18,6 @@ import {
 	statusWrapperCss,
 	statusKoCss,
 	statusOkCss,
-	inputScaleCss,
 	areaCss,
 	circlesCss,
 	circle1Css,
@@ -36,29 +35,14 @@ import {
 
 import "../styles/index.css";
 import { t } from "i18next";
-import i18n from "i18next";
 import { getCookie } from "../main"
 import { initWebSocketClient } from '../lib/socketClient.ts';
 
 let loginStatus: null | "OK" | "KO" = null;
 
-let registerState: "idle" | "success" | "error" = "idle";
-
-function resetRegisterState(delay = 3000) {
-	setTimeout(() => {
-		registerState = "idle";
-		// rerender();
-	}, delay);
-}
-
 let requires2FA = false;
 let twoFactorCode = "";
 let emailValue = "";
-
-function getEmailFromInput(): string {
-	const input = document.querySelector("#emailInput") as HTMLInputElement | null;
-	return input?.value || "";
-}
 
 export function Login(): PongNode<any> {
 	const emailInput = Input({
@@ -78,8 +62,6 @@ export function Login(): PongNode<any> {
 	const handleLogin = () => {
 		emailValue = (document.querySelector("#emailInput") as HTMLInputElement)?.value;
 		const password = (document.querySelector("#password") as HTMLInputElement)?.value;
-
-		console.log("is2fa", AuthStore.instance.user?.is_2FA)
 
 		const body = {
 			email: emailValue,
@@ -140,13 +122,9 @@ export function Login(): PongNode<any> {
 
 	const handle2FAValidation = () => {
 		const email = emailValue;
-		// const email = AuthStore.instance.user?.email;
-		// const id = AuthStore.instance.user?.id;
 		const twoFactorCode = (document.querySelector("#twoFaInput") as HTMLInputElement)?.value;
 
 		console.log("2factorcode: ", twoFactorCode);
-		// console.log("email && id : ", email, id);
-
 
 		fetch("/api/verify2Fa", {
 			method: "POST",
@@ -162,8 +140,6 @@ export function Login(): PongNode<any> {
 			console.log("json", json);
 			
 			if (json.success) {
-				console.log("hereeee");
-				
 				loginStatus = "OK";
 				AuthStore.instance.isLoggedIn = true;
 				AuthStore.instance.refresh()
@@ -172,7 +148,7 @@ export function Login(): PongNode<any> {
 				rerender();
 				setTimeout(() => {
 					navigateTo("/home");
-				}, 1500);
+				}, 500);
 			} else {
 				loginStatus = "KO";
 			}})
@@ -180,6 +156,41 @@ export function Login(): PongNode<any> {
 				rerender();
 			});
 	};
+
+	(window as any).onSignIn = (response: any) => {
+		const idToken = response.credential;
+
+		fetch("http://localhost:3000/gsignin", {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ token: idToken }),
+		})
+		.then(res => {
+			if (!res.ok)
+				throw new Error(`HTTP error! Status: ${res.status}`);
+			return res.text();
+		})
+		.then(body => {
+			console.log("Google Sign-in response:", body);
+		})
+		.catch(e => console.error("Erreur Google Sign-in :", e));
+	};
+
+	setTimeout(() => {
+		if (window.google && window.google.accounts?.id) {
+			window.google.accounts.id.initialize({
+				client_id: "38147679342-b3t2eq1316n4uucavd5nah6agapoaa27.apps.googleusercontent.com",
+				callback: window.onSignIn,
+			});
+			window.google.accounts.id.renderButton(
+				document.getElementById("google-button-container"),
+				{ theme: "outline", size: "large" }
+			);
+		}
+	}, 0);
 
 
 	return Div({ class: areaCss }, [
@@ -217,6 +228,7 @@ export function Login(): PongNode<any> {
 					emailInput,
 					passwordInput,
 				]),
+				Div({ id: "google-button-container", class: "w-fit mx-auto" }),
 				Button({
 					id: "button1",
 					onClick: handleLogin,
